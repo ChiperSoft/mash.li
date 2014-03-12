@@ -6,3 +6,4 @@ public/assets/vendor/**
 npm-debug.log
 pids/**
 logs/**
+app/config.js
