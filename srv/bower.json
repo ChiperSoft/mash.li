@@ -20,7 +20,8 @@
     "pinvault": "~0.1.2",
     "lesshat": "~2.0.13",
     "helper-hoard": "~0.1.0",
-    "davis": "~0.9.8"
+    "davis": "~0.9.8",
+    "soundmanager2": "*"
   },
   "devDependencies": {}
 }
