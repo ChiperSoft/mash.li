@@ -1,0 +1,16 @@
+{{#each tracks}}
+<li data-trackid="{{_id}}" class="{{#compare _id '==' nowPlaying}} playing{{/compare}}{{#compare _id '==' ../lastPlayed}} last-played{{/compare}}">
+	
+	<a class="artwork{{#unless details.kind}} loading{{/unless}}" href="/track/{{_id}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
+	<div class="details details-track"><a href="/track/{{_id}}" class="title">{{details.title}}</a></div>
+	<div class="details details-actions">
+		{{#if details.kind}}<a href="/track/{{_id}}/play" class="play label label-primary"><i class="glyphicon glyphicon-play"></i> Play Track</a>{{/if}}
+		<a href="{{details.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="glyphicon glyphicon-new-window"></i> View On SoundCloud</a>
+	</div>
+	<div class="details details-info">
+		<a href="{{details.user.permalink_url}}" class="artist block" target="_blank"><i class="glyphicon glyphicon-user"></i> {{details.user.username}}</a>
+		{{#each details.tags}}<span class="tag block"><i class="glyphicon glyphicon-tag"></i> {{this}}</span>{{/each}}
+	</div>
+
+</li>
+{{/each}}

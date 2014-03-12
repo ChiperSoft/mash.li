@@ -1,0 +1,98 @@
+[data-component="songbar"] {
+	.body {
+		overflow: hidden;
+		position: fixed;
+		top:72px;
+		z-index: 2;
+	}
+
+	.songbar-close {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		font-size: 16px;
+		color: #333;
+		text-shadow: -1px -1px 5px white, -1px 1px 5px white, 1px -1px 5px white, 1px 1px 5px white;
+		text-decoration: none;
+		cursor: pointer;
+		padding: 5px;
+
+		&:hover {
+			color: @brand-danger;
+		}
+	}
+
+	.artwork {
+		background-color: #eee;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		border-bottom: 1px solid #ccc;
+		color:white;
+		display: block;
+		font-size: 100px;
+		width: @songbar-width;
+		height: @songbar-width;
+		line-height: @songbar-width;
+		text-align: center;
+		text-decoration: none;
+		text-shadow: 0 0 10px rgba(0,0,0,0.75);
+		top: 0;
+
+		&:before {
+			display: none;
+		}
+
+		&:hover:before {
+			display: inline;
+		}
+
+		&.loading {
+			background-size: auto;
+			background-image: url('/assets/images/artwork-loading.gif');
+		}
+	}
+
+	.panel {
+		margin: 10px;
+	}
+
+	hr {
+		margin: 5px 10px;
+	}
+
+
+	.datacell {
+		color: inherit;
+		display: block;
+		line-height: 1;
+		margin: 10px;
+
+		.glyphicon {
+			float: left;
+			font-size: 16px;
+		}
+
+		span {
+			display: block;
+			margin-left: 20px;
+			overflow: hidden;
+			max-height: 300px;
+		}
+	}
+
+	.tags {
+		.label {
+			display: block;
+			float: left;
+			font-size: 10px;
+			line-height: 1;
+			margin: 3px;
+			white-space: nowrap;
+		}
+
+		.glyphicon {
+			margin-top: 3px;
+		}
+	}
+}

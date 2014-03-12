@@ -1,0 +1,8 @@
+node_modules
+*.hbs.js
+public/assets/rjs/**
+public/assets/css/**
+public/assets/vendor/**
+npm-debug.log
+pids/**
+logs/**

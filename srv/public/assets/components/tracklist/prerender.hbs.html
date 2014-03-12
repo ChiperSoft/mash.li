@@ -1,0 +1,5 @@
+{{require "assets/components/tracklist/listContents"}}
+<div data-component="tracklist" data-hasview>
+	<script type="text/json" class="list-data" data-last-played="{{lastPlayed}}">{{stringify tracks}}</script>
+	<ul class="lbody">{{> assets/components/tracklist/listContents}}</ul>
+</div>

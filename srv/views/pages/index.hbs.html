@@ -1,0 +1,46 @@
+{{require "layouts/foundation"}}
+{{require "assets/components/songbar/prerender"}}
+{{require "assets/components/tracklist/prerender"}}
+{{option 'needPlayer' true}}
+{{#extend "layouts/foundation"}}
+	{{#append "head"}}
+		<link rel="stylesheet" href="/assets/css/pages/index.css" />
+	{{/append}}
+
+	{{#content "body"}}
+	<div id="splitview"{{#if track}} class="songbar-open"{{/if}}>
+		<div id="songbar">{{> assets/components/songbar/prerender}}</div>
+		<div id="listview">
+			{{#with lists.new}}{{> assets/components/tracklist/prerender}}{{/with}}
+		</div>
+	</div>
+	{{/content}}
+
+	{{#append "postscripts"}}
+		<script src="/assets/rjs/index.js"></script>
+		<script>
+			require(['soundcloud', 'soundmanager2', 'handlebars', 'helper-hoard', 'js/lib/pagerouter'], function (soundcloud, soundmanager, handlebars, helperHoard) {
+				soundcloud.initialize({
+					client_id: "{{soundcloudKey}}",
+					redirect_uri: "{{httproot}}/soundcloud-callback",
+				});
+
+				soundmanager.setup({
+					url: '/assets/vendor/soundmanager2/swf/',
+					debugMode: false,
+					preferFlash: false,
+					useHighPerformance: true,
+					flashVersion: 9,
+					ontimeout: function() {
+						console.warn('SM2 init failed!');
+					},
+				});
+				soundmanager.beginDelayedInit();
+				window.soundManager = soundmanager;
+
+				helperHoard.load(handlebars);
+			});
+		</script>
+	{{/append}}
+
+{{/extend}}

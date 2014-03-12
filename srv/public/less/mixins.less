@@ -1,0 +1,88 @@
+@import "../assets/vendor/bootstrap/less/mixins.less";
+// @import "../assets/vendor/font-awesome/less/mixins";
+
+.linear-gradient (@startColor: #eee, @endColor: #fff, @direction: top) {
+	@toDirection: ~`{'top':'to bottom', 'bottom':'to top','right':'to left', 'left':'to right'}["@direction"] || 'to bottom'`;
+	background-image: -webkit-linear-gradient(@direction, @startColor, @endColor);
+	background-image: -moz-linear-gradient(@direction, @startColor, @endColor);
+	background-image: -ms-linear-gradient(@direction, @startColor, @endColor);
+	background-image: -o-linear-gradient(@direction, @startColor, @endColor);
+	background-image: linear-gradient(@toDirection, @startColor, @endColor);
+}
+
+/* usage: .radial-gradient(50%, 50%, circle, cover, #ffffff, 0%, #000000, 100%); */
+.radial-gradient(@centerX: center, @centerY: center, @shape: circle, @size: contain, @startColor: rgba(0,0,0,1), @startPos: 0, @endColor: rgba(255,255,255,1), @endPos: 100%) {
+	background-color: @endColor;
+	background-image: -moz-radial-gradient(@centerX @centerY, @shape @size, @startColor @startPos, @endColor @endPos);
+	background-image: -webkit-gradient(radial, @centerX @centerY, @shape @size, @startColor @startPos, @endColor @endPos);
+	background-image: -webkit-radial-gradient(@centerX @centerY, @shape @size, @startColor @startPos, @endColor @endPos);
+	background-image: -o-radial-gradient(@centerX @centerY, @shape @size, @startColor @startPos, @endColor @endPos);
+	background-image: -ms-radial-gradient(@centerX @centerY, @shape @size, @startColor @startPos, @endColor @endPos);
+	background-image: radial-gradient(@shape at @centerX @centerY, @startColor @startPos, @endColor @endPos);
+}
+
+.button-link(@color:inherit) {
+	display: block;
+	&, &:hover {
+		color: @color;
+		text-decoration: none;
+	}
+}
+
+.font(@size: 14px, @weight: normal, @line-height: 1) {
+	@fontName: `"fontVariant" + ({'light':'Light', 'lighter':'Light', 'normal':'Normal','bold':'Bold', 'bolder':'Bold'}["@weight"] || 'Normal')`;
+	font: normal @size/@line-height @@fontName;
+}
+
+.valigner() {
+	display: inline-block;
+	vertical-align: middle;
+	height: 100%;
+	width: 1px;
+	margin-right: -1px;
+}
+
+.valigned() {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.circle-icon(@size) {
+	.circle-icon(@size, @size);
+}
+
+.circle-icon(@size, @padding) {
+	width: @size;
+	height: @size;
+	padding: @padding;
+	font-size: @size;
+	line-height: @size;
+	text-align: center;
+	border-radius: (2 * @padding + @size) / 2;
+}
+
+.label-variant(@color) {
+	background-color: @color;
+	border: 1px solid @color;
+	&[href] {
+		&:hover,
+		&:focus {
+			background-color: darken(@color, 10%);
+			border-color: darken(@color, 10%);
+		}
+	}
+}
+
+.label-variant-inverted(@color) {
+	background-color: white;
+	border: 1px solid @color;
+	color: @color;
+	&[href] {
+		&:hover,
+		&:focus {
+			color: darken(@color, 10%);
+			border-color: darken(@color, 10%);
+			background-color: darken(white, 10%);
+		}
+	}
+}

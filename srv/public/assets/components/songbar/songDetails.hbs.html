@@ -1,0 +1,10 @@
+{{#with track}}
+	<a class="artwork{{#unless details.kind}} loading{{else}} glyphicon glyphicon-play{{/unless}}" href="{{#if details.kind}}/track/{{_id}}/play{{else}}{{details.permalink_url}}{{/if}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
+	<a href="{{details.permalink_url}}" target="_blank" class="title datacell"><i class="glyphicon glyphicon-music"></i><span>{{details.title}}</span></a>
+	<hr>
+	<a href="{{details.user.permalink_url}}" target="_blank" class="artist datacell"><i class="glyphicon glyphicon-user"></i><span>{{details.user.username}}</span></a>
+	{{#if details.description}}<hr><div class="description datacell"><i class="glyphicon glyphicon-info-sign"></i><span>{{{details.description}}}</span></div>{{/if}}
+
+	{{#if details.tags}}<hr><div class="tags datacell"><i class="glyphicon glyphicon-tag"></i><span>{{#each details.tags}}<label class="label label-default">{{this}}</label>{{/each}}</span></div>{{/if}}
+	<a href="/" class="glyphicon glyphicon-remove songbar-close"></a>
+{{/with}}

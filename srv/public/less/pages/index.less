@@ -1,0 +1,44 @@
+@import "../variables.less";
+@import "../mixins.less";
+
+@import "../../assets/components/player/styles.less";
+@import "../../assets/components/tracklist/styles.less";
+@import "../../assets/components/songbar/styles.less";
+
+
+#listview {
+	background: white;
+	border-right: 1px solid #ccc;
+	margin-right: 0;
+	.transition(~'margin-right .35s ease');
+}
+
+#songbar {
+	background: white;
+	float: right;
+	overflow: hidden;
+	
+	&, .body {
+		width: 0;
+		.transition(~'width .35s ease');
+	}
+}
+
+
+.songbar-open {
+	#listview {
+		margin-right: @songbar-width;
+	}
+
+	#songbar, #songbar .body {
+		width: @songbar-width;
+	}
+}
+
+#player {
+	position: absolute;
+	left: 120px;
+	right: 15px;
+	top: 0px;
+	height: 100%;
+}

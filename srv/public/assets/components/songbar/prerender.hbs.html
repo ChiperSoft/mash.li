@@ -1,0 +1,5 @@
+{{require "assets/components/songbar/songDetails"}}
+<div data-component="songbar" data-hasview>
+	<script type="text/json" class="track-data">{{#if track}}{{stringify track}}{{/if}}</script>
+	<div class="body">{{> assets/components/songbar/songDetails}}</div>
+</div>

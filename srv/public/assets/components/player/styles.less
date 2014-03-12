@@ -1,0 +1,105 @@
+[data-component="player"] {
+	.body {
+		color: white;
+		overflow: hidden;
+		height: 50px;
+	}
+
+	a {
+		color: white;
+		text-decoration: none;
+	}
+
+	.controls {
+		font-size: 32px;
+		overflow: hidden;
+		float: right;
+		position: relative;
+
+		.glyphicon {
+			width: 50px;
+			text-align: center;
+			height: 50px;
+			top: 0;
+			float: left;
+			line-height: 48px;
+			cursor: pointer;
+		}
+
+		.player-pause {
+			display: none;
+		}
+	}
+
+	&.playing {
+		.player-pause {
+			display: inline;
+		}
+
+		.player-play {
+			display: none;
+		}
+	}
+
+	.track {
+		display: block;
+		height: 40px;
+		margin-right: 65px;
+		margin-top: 5px;
+		position: relative;
+		background: black;
+
+		overflow: hidden;
+
+		border-radius: 5px;
+		border: 2px solid #444;
+		border-color: #000 #444 #444 #000;
+
+		&.has-waveform {
+			background: @gray-dark;
+		}
+
+		div {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width:100%;
+			height: 100%;
+			text-align: center;
+		}
+
+		.loaded {
+			width: 0%;
+			background-color: @gray;
+		}
+
+		.position {
+			width: 0%;
+			background-color: @brand-primary;
+		}
+
+		.waveform {
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			background-position: top left;
+			-webkit-filter: invert(100%);
+			-moz-filter: invert(100%);
+			-ms-filter: invert(100%);
+			filter: invert(100%);
+		}
+
+		.details {
+			line-height: 36px;
+			font-weight: 800;
+			font-size: 13px;
+			text-shadow: 0 1px 2px rgba(0,0,0,0.75);
+			
+		}
+	}
+
+	&.error {
+		.loaded, .position {
+			background-color: @brand-danger;
+		}
+	}
+}

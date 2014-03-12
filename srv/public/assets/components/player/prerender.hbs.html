@@ -1,0 +1,5 @@
+{{require "assets/components/player/fill"}}
+<div data-component="player" data-hasview>
+	<script type="text/json" class="track-data">{{#if play}}{{stringify track}}{{/if}}</script>
+	<div class="body">{{#if play}}{{> assets/components/player/fill}}{{/if}}</div>
+</div>

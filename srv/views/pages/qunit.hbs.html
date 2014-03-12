@@ -1,0 +1,29 @@
+{{require "layouts/foundation"}}
+{{#extend "layouts/foundation"}}
+	{{#append "head"}}
+		<link rel="stylesheet" href="/assets/vendor/qunit/qunit/qunit.css" />
+	{{/append}}
+
+	{{#content "body"}}
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+	{{/content}}
+
+	{{#append "footer"}}
+		<script src="/assets/vendor/qunit/qunit/qunit.js"></script>
+		<script src="/assets/vendor/qunit-data-providers/qunit-data-providers.js"></script>
+		<script src="/assets/vendor/qunit-promises/qunit-promises.js"></script>
+		<script>
+			QUnit.config.autostart = false;
+
+			var testModules = {{{tests}}};
+
+			// Resolve all testModules and then start the Test Runner.
+			require(testModules, function(){
+				QUnit.load();
+				QUnit.start();
+			});
+		</script>
+	{{/append}}
+
+{{/extend}}
