@@ -10,7 +10,7 @@ var SCTrack = require('app/models/SoundCloudTrack');
 
 module.exports = function (callback) {
 
-	proxmis.wrap(function (cb) { SCTrack.find().select('_id').exec(cb); }).then(function (ids) {
+	proxmis.wrap(function (cb) { SCTrack.find({trackLink: null}).select('_id').exec(cb); }).then(function (ids) {
 		ids = ids
 			.map(function (o) { return Number(o._id); })
 			.sort(function() {return 0.5 - Math.random();})
