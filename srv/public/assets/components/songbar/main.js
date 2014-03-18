@@ -39,7 +39,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 
 			var html = this.template(data);
 
-			this.$('.body').html(html);
+			this.$('.body > div').html(html);
 
 			return this;
 		}

@@ -69,6 +69,8 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 				this.loadModel({id: id});
 				this.render();
 
+				var volume = this.$('.volume-slider input').val();
+
 				soundcloud.stream('/tracks/'+this.model.id, function (sound) {
 					self.sound = sound;
 					if (!sound) {
@@ -78,6 +80,8 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 					}
 
 					sound[autoplay ? 'play' : 'load']({
+						volume: volume,
+						multiShot: true,
 						onstop:       bindSoundEvent(self, 'onSoundStop'),
 						onplay:       bindSoundEvent(self, 'onSoundPlay'),
 						onresume:     bindSoundEvent(self, 'onSoundPlay'),
@@ -108,7 +112,12 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 		events: {
 			'click .player-play': 'play',
-			'click .player-pause': 'pause'
+			'click .player-pause': 'pause',
+			'click .player-volume': 'toggleVolume',
+			'change .volume-slider input': 'changeVolume',
+			'mousedown .track': 'trackMDown',
+			'mousemove .track': 'trackMMove',
+			'mouseup .track': 'trackMUp'
 		},
 
 		play: function () {
@@ -128,6 +137,75 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 		jump: function () {
 
+		},
+
+		trackMDown: function (ev) {
+			this.mdown = true;
+			this.trackScrubbed(ev);
+		},
+
+		trackMUp: function (ev) {
+			this.mdown = false;
+		},
+
+		trackMMove: function (ev) {
+			if (!this.mdown) return;
+			this.trackScrubbed(ev);
+		},
+
+		trackScrubbed: function (ev) {
+			if (!this.sound) {return;}
+
+			var $target = $(ev.currentTarget);
+			var w = $target.width(), h = $target.height();
+			var x = ev.offsetX, y = ev.offsetY;
+			var duration = this.sound.duration;
+
+			if (y < 0 || y > h) return;
+
+			var val = (x / w) * duration;
+
+			val = Math.min(this.sound.duration, val);
+			val = Math.max(0, val);
+
+			console.log(w, h, x, y, val);
+
+			this.sound.setPosition(val);
+
+		},
+
+		toggleVolume: function (ev) {
+			this.$el.toggleClass('volume-open');
+		},
+
+		changeVolume: function (ev) {
+			var level = ev.currentTarget.value;
+			if (this.sound) {
+				this.sound.setVolume(level);
+			}
+			events.trigger('player:volume:change', level);
+
+			var classSet = 'player-volume mashlicon ';
+
+			switch (true) {
+			case level <= 1:
+				classSet += 'mashlicon-volume-mute2';
+				break;
+			case level < 10:
+				classSet += 'mashlicon-volume-mute';
+				break;
+			case level < 20:
+				classSet += 'mashlicon-volume-low';
+				break;
+			case level < 80:
+				classSet += 'mashlicon-volume-medium';
+				break;
+			case level >= 80:
+				classSet += 'mashlicon-volume-high';
+				break;
+			}
+
+			this.$('.player-volume').attr('class', classSet);
 		},
 
 		onSoundStop: function () {

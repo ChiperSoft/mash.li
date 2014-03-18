@@ -11,23 +11,49 @@
 	}
 
 	.controls {
-		font-size: 32px;
-		overflow: hidden;
-		float: right;
-		position: relative;
-
-		.glyphicon {
-			width: 50px;
-			text-align: center;
-			height: 50px;
-			top: 0;
-			float: left;
-			line-height: 48px;
-			cursor: pointer;
-		}
-
+		float: left;
+		padding-left: 10px;
+		font-size: 28px;
+		
 		.player-pause {
 			display: none;
+		}
+	}
+
+	.volume {
+		float: right;
+		padding-right: 12px;
+		font-size: 21px;
+
+
+	}
+
+	.volume-slider {
+		float: left;
+		overflow: hidden;
+		width: 0px;
+		.transition(~'width .35s ease');
+
+		input {
+			width: 100px;
+			height: 48px;
+			margin-left: 15px;
+		}
+	}
+
+	&.volume-open .volume-slider {
+		width: 120px;
+	}
+
+	.controls, .volume {
+		.mashlicon {
+			cursor: pointer;
+			float: left;
+			height: 50px;
+			line-height: 48px;
+			text-align: center;
+			top: 0;
+			width: 50px;
 		}
 	}
 
@@ -44,16 +70,22 @@
 	.track {
 		display: block;
 		height: 40px;
-		margin-right: 65px;
+		margin-right: 70px;
+		margin-left: 70px;
 		margin-top: 5px;
 		position: relative;
 		background: black;
-
 		overflow: hidden;
-
 		border-radius: 5px;
 		border: 2px solid #444;
 		border-color: #000 #444 #444 #000;
+
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 
 		&.has-waveform {
 			background: @gray-dark;

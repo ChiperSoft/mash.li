@@ -11,10 +11,13 @@
 <body>
 	<div class="container">
 	{{#block "header"}}
-		<div class="mask top"></div>
-		<header class="navbar navbar-inverse container">
-			<div class="navbar-header"><a class="navbar-brand" href="/">Mash.li</a></div>
-			{{#if needPlayer}}{{require "assets/components/player/prerender"}}<div id="player">{{> assets/components/player/prerender}}</div>{{/if}}
+		<header class="container">
+			<div class="header-links">
+				<a class="sitelogo pull-left" href="/"><i class="mashlicon mashlicon-logo"></i><span>Mash.li</span></a>
+				<a href="http://twitter.com/mash_li" target="_blank" class="pull-right mashlicon mashlicon-twitter"></a>
+				<a href="http://github.com/chipersoft/mash.li" target="_blank" class="pull-right mashlicon mashlicon-github"></a>
+			</div>
+			<div id="player" class="navbar navbar-inverse">{{#if needPlayer}}{{require "assets/components/player/prerender"}}{{> assets/components/player/prerender}}{{/if}}</div>
 		</header>
 		<div class="filler"></div>
 	{{/block}}

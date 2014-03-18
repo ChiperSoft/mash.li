@@ -3,7 +3,7 @@
 // copy this file to app/config.js and apply the environment level options
 
 module.exports = {
-	soundcloudKey: 'DOMAIN_KEY',
+	soundcloudKey: 'SOUNDCLOUD_PUBLIC_KEY',
 	sessions: {
 		secret: 'secret',
 		cookieKey: 'session'
