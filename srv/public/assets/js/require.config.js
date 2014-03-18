@@ -23,7 +23,6 @@ require.config({
 		'soundmanager2'                 : 'vendor/soundmanager2/script/soundmanager2',
 		'soundcloud'                    : '//connect.soundcloud.com/sdk',
 		'helper-hoard'                  : 'vendor/helper-hoard/build/hoard.all',
-		'davis'                         : 'vendor/davis/davis',
 
 		'events'                        : 'js/lib/events',
 		'collections'                   : 'js/collections',
@@ -58,9 +57,6 @@ require.config({
 		},
 		bootstrap: {
 			deps: ['jquery']
-		},
-		davis: {
-			exports: 'Davis'
 		}
 	}
 });
