@@ -5,8 +5,6 @@ var pathResolve = require('path').resolve,
 
 /** Handlebars Extensions *****************************************************************************************************************/
 
-require('helper-hoard').load(Handlebars);
-
 var root;
 var templateCache = {};
 
@@ -35,9 +33,11 @@ Handlebars.registerHelper('require', function (path) {
 	Handlebars.registerPartial(path, loadTemplate(path));
 });
 
+// Handlebars.registerHelper('component', require('app/helpers/component').component(Handlebars));
 
-Handlebars.registerHelper('component', require('app/helpers/component')(Handlebars));
-Handlebars.registerHelper('option', require('app/helpers/option')(Handlebars));
+_.each(require('mashli-helpers'), function (helper, name) {
+	Handlebars.registerHelper(name, helper(Handlebars));
+});
 
 /** View Class *****************************************************************************************************************/
 

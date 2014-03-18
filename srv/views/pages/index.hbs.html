@@ -19,7 +19,7 @@
 	{{#append "postscripts"}}
 		<script src="/assets/rjs/index.js"></script>
 		<script>
-			require(['soundcloud', 'soundmanager2', 'handlebars', 'helper-hoard', 'js/lib/pagerouter'], function (soundcloud, soundmanager, handlebars, helperHoard) {
+			require(['lodash', 'soundcloud', 'soundmanager2', 'handlebars', 'helpers', 'js/lib/pagerouter'], function (_, soundcloud, soundmanager, handlebars, helpers) {
 				soundcloud.initialize({
 					client_id: "{{soundcloudKey}}",
 					redirect_uri: "{{httproot}}/soundcloud-callback",
@@ -38,7 +38,9 @@
 				soundmanager.beginDelayedInit();
 				window.soundManager = soundmanager;
 
-				helperHoard.load(handlebars);
+				_.each(helpers, function (helper, name) {
+					handlebars.registerHelper(name, helper(handlebars));
+				});
 			});
 		</script>
 	{{/append}}

@@ -5,7 +5,7 @@ var _ = require('lodash');
 // if function it will assume function is the rendering fuction
 // otherwise assumes object already is initialized component
 
-module.exports = function (Handlebars) {
+exports.component = function (Handlebars) {
 	return function (component, options) {
 		switch (typeof component) {
 		case 'string':

@@ -2,7 +2,7 @@
 // injects a value or a block of data into the current context. Designed for use in component blocks
 // if key is wrapped in square braces ("[keyName]"), keyName is treated as an array and overwritten with a new array if not
 
-module.exports = function () {
+exports.option = function () {
 	return function (key, value, options) {
 		options = arguments[arguments.length - 1];
 

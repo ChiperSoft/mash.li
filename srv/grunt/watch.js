@@ -12,13 +12,18 @@ module.exports = function (grunt) {
 			tasks: ['handlebars']
 		},
 
+		helpers: {
+			files: 'app/helpers/**/*.js',
+			tasks: ['concat:helpers', 'amdwrap:helpers']
+		},
+
 		requirejs: {
 			files: ['public/assets/js/require.config.js', 'public/assets/modules/main.js'],
 			tasks: ['requirejs:main']
 		},
 
 		express: {
-			files:  [ 'app/**/*.js', 'views/**/*.js' ],
+			files:  [ 'app/**/*.js', 'views/**/*.js', 'node_modules/mashli-helpers.js' ],
 			tasks:  [ 'express:server' ],
 			options: {
 				spawn: false // Without this option specified express won't be reloaded

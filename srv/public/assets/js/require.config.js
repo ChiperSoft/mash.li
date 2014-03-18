@@ -22,7 +22,7 @@ require.config({
 		'pinvault'                      : 'vendor/pinvault/pinvault',
 		'soundmanager2'                 : 'vendor/soundmanager2/script/soundmanager2',
 		'soundcloud'                    : '//connect.soundcloud.com/sdk',
-		'helper-hoard'                  : 'vendor/helper-hoard/build/hoard.all',
+		'helpers'                       : 'vendor/mash.li/helpers',
 
 		'events'                        : 'js/lib/events',
 		'collections'                   : 'js/collections',

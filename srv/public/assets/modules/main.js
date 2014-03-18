@@ -5,7 +5,6 @@ require([
 	'jquery',
 	'lodash',
 	'backbone',
-	'handlebars',
 	'bootstrap',
 	'js/lib/require-components'
 ]);

@@ -18,7 +18,6 @@
     "pinvault-observer": "~0.1.1",
     "pinvault": "~0.1.2",
     "lesshat": "~2.0.13",
-    "helper-hoard": "~0.1.1",
     "soundmanager2": "*"
   },
   "devDependencies": {}

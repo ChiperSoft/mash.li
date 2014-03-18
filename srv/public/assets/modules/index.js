@@ -1,8 +1,9 @@
 
 require([
 	'soundmanager2',
+	'moment',
 	'handlebars',
-	'helper-hoard',
+	'helpers',
 	'js/lib/pagerouter',
 	'components/player/main',
 	'components/songbar/main',

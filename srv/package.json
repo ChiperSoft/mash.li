@@ -46,7 +46,9 @@
     "grunt-contrib-handlebars": "~0.7.0",
     "grunt-contrib-cssmin": "~0.7.0",
     "lodash-cli": "~2.4.1",
-    "grunt-lodash": "~0.3.0"
+    "grunt-lodash": "~0.3.0",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-amd-wrap": "^1.0.1"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.5.3",

@@ -15,6 +15,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('launch', [
 		'less',
 		'handlebars',
+		'concat:helpers',
+		'amdwrap:helpers',
 		'requirejs:main',
 		'copy:rjsmodules',
 		'express:server',
@@ -32,6 +34,8 @@ module.exports = function(grunt) {
 		'cssmin',
 		'handlebars',
 		'lodash',
+		'concat:helpers',
+		'amdwrap:helpers',
 		'requirejs'
 	]);
 
@@ -43,6 +47,8 @@ module.exports = function(grunt) {
 		'handlebars',
 		'lodash',
 		'test',
+		'concat',
+		'amdwrap',
 		'requirejs'
 	]);
 
