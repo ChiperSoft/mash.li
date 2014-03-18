@@ -4,6 +4,7 @@ module.exports = function (grunt) {
 	grunt.config('concat', {
 		helpers: {
 			src: [
+				'app/helpers/nl2br.js',
 				'app/helpers/durationLong.js',
 				'app/helpers/durationShort.js',
 				'app/helpers/option.js',
