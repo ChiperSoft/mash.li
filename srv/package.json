@@ -17,8 +17,6 @@
     "proxmis": "^0.1.0",
     "mongoose": "^3.8.8",
     "redis": "^0.10.1",
-    "memjs": "^0.8.3",
-    "mysql2": "^0.11.6",
     "cli-color": "^0.2.3",
     "moment": "^2.5.1",
     "static-favicon": "^1.0.0",
