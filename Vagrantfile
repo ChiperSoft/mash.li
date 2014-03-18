@@ -4,8 +4,8 @@
 Vagrant.configure("2") do |config|
 
 	# Every Vagrant virtual environment requires a box to build off of.
-	config.vm.box = "packer-node"
-	#config.vm.box_url = "../packer/build/ubuntu-13.10-amd64.box"
+	config.vm.box = "node-ubuntu-1310-amd64-vbox438-r1"
+	config.vm.box_url = "http://mash.li/vagrant/ubuntu-13.10-amd64-vbox438.box"
 
 	# Assign this VM to a host-only network IP, allowing you to access it
 	# via the IP. Host-only networks can talk to the host machine as well as
@@ -14,7 +14,6 @@ Vagrant.configure("2") do |config|
 	config.vm.network :private_network, ip: "192.168.56.151"
 	config.vm.network "forwarded_port", guest:  3306, host:  3306 # mysql
 	config.vm.network "forwarded_port", guest:  6379, host:  6379 # redis
-	config.vm.network "forwarded_port", guest:  6380, host:  6380 # redis
 	config.vm.network "forwarded_port", guest: 11211, host: 11211 # memcached
 	config.vm.network "forwarded_port", guest: 27017, host: 27017 # mongodb
 	config.vm.hostname = "mash.li"
