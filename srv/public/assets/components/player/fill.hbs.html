@@ -7,5 +7,5 @@
 	<div class="loaded"></div>
 	<div class="position"></div>
 	{{#if track.details.waveform_url}}<div class="waveform" style="background-image:url({{track.details.waveform_url}});"></div>{{/if}}
-	<div class="details">{{track.details.title}}</div>
+	<div class="details">{{track.details.title}} - {{durationShort track.details.duration}}</div>
 </div>
