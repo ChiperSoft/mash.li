@@ -13,8 +13,8 @@ module.exports = function (grunt) {
 		},
 
 		requirejs: {
-			files: 'public/assets/js/require.config.js',
-			tasks: ['requirejs']
+			files: ['public/assets/js/require.config.js', 'public/assets/modules/main.js'],
+			tasks: ['requirejs:main']
 		},
 
 		express: {
