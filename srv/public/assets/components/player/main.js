@@ -144,12 +144,12 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 			this.trackScrubbed(ev);
 		},
 
-		trackMUp: function (ev) {
+		trackMUp: function () {
 			this.mdown = false;
 		},
 
 		trackMMove: function (ev) {
-			if (!this.mdown) return;
+			if (!this.mdown) {return;}
 			this.trackScrubbed(ev);
 		},
 
@@ -161,7 +161,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 			var x = ev.offsetX, y = ev.offsetY;
 			var duration = this.sound.duration;
 
-			if (y < 0 || y > h) return;
+			if (y < 0 || y > h) {return;}
 
 			var val = (x / w) * duration;
 
@@ -174,7 +174,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 		},
 
-		toggleVolume: function (ev) {
+		toggleVolume: function () {
 			this.$el.toggleClass('volume-open');
 		},
 
