@@ -1,7 +1,9 @@
 var express = require('express');
+var when = require('when');
 var whenKeysMap = require('when/keys').map;
 var Track = require('app/models/Track');
 var _ = require('lodash');
+var promiseFromSoundcloudCache = require('app/lib/soundcloud-cache');
 
 module.exports = exports = function () {
 
@@ -17,12 +19,32 @@ module.exports = exports = function () {
 exports.getMain = function (req, res) {
 	var load = {
 		playlists: whenKeysMap({
-			'new': Track.promiseForListNew()
+			'new': Track.promiseForListNew().then(function (models) {
+				return when.all(_.map(models, function (model) {
+					var track = model.toObject();
+					return promiseFromSoundcloudCache(track._id).then(
+						function (details) {
+							track.details = details;
+							return track;
+						},
+						function (err) { return track; }
+					);
+				}));
+			})
 		})
 	};
 
 	if (req.params.trackid) {
-		load.track = Track.promiseForID(req.params.trackid);
+		load.track = Track.promiseForID(req.params.trackid).then(function (model) {
+			var track = model.toObject();
+			return promiseFromSoundcloudCache(track._id).then(
+				function (details) {
+					track.details = details;
+					return track;
+				},
+				function (err) { return track; }
+			);
+		});
 	}
 
 	var directives = req.params.directive && req.params.directive.split('/') || [];
