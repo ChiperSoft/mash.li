@@ -1,9 +1,8 @@
 var env = process.env.NODE_ENV || 'development';
 
-// Enabling this caused a 20% spike in cpu usage.  disabling until they clear it up.
-// if (env === 'production') {
-// 	require('newrelic');
-// }
+if (env === 'production') {
+	require('newrelic');
+}
 
 var express = require('express');
 var expressSession = require("express-session");
