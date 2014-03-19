@@ -1,3 +1,4 @@
+require('newrelic');
 var express = require('express');
 var expressSession = require("express-session");
 var expressSessionRedisStore = require('connect-redis')(expressSession);
