@@ -7,7 +7,7 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 		_waiting: {},
 		_requesting: [],
 		
-		_responseCallback: function (tracks, err) {
+		_responseCallback: function (tracks, err, expecting) {
 			if (err || !_.isArray(tracks)) {
 				TrackLoader._onError('Soundcloud did not respond with a tracks array.', tracks, err);
 				return;
@@ -21,6 +21,7 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 
 				delete TrackLoader._requesting[track.id];
 				delete TrackLoader._waiting[track.id];
+				delete expecting[track.id];
 
 				_.each(callbacks, function (cb) {
 					try {
@@ -30,17 +31,39 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 					}
 				});
 			});
+
+			// loop through any remaining expected tracks and do false callbacks to indicate track was not found.
+			_.each(expecting, function (junk, id) {
+				var callbacks = TrackLoader._waiting[id];
+				_.each(callbacks, function (cb) {
+					try {
+						cb(false);
+					} catch (e) {
+						TrackLoader._onError(e);
+					}
+				});
+			});
 		},
 
 		_fetch: _.debounce(function () {
-			var ids = _.keys(TrackLoader._requesting), url;
+			var ids = _.keys(TrackLoader._requesting);
 
 			while (ids.length) {
-				url = '/tracks?ids=' + ids.shift();
-				while (url.length < TrackLoader.URL_LIMIT && ids.length) {
-					url += ',' + ids.shift();
-				}
-				soundcloud.get(url, TrackLoader._responseCallback);
+				(function () {
+					var id = ids.shift(),
+						expecting = {},
+						url = '/tracks?ids=' + id;
+
+					expecting[id] = true;
+
+					while (url.length < TrackLoader.URL_LIMIT && ids.length) {
+						url += ',' + ids.shift();
+					}
+
+					soundcloud.get(url, function (tracks, err) {
+						TrackLoader._responseCallback(tracks, err, expecting);
+					});
+				})();
 			}
 		}, 300),
 

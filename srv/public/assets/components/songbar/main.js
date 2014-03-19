@@ -27,7 +27,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 			
 		},
 
-		onPageScroll: function (ev) {
+		onPageScroll: function () {
 			// no need to update the view height if the drawer is hidden
 			if (!this.model) {return;}
 			this.updateDetailHeight();
@@ -69,6 +69,10 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 
 		render: function () {
 			var data = { track: this.model.toJSON() };
+
+			if (!data.track.details) {
+				track = false;
+			}
 
 			var html = this.template(data);
 
