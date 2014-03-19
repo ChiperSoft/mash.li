@@ -5,7 +5,7 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 	var TrackLoader = {
 		URL_LIMIT: 1000,
 		_waiting: {},
-		_requesting: [],
+		_requesting: {},
 		
 		_responseCallback: function (tracks, err, expecting) {
 			if (err || !_.isArray(tracks)) {
@@ -48,22 +48,26 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 		_fetch: _.debounce(function () {
 			var ids = _.keys(TrackLoader._requesting);
 
-			while (ids.length) {
-				(function () {
-					var id = ids.shift(),
-						expecting = {},
-						url = '/tracks?ids=' + id;
+			function makeRequest() {
+				var id = ids.shift(),
+					expecting = {},
+					url = '/tracks?ids=' + id;
 
+				expecting[id] = true;
+
+				while (url.length < TrackLoader.URL_LIMIT && ids.length) {
+					id = ids.shift();
 					expecting[id] = true;
+					url += ',' + id;
+				}
 
-					while (url.length < TrackLoader.URL_LIMIT && ids.length) {
-						url += ',' + ids.shift();
-					}
+				soundcloud.get(url, function (tracks, err) {
+					TrackLoader._responseCallback(tracks, err, expecting);
+				});
+			}
 
-					soundcloud.get(url, function (tracks, err) {
-						TrackLoader._responseCallback(tracks, err, expecting);
-					});
-				})();
+			while (ids.length) {
+				makeRequest();
 			}
 		}, 300),
 
@@ -157,7 +161,9 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 			}
 		} else {
 			track = trackCache[id] = new SCTrack(attributes, options);
-			track.fetch();
+			if (!attributes.kind) {
+				track.fetch();
+			}
 		}
 
 		return track;
