@@ -1,9 +1,13 @@
-require('newrelic');
+var env = process.env.NODE_ENV || 'development';
+
+if (env === 'production') {
+	require('newrelic');
+}
+
 var express = require('express');
 var expressSession = require("express-session");
 var expressSessionRedisStore = require('connect-redis')(expressSession);
 
-var env = process.env.NODE_ENV || 'development';
 
 require('when/monitor/console');
 
