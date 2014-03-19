@@ -37,8 +37,11 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 		// or the top of the footer, and sets the details view height to the smaller of the two.
 		// This makes sure the view has a scrollbar when needed.
 		updateDetailHeight: function (force) {
+			var $details = this.$('.details');
+
+			if (!$details.length) return;
+
 			var pageScroll = $(window).scrollTop(),
-				$details = this.$('.details'),
 				detailsTop = $details.position().top + this.$('.body').position().top,
 				footerTop = $('footer').offset().top,
 				viewHeight = $(window).height(),
