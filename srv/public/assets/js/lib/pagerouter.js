@@ -30,6 +30,10 @@ define(['lodash', 'backbone', 'events'], function (_, Backbone, events) {
 		if (href.slice(protocol.length) !== protocol) {
 			evt.preventDefault();
 			router.navigate(href, true);
+
+			if (window.ga) {
+				ga('send', 'pageview', href);
+			}
 		}
 	});
 
