@@ -43,7 +43,7 @@ The following commands are needed to download and install the mash.li site for t
 
 ```
 git clone https://github.com/ChiperSoft/mash.li.git
-cd mash.li
+cd mash.li/srv
 npm install
 bower install
 grunt
