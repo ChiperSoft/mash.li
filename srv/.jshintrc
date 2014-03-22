@@ -11,7 +11,7 @@
 	"immed": true,
 	"indent": 4,
 	"jquery": true,
-	"latedef": true,
+	"latedef": "nofunc",
 	"loopfunc": false,
 	"newcap": true,
 	"noarg": true,
