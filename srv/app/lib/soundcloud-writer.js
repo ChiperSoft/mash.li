@@ -32,7 +32,8 @@ stream._write = function (track, encoding, next) {
 		log({
 			level: 6,
 			name: 'Scanned New Song',
-			status: track.title
+			status: track.title,
+			target: track.created_at
 		});
 		
 		next();

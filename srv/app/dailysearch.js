@@ -1,4 +1,4 @@
-var Setting = require('app/models/Setting');
+var SoundCloudTrack = require('app/models/SoundCloudTrack');
 var log = require('app/log');
 
 module.exports = function (callback) {
@@ -6,22 +6,24 @@ module.exports = function (callback) {
 	var reader = new (require('app/lib/soundcloud-reader'))();
 	var writer = require('app/lib/soundcloud-writer');
 
-	Setting.findById('LastSoundCloudSync', function (err, setting) {
-		reader.since = setting && new Date(setting.value) || false;
+	SoundCloudTrack.find()
+		.sort('-created_at')
+		.select('created_at')
+		.limit(1)
+		.exec(function (err, results) {
+			reader.since = results.length && results[0] && new Date(results[0].created_at) || false;
 
-		log({
-			level: 6,
-			name: 'Requesting new tracks since',
-			status: reader.since
+			log({
+				level: 6,
+				name: 'Requesting new tracks since',
+				status: reader.since
+			});
+			
+			reader.pipe(writer);
 		});
-		
-		reader.pipe(writer);
-	});
 
 	writer.on('finish', function () {
-		Setting.update({_id:'LastSoundCloudSync'}, {value:Date.now()}, {upsert:true}, function () {
-			callback(null);
-		});
+		callback(null);
 	});
 
 	writer.on('error', function (err) {
