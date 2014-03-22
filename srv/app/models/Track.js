@@ -1,7 +1,10 @@
-
-var mongoose = require('app/db/mongo');
-var moment = require('moment');
 var proxmis = require('proxmis');
+var when = require('when');
+
+require('app/models/SoundCloudTrack');
+var mongoose = require('app/db/mongo');
+
+var promiseFromSoundcloudCache = require('app/lib/soundcloud-cache');
 
 var sTrack = mongoose.Schema({
 	_id: String,
@@ -13,27 +16,38 @@ var sTrack = mongoose.Schema({
 
 var Track = mongoose.model('Track', sTrack);
 
-Track.promiseForListNew = function (callback) {
-	require('app/models/SoundCloudTrack');
-	var p = proxmis(callback);
-	Track.find()
-		.populate('details')
-		.where('created_at')
-			.gte(moment().subtract('days', 1).startOf('day').toDate()) //yesterday morning
-			.lte(moment().endOf('day').toDate()) //tonight
-		.sort('-created_at')
-		.exec(p);
-	return p;
-};
-
-
-Track.promiseForID = function (id, callback) {
-	require('app/models/SoundCloudTrack');
-	var p = proxmis(callback);
+Track.promiseTrackByID = function (id, asModel) {
+	var p = proxmis();
 	Track.findOne({_id: id})
 		.populate('details')
 		.exec(p);
-	return p;
+
+	if (asModel) {
+		return when(p);
+	}
+
+	return p.then(function (model) {
+		if (!model) return false;
+		
+		var track = model.toObject();
+		return promiseFromSoundcloudCache(track._id).then(
+			function (details) {
+				// if details is false, that means soundcloud no longer has the track
+				// return false in that situation, since the track no longer exists
+				if (details) {
+					track.details = details;
+					return track;
+				} else {
+					return false;
+				}
+			},
+			// if the promise rejected, that means we had an error communicating with
+			// soundcloud. This could mean they're offline, so we return what we stored at scan time
+			function () {
+				return track;
+			}
+		);
+	})
 };
 
 module.exports = Track;

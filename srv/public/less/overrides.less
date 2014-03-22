@@ -9,6 +9,10 @@ body {
 	background-attachment: fixed;
 }
 
+h1,h2,h3,h4 {
+	margin-top: 0;
+}
+
 .mask.bottom {
 	.container;
 	background-color: @body-bg;
@@ -72,8 +76,6 @@ header.container {
 			}
 		}
 	}
-
-	
 }
 
 footer.navbar {
@@ -131,5 +133,54 @@ body > .container {
 			.label-variant-inverted(@label-danger-bg);
 		}
 
+	}
+}
+
+
+.application-error {
+	padding: 1px 10px 10px;
+	font: 13px "Helvetica Neue", "Lucida Grande", "Arial";
+	background: #ECE9E9 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#ECE9E9));
+	background: #ECE9E9 -moz-linear-gradient(top, #fff, #ECE9E9);
+	background-repeat: no-repeat;
+	color: #555;
+
+	h1, h2, h3 {
+		font-size: 22px;
+		color: #343434;
+	}
+
+	h1 em, h2 em {
+		padding: 0 5px;
+		font-weight: normal;
+	}
+
+	h1 {
+		font-size: 60px;
+	}
+	h2 {
+		margin-top: 10px;
+	}
+
+	ul li {
+		list-style: none;
+	}
+	ul li:hover {
+		color: #2e2e2e;
+	}
+	ul li .path {
+		padding-left: 5px;
+		font-weight: bold;
+	}
+	ul li .line {
+		padding-right: 5px;
+		font-style: italic;
+	}
+	ul li:first-child .path {
+		padding-left: 0;
+	}
+
+	#stacktrace {
+		margin-top: 15px;
 	}
 }

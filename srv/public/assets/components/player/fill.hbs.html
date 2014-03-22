@@ -1,3 +1,4 @@
+{{#if track}}
 <span class="volume">
 	<span class="volume-slider"><input type="range"></span>
 	<a class="player-volume mashlicon mashlicon-volume-high"></a>
@@ -9,3 +10,4 @@
 	{{#if track.details.waveform_url}}<div class="waveform" style="background-image:url({{track.details.waveform_url}});"></div>{{/if}}
 	<div class="details">{{track.details.title}} - {{durationShort track.details.duration}}</div>
 </div>
+{{/if}}

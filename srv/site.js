@@ -42,9 +42,7 @@ app.use(function(req, res, next){
 	next();
 });
 
-app.use(require('app/routes/index')());
-
-app.use(require('app/routes/404'));
+app.use(require('app/routes/main')());
 
 app.use(require('errorhandler')({
 	dumpExceptions:true,

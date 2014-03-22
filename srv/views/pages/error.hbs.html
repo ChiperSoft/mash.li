@@ -1,0 +1,13 @@
+{{require "layouts/foundation"}}
+{{#extend "layouts/foundation"}}
+
+	{{#content "body"}}
+	<div class="application-error">
+		{{#if title}}<h1>{{title}}</h1>{{/if}}
+		<h2><em>{{statusCode}}</em> {{error}}</h2>
+		<ul id="stacktrace">{{#each stack}}<li>{{this}}</li>{{/each}}</ul>
+		<a href="/" data-bypass class="btn btn-primary">Return to front page.</a>
+	</div>
+	{{/content}}
+
+{{/extend}}
