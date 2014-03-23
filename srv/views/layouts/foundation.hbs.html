@@ -10,27 +10,29 @@
 </head>
 <body>
 	<div class="container">
-	{{#block "header"}}
 		<header class="container">
+	{{#block "header"}}
 			<div class="header-links">
 				<a class="sitelogo pull-left" href="/" data-bypass><i class="mashlicon mashlicon-logo"></i><span>Mash.li</span></a>
 				<a href="http://twitter.com/mash_li" target="_blank" class="pull-right mashlicon mashlicon-twitter"></a>
 				<a href="http://github.com/chipersoft/mash.li" target="_blank" class="pull-right mashlicon mashlicon-github"></a>
 			</div>
 			<div id="player" class="navbar navbar-inverse">{{#if needPlayer}}{{require "assets/components/player/prerender"}}{{> assets/components/player/prerender}}{{/if}}</div>
+	{{/block}}
 		</header>
 		<div class="filler"></div>
-	{{/block}}
 
 		<section class="main-body">{{#block "body"}}{{/block}}</section>
 
+		<footer>
 	{{#block "footer"}}
-		<footer class="navbar navbar-inverse">
+		<div class="navbar navbar-inverse">
 			<img src="/assets/images/powered-by-soundcloud.png" class="powered navbar-btn navbar-right">
-			<p class="navbar-text">Mash.li Copyright &copy; 2014, <a href="http://chipersoft.com/" target="_blank">Jarvis Badgley</a><br>All tracks and track artwork are copyright their respective owners. <a href="http://soundcloud.com/" target="_blank">Content provided by SoundCloud, Inc.</a><p>
+			<p class="navbar-text">Mash.li Copyright &copy; 2014, <a href="http://chipersoft.com/" target="_blank">Jarvis Badgley</a><br>All tracks and track artwork are copyright their respective owners. <a href="http://soundcloud.com/" target="_blank">Content provided by SoundCloud, Inc.</a></p>
+		</div>
+	{{/block}}
 		</footer>
 		<div class="mask bottom"></div>
-	{{/block}}
 	</div>
 
 	<script src="/assets/rjs/main.js"></script>
