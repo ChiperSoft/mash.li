@@ -6,6 +6,7 @@ var Setting = require('app/models/Setting');
 var Track = require('app/models/Track');
 var TrackList = require('app/models/TrackList');
 
+var DEFAULT_LIST = 'new';
 var DEFAULT_LIMIT = 25;
 
 module.exports = exports = function () {
@@ -53,7 +54,7 @@ exports.scanForList = function (req, res, next) {
 	var match;
 
 	match = req.path.match(REGEX_FOR_LISTNAME);
-	var listname = match && match[1] || 'new';
+	var listname = match && match[1] || DEFAULT_LIST;
 	res.locals.list = listname;
 		
 	if (match && match.index === 0) {
@@ -178,3 +179,6 @@ exports.main = function (req, res) {
 
 	}
 };
+
+// load the front page default list at launch time so we pre-cache the track info.
+TrackList.promiseTrackList[DEFAULT_LIST](0, DEFAULT_LIMIT * 2);
