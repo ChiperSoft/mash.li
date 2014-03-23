@@ -8,6 +8,8 @@ module.exports = function (grunt) {
 				'app/helpers/durationLong.js',
 				'app/helpers/durationShort.js',
 				'app/helpers/option.js',
+				'node_modules/helper-hoard/src/helpers/math/add.js',
+				'node_modules/helper-hoard/src/helpers/math/sub.js',
 				'node_modules/helper-hoard/src/helpers/compare/and.js',
 				'node_modules/helper-hoard/src/helpers/compare/compare.js',
 				'node_modules/helper-hoard/src/helpers/data/*.js',

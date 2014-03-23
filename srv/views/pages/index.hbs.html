@@ -1,4 +1,5 @@
 {{require "layouts/foundation"}}
+{{require "assets/components/featuredLists/prerender"}}
 {{require "assets/components/songbar/prerender"}}
 {{require "assets/components/tracklist/prerender"}}
 {{option 'needPlayer' true}}
@@ -11,10 +12,21 @@
 	<div id="splitview"{{#if track}} class="songbar-open"{{/if}}>
 		<div id="songbar">{{> assets/components/songbar/prerender}}</div>
 		<div id="listview">
+			{{#if featuredLists}}{{> assets/components/featuredLists/prerender}}{{/if}}
 			{{> assets/components/tracklist/prerender}}
 		</div>
 	</div>
 	{{/content}}
+
+	{{#prepend "footer"}}{{#if total}}
+	<li class="pager">
+		<span class="location">Tracks {{add start 1}} - {{stop}} of {{total}}</span>
+		<span class="previous {{#unless start}}omit{{/unless}}"><a href="/list/{{list}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}" data-bypass><i class="mashlicon mashlicon-fast-backward"></i> Newest</a></span>
+		<span class="previous {{#unless start}}omit{{/unless}}"><a href="/list/{{list}}/start/{{add prevPage 1}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}" data-bypass><i class="mashlicon mashlicon-backward"></i> Newer</a></span>
+		<span class="next {{#unless nextPage}}omit{{/unless}}"><a href="/list/{{list}}/start/{{sub total limit}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}" data-bypass>Oldest <i class="mashlicon mashlicon-fast-forward"></i></a></span>
+		<span class="next {{#unless nextPage}}omit{{/unless}}"><a href="/list/{{list}}/start/{{add nextPage 1}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}" data-bypass>Older <i class="mashlicon mashlicon-forward"></i></a></span>
+	</li>
+	{{/if}}{{/prepend}}
 
 	{{#append "postscripts"}}
 		<script src="/assets/rjs/index.js"></script>

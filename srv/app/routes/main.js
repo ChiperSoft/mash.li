@@ -1,10 +1,12 @@
+var _ = require('lodash');
 var express = require('express');
-var when = require('when');
 var whenKeysMap = require('when/keys').map;
+
+var Setting = require('app/models/Setting');
 var Track = require('app/models/Track');
 var TrackList = require('app/models/TrackList');
-var promiseFromSoundcloudCache = require('app/lib/soundcloud-cache');
-var _ = require('lodash');
+
+var DEFAULT_LIMIT = 25;
 
 module.exports = exports = function () {
 
@@ -14,6 +16,7 @@ module.exports = exports = function () {
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
+	router.use(exports.loadOther);
 	router.use(exports.waitForPromises);
 	router.get('*', exports.main);
 
@@ -51,28 +54,35 @@ exports.scanForList = function (req, res, next) {
 
 	match = req.path.match(REGEX_FOR_LISTNAME);
 	var listname = match && match[1] || 'new';
-
+	res.locals.list = listname;
+		
 	if (match && match.index === 0) {
 		res.locals.first = 'list';
 	}
 
-	if (!TrackList.promiseTrackList[listname]) {
-		res.locals.tracks = false;
+	match = req.path.match(REGEX_FOR_START);
+	var start = match && Math.max(parseInt(match[1],10) - 1, 0) || 0;
+	res.locals.start = start;
+
+	match = req.path.match(REGEX_FOR_LIMIT);
+	var limit = match && parseInt(match[1],10) || DEFAULT_LIMIT;
+	res.locals.limit = limit;
+
+	if (limit !== DEFAULT_LIMIT) {
+		res.locals.limitIsCustom = true;
+	}
+	
+	// first see if the list name is one of our computed lists
+	if (TrackList.promiseTrackList[listname]) {
+		res.locals.tracks = TrackList.promiseTrackList[listname](start, limit);
+		res.locals.total = TrackList.promiseTotalTracks[listname]();
 		return next();
 	}
 
-	match = req.path.match(REGEX_FOR_START);
-	var start = match && parseInt(match[1],10) || 0;
-
-	match = req.path.match(REGEX_FOR_LIMIT);
-	var limit = match && parseInt(match[1],10) || 25;
-	
-	res.locals.start = start;
-	res.locals.limit = limit;
-	res.locals.list = 'new';
-	res.locals.tracks = TrackList.promiseTrackList[listname](start, limit);
-
-	next();
+	// list is not computed, try loading it by name.
+	res.locals.tracks = TrackList.promiseTrackList(listname, start, limit);
+	res.locals.total = TrackList.promiseTotalTracks(listname);
+	return next();
 };
 
 var REGEX_FOR_JSON = /\.json\/?/;
@@ -87,9 +97,23 @@ exports.scanForJSON = function (req, res, next) {
 	next();
 };
 
+exports.loadOther = function (req, res, next) {
+	res.locals.featuredLists = Setting.get('FeaturedLists');
+
+	next();
+};
+
 exports.waitForPromises = function (req, res, next) {
 	whenKeysMap(res.locals).then(
 		function (locals) {
+			locals.stop = Math.min(locals.start + locals.limit, locals.total);
+			locals.prevPage = Math.max(0, locals.start - locals.limit);
+			if (locals.stop < locals.total) {
+				locals.nextPage = locals.stop;
+			} else {
+				locals.nextPage = false;
+			}
+
 			res.locals = locals;
 			next();
 		},
@@ -148,6 +172,7 @@ exports.main = function (req, res) {
 			res.locals.statusCode = 404;
 			res.render('pages/error', res.locals);
 		} else {
+			// res.json(res.locals);
 			res.render('pages/index', res.locals);
 		}
 
