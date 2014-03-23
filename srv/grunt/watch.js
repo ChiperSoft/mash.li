@@ -13,7 +13,7 @@ module.exports = function (grunt) {
 		},
 
 		helpers: {
-			files: 'app/helpers/**/*.js',
+			files: ['app/helpers/**/*.js', 'grunt/concat.js'],
 			tasks: ['concat:helpers', 'amdwrap:helpers']
 		},
 
