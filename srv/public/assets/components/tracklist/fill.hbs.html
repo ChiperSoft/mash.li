@@ -1,15 +1,12 @@
 {{#each tracks}}{{#and this details}}
-	
 <li data-trackid="{{_id}}" class="{{#compare _id '==' ../../nowPlaying}}playing{{/compare}}{{#compare _id '==' ../../lastPlayed}} last-played{{/compare}}">
+	<span class="duration">{{durationShort details.duration}} <i class="mashlicon mashlicon-time"></i></span>
 	<a class="artwork{{#unless details.kind}} loading{{/unless}}" href="/track/{{_id}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
-	<div class="details details-track"><a href="/track/{{_id}}" class="title">{{details.title}}</a></div>
-	<div class="details details-actions">
+	<div class="title"><a href="/track/{{_id}}">{{details.title}}</a></div>
+	<div class="actions">
 		{{#if details.kind}}<a href="/track/{{_id}}/play" class="play label label-primary"><i class="mashlicon mashlicon-play"></i> Play Track</a>{{/if}}
 		<a href="{{details.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-soundcloud"></i> View On SoundCloud</a>
-	</div>
-	<div class="details details-info">
-		<a href="{{details.user.permalink_url}}" class="artist block" target="_blank"><i class="mashlicon mashlicon-user"></i> {{details.user.username}}</a>
-		{{#each details.tags}}<span class="tag block"><i class="mashlicon mashlicon-tag"></i> {{this}}</span>{{/each}}
+		<a href="{{details.user.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-user"></i> View {{details.user.username}}</a>
 	</div>
 
 </li>

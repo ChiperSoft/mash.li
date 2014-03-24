@@ -8,6 +8,7 @@
 		margin: 0;
 
 		> li {
+			position: relative;
 			border-top: 1px solid #ccc;
 			font-size: 12px;
 			margin-top: 0;
@@ -25,8 +26,8 @@
 				background-size: contain;
 				display: block;
 				float: left;
-				height: 72px;
-				width: 72px;
+				height: 68px;
+				width: 68px;
 
 				&.loading {
 					background-size: auto;
@@ -35,7 +36,7 @@
 			}
 
 			.details {
-				margin-left: 80px;
+				margin-left: 76px;
 				overflow: hidden;
 			}
 
@@ -53,39 +54,69 @@
 					float: left;
 					font-size: 10px;
 					line-height: 1;
-					margin: 3px;
+					margin: 3px 3px 3px 0;
 					white-space: nowrap;
+
+					.mashlicon {
+						vertical-align: middle;
+					}
+				}
+
+
+			}
+
+			.duration {
+				font-weight: 600;
+				font-size: 11px;
+				padding-left: 4px;
+				text-transform: capitalize;
+				margin-left: 20px;
+				margin-right: 5px;
+				line-height: 26px;
+				float: right;
+			}
+
+			.actions {
+				margin-top: 40px;
+				margin-left: 76px;
+
+				.label {
+					display: block;
+					float: left;
+					font-family: 'Open Sans', sans-serif;
+					font-size: 10px;
+					font-weight: 600;
+					margin-right: 5px;
+					margin-top: 5px;
+					padding: 2px 5px 4px;
+
+					.mashlicon-soundcloud {
+						font-size: 16px;
+						line-height: 4px;
+						top: 3px;
+						position: relative;
+					}
 				}
 			}
 
 			.title {
-				color: black;
-				display: block;
+				position: absolute;
+				left: 84px;
+				right: 80px;
+				top: 10px;
+
 				font-family: 'Open Sans', sans-serif;
-				font-size: 14px;
 				font-size: 18px;
 				font-weight: 300;
 				line-height: 1;
-				margin-bottom: 3px;
+				height: 2em;
+				overflow: hidden;
+
+				a {
+					color: black;
+				}
 			}
 
-			.label {
-				display: block;
-				float: left;
-				font-family: 'Open Sans', sans-serif;
-				font-size: 10px;
-				font-weight: 600;
-				margin-right: 5px;
-				margin-top: 5px;
-				padding: 2px 5px 4px;
-			}
-
-			.mashlicon-soundcloud {
-				font-size: 16px;
-				line-height: 4px;
-				top: 3px;
-				position: relative;
-			}
 
 			&.last-played {
 				background-color: @gray-lighter;
