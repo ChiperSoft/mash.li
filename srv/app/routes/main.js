@@ -115,6 +115,10 @@ exports.waitForPromises = function (req, res, next) {
 				locals.nextPage = false;
 			}
 
+			if (locals.track && locals.play) {
+				locals.lastPlayed = locals.track._id;
+			}
+
 			res.locals = locals;
 			next();
 		},

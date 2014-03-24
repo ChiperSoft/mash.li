@@ -1,6 +1,6 @@
 {{#each tracks}}{{#and this details}}
-<li data-trackid="{{_id}}" class="{{#compare _id '==' nowPlaying}} playing{{/compare}}{{#compare _id '==' ../lastPlayed}} last-played{{/compare}}">
 	
+<li data-trackid="{{_id}}" class="{{#compare _id '==' ../../nowPlaying}}playing{{/compare}}{{#compare _id '==' ../../lastPlayed}} last-played{{/compare}}">
 	<a class="artwork{{#unless details.kind}} loading{{/unless}}" href="/track/{{_id}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
 	<div class="details details-track"><a href="/track/{{_id}}" class="title">{{details.title}}</a></div>
 	<div class="details details-actions">
