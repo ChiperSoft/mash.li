@@ -119,7 +119,11 @@ exports.waitForPromises = function (req, res, next) {
 				locals.lastPlayed = locals.track._id;
 			}
 
-			locals.title = 'Mash.li - New Music Mashups Every Day'
+			if (Array.isArray(locals.tracks)) {
+				locals.tracks = _.filter(locals.tracks);
+			}
+
+			locals.title = 'Mash.li - New Music Mashups Every Day';
 
 			res.locals = locals;
 			next();
