@@ -43,12 +43,12 @@ app.use(require('static-favicon')(__dirname + '/public/favicon.ico'));
 app.use('/assets', express.static(__dirname + '/public/assets'));
 
 // process the request cookies and register the session handler with a redis store
-app.use(require('cookie-parser')());
-app.use(expressSession({
-	store: new expressSessionRedisStore({ client: redis }),
-	secret: config.sessions.secret,
-	key: config.sessions.cookieKey
-}));
+// app.use(require('cookie-parser')());
+// app.use(expressSession({
+// 	store: new expressSessionRedisStore({ client: redis }),
+// 	secret: config.sessions.secret,
+// 	key: config.sessions.cookieKey
+// }));
 
 // register any request specific locals.
 app.use(function(req, res, next){
