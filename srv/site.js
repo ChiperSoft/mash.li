@@ -12,8 +12,6 @@ require('when/monitor/console');
 
 // load express and any middleware dependencies that need to be saved
 var express = require('express');
-var expressSession = require("express-session");
-var expressSessionRedisStore = require('connect-redis')(expressSession);
 
 // load local modules
 var config = require('app/config');
@@ -21,7 +19,7 @@ var log = require('app/log');
 
 // load our database connections
 var mongo = require('app/db/mongo');
-var redis = require('app/db/redis');
+
 
 var app = express();
 app.set('port', process.env.PORT || 8000);
@@ -45,13 +43,11 @@ app.use(require('app/middleware/logger')());
 app.use(require('static-favicon')(__dirname + '/public/favicon.ico'));
 app.use('/assets', express.static(__dirname + '/public/assets'));
 
-// process the request cookies and register the session handler with a redis store
-// app.use(require('cookie-parser')());
-// app.use(expressSession({
-// 	store: new expressSessionRedisStore({ client: redis }),
-// 	secret: config.sessions.secret,
-// 	key: config.sessions.cookieKey
-// }));
+// process the request cookies
+app.use(require('cookie-parser')());
+
+// Register the session handler with a redis store -- disabled until we need sessions
+// app.use(require('app/middleware/sessions')());
 
 // register any request specific locals.
 var REGEX_FOR_JSON = /\.json\/?/;
@@ -108,7 +104,6 @@ if (isProduction) {
 			name: 'Shutdown',
 		});
 
-		redis.quit();
 		mongo.disconnect();
 
 		setTimeout( function () {
