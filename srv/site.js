@@ -69,6 +69,7 @@ app.use(function(req, res, next){
 });
 
 // with all middleware in place, register the actual routers that handle the page requests.
+app.use(require('app/routes/votes')());
 app.use(require('app/routes/main')());
 
 // if our site were able to have 404 errors, the handler for that would go here.

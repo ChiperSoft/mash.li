@@ -10,6 +10,14 @@ var sTrack = mongoose.Schema({
 	_id: String,
 	details: { type: String, ref: 'SoundCloudTrack' },
 	created_at: { type: Date, default: Date.now },
+	votes: {
+		'1': { type: Number, default: 0 },
+		'-1': { type: Number, default: 0 }
+	},
+	votesActual: {
+		'1': { type: Number, default: 0 },
+		'-1': { type: Number, default: 0 }
+	}
 },{
 	strict: true
 });
