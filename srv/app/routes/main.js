@@ -13,11 +13,14 @@ module.exports = exports = function () {
 
 	var router = express.Router();
 	
+	// register data gatherers
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
 	router.use(exports.loadOther);
 	router.use(exports.waitForPromises);
+
+	// add actual routes
 	router.get('*', exports.main);
 
 	return router;
