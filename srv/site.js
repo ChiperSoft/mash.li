@@ -26,6 +26,9 @@ var redis = require('app/db/redis');
 var app = express();
 app.set('port', process.env.PORT || 8000);
 
+// we're proxying all requests through nginx, so tell express to trust our proxy
+app.enable('trust proxy');
+
 // initialize our custom view renderer
 app.set('view', require('app/lib/view'));
 app.set('views', __dirname + '/views/');
