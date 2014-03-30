@@ -72,10 +72,7 @@ app.use(require('app/routes/main')());
 // the main router.
 
 // finally, register an error handler at the tail end of the request.
-app.use(require('errorhandler')({
-	dumpExceptions:true,
-	showStack:true
-}));
+app.use(require('app/middleware/errorhandler')());
 
 // start the server.
 var server = app.listen(app.get('port'), function() {
