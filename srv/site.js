@@ -51,8 +51,17 @@ app.use('/assets', express.static(__dirname + '/public/assets'));
 // }));
 
 // register any request specific locals.
+var REGEX_FOR_JSON = /\.json\/?/;
 app.use(function(req, res, next){
+	var match = req.path.match(REGEX_FOR_JSON);
+	var accept = req.headers.accept || '';
+
+	if (match || accept.indexOf('json') > -1) {
+		res.locals.wantsJSON = true;
+	}
+
 	res.locals.httproot = req.protocol + '://' + req.host;
+
 	next();
 });
 

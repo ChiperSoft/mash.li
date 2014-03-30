@@ -13,7 +13,6 @@ module.exports = exports = function () {
 
 	var router = express.Router();
 	
-	router.use(exports.scanForJSON);
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
@@ -84,18 +83,6 @@ exports.scanForList = function (req, res, next) {
 	res.locals.tracks = TrackList.promiseTrackList(listname, start, limit);
 	res.locals.total = TrackList.promiseTotalTracks(listname);
 	return next();
-};
-
-var REGEX_FOR_JSON = /\.json\/?/;
-exports.scanForJSON = function (req, res, next) {
-	var match = req.path.match(REGEX_FOR_JSON);
-	var accept = req.headers.accept || '';
-
-	if (match || accept.indexOf('json') > -1) {
-		res.locals.wantsJSON = true;
-	}
-
-	next();
 };
 
 exports.loadOther = function (req, res, next) {
