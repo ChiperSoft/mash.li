@@ -17,9 +17,8 @@ var express = require('express');
 var config = require('app/config');
 var log = require('app/log');
 
-// load our database connections
-var mongo = require('app/db/mongo');
-
+// start our database connection
+require('app/db/mongo');
 
 var app = express();
 app.set('port', process.env.PORT || 8000);
@@ -93,26 +92,26 @@ if (isProduction) {
 	process.on('SIGTERM', function () {
 		log({
 			level: 1,
-			name: 'Server is terminating, closing listening socket.',
+			name: 'Process is terminating, stopping server and finishing requests.',
 		});
-		server.close();
-	});
-
-	server.on('close', function () {
-		log({
-			level: 1,
-			name: 'Shutdown',
-		});
-
-		mongo.disconnect();
-
-		setTimeout( function () {
+		server.close(function () {
 			log({
 				level: 1,
-				name: 'Could not close connections in time, forcefully shutting down.',
+				name: 'Server stopped, closing db connections.',
 			});
-			process.exit(1);
-		}, 1000);
+
+			var promises = [];
+			process.emit('graceful stop', promises);
+
+			require('when').settle(promises).then(function () {
+				log({
+					level: 1,
+					name: 'Shutdown',
+				});
+
+				process.exit();
+			});
+		});
 	});
 }
 

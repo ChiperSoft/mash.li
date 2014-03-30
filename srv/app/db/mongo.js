@@ -31,4 +31,11 @@ db.once('open', function () {
 	});
 });
 
+process.on('graceful stop', function (promises) {
+	var p = require('proxmis')();
+	promises.push(p);
+
+	mongoose.disconnect(p);
+});
+
 module.exports = mongoose;

@@ -28,5 +28,11 @@ redis.once('connect', function () {
 	});
 });
 
+process.on('graceful stop', function (promises) {
+	var p = require('proxmis')();
+	promises.push(p);
+
+	redis.close(p);
+});
 
 module.exports = redis;
