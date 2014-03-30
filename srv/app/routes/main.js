@@ -1,6 +1,5 @@
 var _ = require('lodash');
 var express = require('express');
-var whenKeysMap = require('when/keys').map;
 
 var Setting = require('app/models/Setting');
 var Track = require('app/models/Track');
@@ -18,7 +17,8 @@ module.exports = exports = function () {
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
 	router.use(exports.loadOther);
-	router.use(exports.waitForPromises);
+	router.use(require('app/middleware/localsResolver'));
+	router.use(exports.processData);
 
 	// add actual routes
 	router.get('*', exports.main);
@@ -94,51 +94,29 @@ exports.loadOther = function (req, res, next) {
 	next();
 };
 
-exports.waitForPromises = function (req, res, next) {
-	whenKeysMap(res.locals).then(
-		function (locals) {
-			locals.stop = Math.min(locals.start + locals.limit, locals.total);
-			locals.prevPage = Math.max(0, locals.start - locals.limit);
-			if (locals.stop < locals.total) {
-				locals.nextPage = locals.stop;
-			} else {
-				locals.nextPage = false;
-			}
+exports.processData = function (req, res, next) {
+	var locals = res.locals;
 
-			if (locals.track && locals.play) {
-				locals.lastPlayed = locals.track._id;
-			}
+	locals.stop = Math.min(locals.start + locals.limit, locals.total);
+	locals.prevPage = Math.max(0, locals.start - locals.limit);
+	if (locals.stop < locals.total) {
+		locals.nextPage = locals.stop;
+	} else {
+		locals.nextPage = false;
+	}
 
-			if (Array.isArray(locals.tracks)) {
-				locals.tracks = _.filter(locals.tracks);
-			}
+	if (locals.track && locals.play) {
+		locals.lastPlayed = locals.track._id;
+	}
 
-			locals.title = 'Mash.li - New Music Mashups Every Day';
+	if (Array.isArray(locals.tracks)) {
+		locals.tracks = _.filter(locals.tracks);
+	}
 
-			res.locals = locals;
-			next();
-		},
-		function (err) {
-			var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function(v){ return '' + v + ''; }) }, err)};
+	locals.title = 'Mash.li - New Music Mashups Every Day';
 
-			console.warn(error);
+	next();
 
-			res.status(503);
-			if (res.locals.wantsJSON) {
-				res.json(error);
-			} else {
-				res.locals.error = err.toString()
-					.replace(/\n/g, '')
-					.replace(/&(?!\w+;)/g, '&amp;')
-					.replace(/</g, '&lt;')
-					.replace(/>/g, '&gt;')
-					.replace(/"/g, '&quot;');
-				res.locals.statusCode = res.statusCode;
-				res.locals.stack = error.stack;
-				res.render('pages/error', res.locals);
-			}
-		}
-	);
 };
 
 exports.main = function (req, res) {
