@@ -52,8 +52,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 			var $targetVote = $(ev.currentTarget),
 				$track = $targetVote.parents('li'),
-				$currentVote = $track.find('.vote .current'),
-				$currentScore = $track.find('.vote .score');
+				$currentVote = $track.find('.vote .current');
 
 			var trackID = $track.attr('data-trackid'),
 				track = this.collection.get(trackID),
@@ -67,7 +66,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 				track.set({score: targetScore, voted: targetDelta});
 
-				// $.getJSON($targetVote.attr('href'));
+				$.getJSON($targetVote.attr('href'));
 			}
 
 		},

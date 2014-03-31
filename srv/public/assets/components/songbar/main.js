@@ -66,8 +66,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 			ev.stopPropagation();
 
 			var $targetVote = $(ev.currentTarget),
-				$currentVote = this.$('.vote .current'),
-				$currentScore = this.$('.vote .score');
+				$currentVote = this.$('.vote .current');
 
 			var track = this.model,
 				targetDelta = parseInt($targetVote.attr('data-delta'),10),
