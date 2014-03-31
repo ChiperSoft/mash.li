@@ -1,4 +1,4 @@
-
+/*globals ga */
 
 define(['lodash', 'backbone', 'events'], function (_, Backbone, events) {
 

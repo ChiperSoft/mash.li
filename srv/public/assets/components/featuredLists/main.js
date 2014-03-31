@@ -1,3 +1,4 @@
+/*jshint unused:false */
 
 define(['lodash', 'backbone', 'events', './fill.hbs'], function (_, Backbone, events, tmplFill) {
 

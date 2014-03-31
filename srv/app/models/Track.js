@@ -1,4 +1,3 @@
-var proxmis = require('proxmis');
 var when = require('when');
 
 require('app/models/SoundCloudTrack');

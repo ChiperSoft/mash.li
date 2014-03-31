@@ -129,7 +129,5 @@ function getPage (limit, offset, since, callback) {
 	// 	url += '&created_at[from]=' + moment(since).format('YYYY-MM-DD') + '00:00:00 +0000';
 	// }
 
-console.log(url);
-
 	request.get(url, {json:true}, callback);
 }

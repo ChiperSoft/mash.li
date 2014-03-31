@@ -39,7 +39,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 		updateDetailHeight: function (force) {
 			var $details = this.$('.details');
 
-			if (!$details.length) return;
+			if (!$details.length) {return;}
 
 			var pageScroll = $(window).scrollTop(),
 				detailsTop = $details.position().top + this.$('.body').position().top,
@@ -74,7 +74,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 			var data = { track: this.model.toJSON() };
 
 			if (!data.track.details) {
-				track = false;
+				data.track = false;
 			}
 
 			var html = this.template(data);
