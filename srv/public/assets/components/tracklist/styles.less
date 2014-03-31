@@ -2,6 +2,11 @@
 
 	background: white;
 
+	@artwork-size: 68px;
+	@vote-width: 40px;
+	@vote-up-color: #439915;
+	@vote-down-color: #F44469;
+
 	.lbody {
 		padding: 0;
 		list-style: none;
@@ -14,9 +19,59 @@
 			margin-top: 0;
 			overflow:hidden;
 			padding: 8px;
+			padding-left: 0;
 
 			&:first-child {
 				border-top: none;
+			}
+
+			.vote {
+				position: relative;
+				float: left;
+				width: @vote-width;
+				height: @artwork-size;
+				font-size: 16px;
+
+				a {
+					display: block;
+					text-align: center;
+					color: @gray-light;
+
+					&:hover {
+						color: @gray-darker;
+						text-decoration: none;
+					}
+				}
+
+				.up, .down {
+					position: absolute;
+					left: 0;
+					width: 100%;
+
+				}
+
+				.up {
+					top: 0;
+
+					&.current {
+						color: @vote-up-color;
+						text-shadow: 0 -6px 0px @vote-up-color;
+					}
+				}
+
+				.down {
+					bottom: 0;
+
+					&.current {
+						color: @vote-down-color;
+						text-shadow: 0 6px 0px @vote-down-color;
+					}
+				}
+
+				.score {
+					line-height: @artwork-size;
+					font-family: Helvetica, Arial, sans-serif;
+				}
 			}
 
 			.artwork {
@@ -26,8 +81,8 @@
 				background-size: contain;
 				display: block;
 				float: left;
-				height: 68px;
-				width: 68px;
+				height: @artwork-size;
+				width: @artwork-size;
 
 				&.loading {
 					background-size: auto;
@@ -36,7 +91,7 @@
 			}
 
 			.details {
-				margin-left: 76px;
+				margin-left: 112px;
 				overflow: hidden;
 			}
 
@@ -78,7 +133,7 @@
 
 			.actions {
 				margin-top: 40px;
-				margin-left: 76px;
+				margin-left: @vote-width + @artwork-size + 10px;
 
 				.label {
 					display: block;
@@ -101,7 +156,7 @@
 
 			.title {
 				position: absolute;
-				left: 84px;
+				left: @vote-width + @artwork-size + 10px;
 				right: 80px;
 				top: 10px;
 

@@ -30,6 +30,10 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			this.listenTo(events, 'player:paused', this.onPaused);
 		},
 
+		events: {
+			'click .vote a': 'onVote'
+		},
+
 		onPlayback: function (ev, id) {
 			this.lastPlayed = id;
 			this.nowPlaying = id;
@@ -41,6 +45,33 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			this.render();
 		},
 
+		onVote: function (ev) {
+			ev.preventDefault();
+			ev.stopPropagation();
+
+			var $targetVote = $(ev.currentTarget),
+				$track = $targetVote.parents('li'),
+				$currentVote = $track.find('.vote .current'),
+				$currentScore = $track.find('.vote .score');
+
+			var trackID = $track.attr('data-trackid'),
+				track = this.collection.get(trackID),
+				targetDelta = parseInt($targetVote.attr('data-delta'),10),
+				currentDelta = parseInt($currentVote.attr('data-delta'),10) || 0,
+				currentScore = track.get('score'),
+				targetScore;
+
+			if (targetDelta !== currentDelta) {
+				targetScore = currentScore + (targetDelta - currentDelta);
+
+				track.set('score', targetScore);
+				track.set('voted', targetDelta);
+				this.render();
+
+				$.getJSON($targetVote.attr('href'));
+			}
+
+		},
 
 		render: function () {
 			var data = {
