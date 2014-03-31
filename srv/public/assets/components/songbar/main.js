@@ -16,6 +16,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 			if (json) {
 				this.model = new Track(json);
 				this.listenTo(this.model, 'sync', this.render);
+				this.listenTo(this.model, 'change', this.render);
 			}
 
 			this.render = this.render.bind(this);
@@ -25,6 +26,10 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 			$(window).on('resize scroll', this.onPageScroll.bind(this));
 			this.updateDetailHeight();
 			
+		},
+
+		events: {
+			'click .vote a': 'onVote'
 		},
 
 		onPageScroll: function () {
@@ -56,6 +61,30 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 
 		},
 
+		onVote: function (ev) {
+			ev.preventDefault();
+			ev.stopPropagation();
+
+			var $targetVote = $(ev.currentTarget),
+				$currentVote = this.$('.vote .current'),
+				$currentScore = this.$('.vote .score');
+
+			var track = this.model,
+				targetDelta = parseInt($targetVote.attr('data-delta'),10),
+				currentDelta = parseInt($currentVote.attr('data-delta'),10) || 0,
+				currentScore = track.get('score'),
+				targetScore;
+
+			if (targetDelta !== currentDelta) {
+				targetScore = currentScore + (targetDelta - currentDelta);
+
+				track.set({score: targetScore, voted: targetDelta});
+
+				$.getJSON($targetVote.attr('href'));
+			}
+
+		},
+
 		onTrackEvent: function (event, id) {
 			$('#splitview').toggleClass('songbar-open', !!id);
 			if (id && (!this.model || this.model.id !== id)) {
@@ -64,6 +93,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 				}
 				this.model = new Track({id: id});
 				this.listenTo(this.model, 'sync', this.render);
+				this.listenTo(this.model, 'change', this.render);
 				this.render();
 			} else if (!id) {
 				this.model = null;

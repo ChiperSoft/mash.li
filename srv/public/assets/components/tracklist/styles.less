@@ -2,10 +2,8 @@
 
 	background: white;
 
-	@artwork-size: 68px;
-	@vote-width: 40px;
-	@vote-up-color: #439915;
-	@vote-down-color: #F44469;
+	@tracklist-artwork-size: 68px;
+	@tracklist-vote-width: 40px;
 
 	.lbody {
 		padding: 0;
@@ -28,8 +26,8 @@
 			.vote {
 				position: relative;
 				float: left;
-				width: @vote-width;
-				height: @artwork-size;
+				width: @tracklist-vote-width;
+				height: @tracklist-artwork-size;
 				font-size: 16px;
 
 				a {
@@ -69,7 +67,7 @@
 				}
 
 				.score {
-					line-height: @artwork-size;
+					line-height: @tracklist-artwork-size;
 					font-family: Helvetica, Arial, sans-serif;
 				}
 			}
@@ -81,8 +79,8 @@
 				background-size: contain;
 				display: block;
 				float: left;
-				height: @artwork-size;
-				width: @artwork-size;
+				height: @tracklist-artwork-size;
+				width: @tracklist-artwork-size;
 
 				&.loading {
 					background-size: auto;
@@ -133,7 +131,7 @@
 
 			.actions {
 				margin-top: 40px;
-				margin-left: @vote-width + @artwork-size + 10px;
+				margin-left: @tracklist-vote-width + @tracklist-artwork-size + 10px;
 
 				.label {
 					display: block;
@@ -156,7 +154,7 @@
 
 			.title {
 				position: absolute;
-				left: @vote-width + @artwork-size + 10px;
+				left: @tracklist-vote-width + @tracklist-artwork-size + 10px;
 				right: 80px;
 				top: 10px;
 

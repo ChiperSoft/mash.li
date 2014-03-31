@@ -22,9 +22,10 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 			this.collection = new TrackList(json);
 
-			this.render = this.render.bind(this);
+			this.render = _.debounce(this.render.bind(this), 50);
 
-			this.listenTo(this.collection, 'sync', _.debounce(this.render, 200));
+			this.listenTo(this.collection, 'sync', this.render);
+			this.listenTo(this.collection, 'change', this.render);
 
 			this.listenTo(events, 'player:playing', this.onPlayback);
 			this.listenTo(events, 'player:paused', this.onPaused);
@@ -64,11 +65,9 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			if (targetDelta !== currentDelta) {
 				targetScore = currentScore + (targetDelta - currentDelta);
 
-				track.set('score', targetScore);
-				track.set('voted', targetDelta);
-				this.render();
+				track.set({score: targetScore, voted: targetDelta});
 
-				$.getJSON($targetVote.attr('href'));
+				// $.getJSON($targetVote.attr('href'));
 			}
 
 		},

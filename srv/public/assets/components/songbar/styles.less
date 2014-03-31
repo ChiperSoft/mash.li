@@ -1,5 +1,8 @@
 [data-component="songbar"] {
 
+	@songbar-vote-width: 50px;
+	@songbar-vote-height: 40px;
+
 	.details {
 		width: 100%;
 		// max-height: 500px;
@@ -56,6 +59,57 @@
 		}
 	}
 
+	.vote {
+		position: relative;
+		float: right;
+		width: @songbar-vote-width;
+		height: @songbar-vote-height;
+		font-size: 16px;
+		margin-top: 5px;
+		margin-right: 5px;
+
+		a {
+			display: block;
+			text-align: center;
+			color: @gray-light;
+
+			&:hover {
+				color: @gray-darker;
+				text-decoration: none;
+			}
+		}
+
+		.up, .down {
+			position: absolute;
+			right: 0;
+			width: 20px;
+		}
+
+		.up {
+			top: 0;
+
+			&.current {
+				color: @vote-up-color;
+				text-shadow: 0 -6px 0px @vote-up-color;
+			}
+		}
+
+		.down {
+			bottom: 0;
+
+			&.current {
+				color: @vote-down-color;
+				text-shadow: 0 6px 0px @vote-down-color;
+			}
+		}
+
+		.score {
+			line-height: @songbar-vote-height;
+			font-family: Helvetica, Arial, sans-serif;
+			margin-right: 20px;
+		}
+	}
+
 	.panel {
 		margin: 10px;
 	}
@@ -100,4 +154,8 @@
 			margin-top: 3px;
 		}
 	}
+
+	// .datacell.title {
+	// 	min-height: @songbar-vote-height;
+	// }
 }
