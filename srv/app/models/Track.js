@@ -23,27 +23,32 @@ var sTrack = mongoose.Schema({
 
 var Track = mongoose.model('Track', sTrack);
 
-Track.promiseTrackByID = function (id, asModel) {
+Track.promiseTrackByID = function (id, options) {
+	options = options || {};
+
 	var p = Track.findOne({_id: id})
 		.populate('details')
 		.exec();
 
-	if (asModel) {
+	if (options.asModel) {
 		return when(p);
 	}
 
 	return p.then(function (model) {
 		if (!model) {return false;}
 		
-		return model.promisePopulatedFromSoundcloud();
+		return model.promiseForRendering(options.visitorid);
 	});
 };
 
-Track.prototype.promisePopulatedFromSoundcloud = function () {
+Track.prototype.promiseForRendering = function (visitorid) {
 	var track = this.toObject();
 	track.score = this.getScore();
 	delete track.votesActual;
-	return promiseFromSoundcloudCache(track._id).then(
+
+	var waiting = [];
+
+	waiting.push(promiseFromSoundcloudCache(track._id).then(
 		function (details) {
 			// if details is false, that means soundcloud no longer has the track
 			// return false in that situation, since the track no longer exists
@@ -51,6 +56,7 @@ Track.prototype.promisePopulatedFromSoundcloud = function () {
 				track.details = details;
 				return track;
 			} else {
+				track.details = false;
 				return false;
 			}
 		},
@@ -59,7 +65,36 @@ Track.prototype.promisePopulatedFromSoundcloud = function () {
 		function () {
 			return track;
 		}
-	);
+	));
+
+	if (visitorid) {
+		waiting.push(require('app/models/TrackVote').promisePreviousVote(track._id, visitorid).then(
+			function (vote) {
+				// if vote is false, the user has not voted on this track
+				if (vote) {
+					track.voted = vote && vote.delta || 0;
+					return track;
+				} else {
+					track.voted = 0;
+					return false;
+				}
+			},
+			// the promise shouldn't ever reject, but if it does, pretend the user didn't vote
+			function () {
+				track.voted = 0;
+				return track;
+			}
+		));
+	}
+
+	return when.all(waiting).then(function () {
+		if (track.details) {
+			return track;
+		}
+
+		return false;
+	});
+
 };
 
 Track.prototype.getScore = function () {

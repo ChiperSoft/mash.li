@@ -13,6 +13,7 @@ module.exports = exports = function () {
 	var router = express.Router();
 	
 	// register data gatherers
+	router.use(require('app/middleware/visitor').creator);
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
@@ -35,7 +36,7 @@ exports.scanForTrack = function (req, res, next) {
 		res.locals.first = 'track';
 	}
 
-	res.locals.track = Track.promiseTrackByID(match[1]);
+	res.locals.track = Track.promiseTrackByID(match[1], {visitorid:res.locals.visitorid});
 	next();
 };
 
@@ -77,13 +78,13 @@ exports.scanForList = function (req, res, next) {
 	
 	// first see if the list name is one of our computed lists
 	if (TrackList.promiseTrackList[listname]) {
-		res.locals.tracks = TrackList.promiseTrackList[listname](start, limit);
+		res.locals.tracks = TrackList.promiseTrackList[listname]({start:start, limit:limit, visitorid:res.locals.visitorid});
 		res.locals.total = TrackList.promiseTotalTracks[listname]();
 		return next();
 	}
 
 	// list is not computed, try loading it by name.
-	res.locals.tracks = TrackList.promiseTrackList(listname, start, limit);
+	res.locals.tracks = TrackList.promiseTrackList(listname, {start:start, limit:limit, visitorid:res.locals.visitorid});
 	res.locals.total = TrackList.promiseTotalTracks(listname);
 	return next();
 };
@@ -159,4 +160,4 @@ exports.main = function (req, res) {
 };
 
 // load the front page default list at launch time so we pre-cache the track info.
-TrackList.promiseTrackList[DEFAULT_LIST](0, DEFAULT_LIMIT * 2);
+// TrackList.promiseTrackList[DEFAULT_LIST]({start:0, limit:DEFAULT_LIMIT * 2});

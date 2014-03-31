@@ -15,13 +15,15 @@ var sTrackList = mongoose.Schema({
 
 var TrackList = mongoose.model('TrackList', sTrackList);
 
-TrackList.promiseTrackList = function (name, start, limit, asModels) {
+TrackList.promiseTrackList = function (name, options) {
+	options = options || {};
+
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
 			options: {
-				skip: start,
-				limit: limit
+				skip: options.start,
+				limit: options.limit
 			}
 		})
 		.exec();
@@ -39,7 +41,7 @@ TrackList.promiseTrackList = function (name, start, limit, asModels) {
 		});
 	});
 
-	if (asModels) {
+	if (options.asModels) {
 		return when(p);
 	}
 
@@ -49,26 +51,28 @@ TrackList.promiseTrackList = function (name, start, limit, asModels) {
 		}
 
 		return when.map(tracklist.tracks, function (model) {
-			return model.promisePopulatedFromSoundcloud();
+			return model.promiseForRendering(options.visitorid);
 		});
 	});
 
 };
 
-TrackList.promiseTrackList['new'] = function (start, limit, asModels) {
+TrackList.promiseTrackList['new'] = function (options) {
+	options = options || {};
+
 	var p = Track.find()
 		.populate('details')
 		.sort('-created_at')
-		.skip(start)
-		.limit(limit)
+		.skip(options.start)
+		.limit(options.limit)
 		.exec();
 
-	if (asModels) {
+	if (options.asModels) {
 		return when(p);
 	}
 
 	return when.map(when(p), function (model) {
-		return model.promisePopulatedFromSoundcloud();
+		return model.promiseForRendering(options.visitorid);
 	});
 };
 
