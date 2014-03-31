@@ -25,10 +25,9 @@ var sTrack = mongoose.Schema({
 var Track = mongoose.model('Track', sTrack);
 
 Track.promiseTrackByID = function (id, asModel) {
-	var p = proxmis();
-	Track.findOne({_id: id})
+	var p = Track.findOne({_id: id})
 		.populate('details')
-		.exec(p);
+		.exec();
 
 	if (asModel) {
 		return when(p);

@@ -16,9 +16,7 @@ var sTrackList = mongoose.Schema({
 var TrackList = mongoose.model('TrackList', sTrackList);
 
 TrackList.promiseTrackList = function (name, start, limit, asModels) {
-	var p = proxmis();
-
-	TrackList.findOne({_id: name})
+	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
 			options: {
@@ -26,7 +24,7 @@ TrackList.promiseTrackList = function (name, start, limit, asModels) {
 				limit: limit
 			}
 		})
-		.exec(p);
+		.exec();
 
 	p = p.then(function (tracklist) {
 		if (!tracklist) {
@@ -58,14 +56,12 @@ TrackList.promiseTrackList = function (name, start, limit, asModels) {
 };
 
 TrackList.promiseTrackList['new'] = function (start, limit, asModels) {
-	var p = proxmis();
-
-	Track.find()
+	var p = Track.find()
 		.populate('details')
 		.sort('-created_at')
 		.skip(start)
 		.limit(limit)
-		.exec(p);
+		.exec();
 
 	if (asModels) {
 		return when(p);
@@ -82,9 +78,7 @@ TrackList.promiseTrackList.empty = function () {
 
 
 TrackList.promiseTotalTracks = function (name) {
-	var p = proxmis();
-
-	TrackList.findOne({_id: name}, p);
+	var p = TrackList.findOne({_id: name}).exec();
 
 	return when(p).then(function (tracklist) {
 		return tracklist.tracks.length;
@@ -92,9 +86,7 @@ TrackList.promiseTotalTracks = function (name) {
 };
 
 TrackList.promiseTotalTracks['new'] = function () {
-	var p = proxmis();
-
-	Track.count({}, p);
+	var p = Track.find({}).count().exec();
 
 	return when(p);
 };
