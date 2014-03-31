@@ -17,7 +17,7 @@ db.on("error", function (err) {
 	log({
 		level: 1,
 		name: 'ERROR!',
-		status: 'redis',
+		status: 'mongodb',
 		target: JSON.stringify(err),
 		warn: true
 	});

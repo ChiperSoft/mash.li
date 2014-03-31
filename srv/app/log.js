@@ -63,12 +63,12 @@ debug.level = 10;
 
 debug.fireAndForget = function (options) {
 	return function (err) {
-		if (!err) return;
+		if (!err) {return;}
 		debug(_.assign({
 			level: 1,
 			warn: true
 		}, options));
 	};
-}
+};
 
 module.exports = debug;
