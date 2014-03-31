@@ -64,9 +64,13 @@ debug.level = 10;
 debug.fireAndForget = function (options) {
 	return function (err) {
 		if (!err) {return;}
+
+		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function(v){ return '' + v + ''; }) }, err)};
+
 		debug(_.assign({
 			level: 1,
-			warn: true
+			warn: true,
+			id: error
 		}, options));
 	};
 };

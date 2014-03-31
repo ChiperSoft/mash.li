@@ -13,7 +13,9 @@ module.exports = exports = function () {
 	var router = express.Router();
 	
 	// register data gatherers
+	router.use(require('app/middleware/visitor').loader);
 	router.use(require('app/middleware/visitor').creator);
+	router.use(require('app/middleware/localsResolver'));
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
@@ -36,7 +38,9 @@ exports.scanForTrack = function (req, res, next) {
 		res.locals.first = 'track';
 	}
 
-	res.locals.track = Track.promiseTrackByID(match[1], {visitorid:res.locals.visitorid});
+	res.locals.track = Track.promiseTrackByID(match[1], {
+		visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
+	});
 	next();
 };
 
@@ -75,16 +79,22 @@ exports.scanForList = function (req, res, next) {
 	if (limit !== DEFAULT_LIMIT) {
 		res.locals.limitIsCustom = true;
 	}
-	
+
 	// first see if the list name is one of our computed lists
 	if (TrackList.promiseTrackList[listname]) {
-		res.locals.tracks = TrackList.promiseTrackList[listname]({start:start, limit:limit, visitorid:res.locals.visitorid});
+		res.locals.tracks = TrackList.promiseTrackList[listname]({
+			start:start, limit:limit,
+			visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
+		});
 		res.locals.total = TrackList.promiseTotalTracks[listname]();
 		return next();
 	}
 
 	// list is not computed, try loading it by name.
-	res.locals.tracks = TrackList.promiseTrackList(listname, {start:start, limit:limit, visitorid:res.locals.visitorid});
+	res.locals.tracks = TrackList.promiseTrackList(listname, {
+		start:start, limit:limit,
+		visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
+	});
 	res.locals.total = TrackList.promiseTotalTracks(listname);
 	return next();
 };

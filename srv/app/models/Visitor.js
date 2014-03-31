@@ -8,6 +8,7 @@ var THRESHOLD_UNTRUSTED = -10;
 var sVisitor = mongoose.Schema({
 	_id: String,
 	trust: { type: Number, default: 0 },
+	voteCount: { type: Number, default: 0 },
 	created_at: { type: Date, default: Date.now },
 });
 

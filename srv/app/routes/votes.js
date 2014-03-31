@@ -159,6 +159,8 @@ exports.checkExistingAndTrustedVote = function (req, res, next) {
 
 	vote.save(log.fireAndForget({source: 'TrackVote save in votes.js'}));
 
+	res.locals.visitor.update({$inc: {voteCount: 1}}, {upsert:true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
+
 	// if the visitor is trusted, we can just save the vote and stop here.
 	// we don't need to do anything with the save callback
 	if (trusted === true) {
@@ -235,8 +237,7 @@ exports.validateUntrustedVote = function (req, res) {
 	} while(0);
 
 	if (trustShift) {
-		visitor.trust += trustShift;
-		visitor.save(log.fireAndForget({source: 'Visitor trust save in votes.js'}));
+		visitor.update({$inc: {trust: trustShift}}, {upsert: true}, log.fireAndForget({source: 'Visitor trust save in votes.js'}));
 	}
 
 	track.votes[delta]++;
