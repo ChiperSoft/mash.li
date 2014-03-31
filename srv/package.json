@@ -10,7 +10,7 @@
   "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.0.0-rc2",
+    "express": "^4.0.0-rc4",
     "querystring": "^0.2.0",
     "request": "^2.34.0",
     "handlebars": "~1.3.0",
