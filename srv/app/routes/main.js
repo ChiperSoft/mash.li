@@ -15,7 +15,6 @@ module.exports = exports = function () {
 	// register data gatherers
 	router.use(require('app/middleware/visitor').loader);
 	router.use(require('app/middleware/visitor').creator);
-	router.use(require('app/middleware/localsResolver'));
 	router.use(exports.scanForTrack);
 	router.use(exports.scanForList);
 	router.use(exports.scanForPlay);
