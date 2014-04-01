@@ -62,7 +62,7 @@ TrackList.promiseTrackList['new'] = function (options) {
 
 	var p = Track.find()
 		.populate('details')
-		.sort('-created_at')
+		.sort({created_at:-1, _id:1})
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();
