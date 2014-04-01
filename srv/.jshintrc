@@ -28,6 +28,7 @@
 	"globals": {
 		"define"          : false,
 		"require"         : false,
+		"ga"              : false,
 
 		"asyncTest"       : false,
 		"deepEqual"       : false,
