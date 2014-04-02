@@ -66,9 +66,13 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 				track.set({score: targetScore, voted: targetDelta});
 
-				var url = $targetVote.attr('href');
+				var url = $targetVote.attr('data-url');
 
-				$.getJSON(url);
+				$.ajax({
+					url: url,
+					type: "POST",
+					dataType: 'json'
+				});
 
 				if (window.ga) {
 					ga('send', 'pageview', url);

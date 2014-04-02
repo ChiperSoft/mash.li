@@ -17,7 +17,7 @@ module.exports = exports = function () {
 	var router = express.Router();
 	
 	router.use(require('app/middleware/visitor').loader);
-	router.all('/vote/:trackid/:direction',
+	router.post('/vote/:trackid/:direction',
 		exports.loadTrack,
 		exports.validateTrackAndVisitor,
 		exports.checkExistingAndTrustedVote,
