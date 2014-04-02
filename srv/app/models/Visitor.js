@@ -23,7 +23,7 @@ Visitor.promiseByID = function (id) {
 Visitor.prototype.isTrusted = function () {
 	if (this.trust > THRESHOLD_TRUSTED) {return true;}
 	if (this.trust < THRESHOLD_UNTRUSTED) {return false;}
-	return undefined;
+	return null;
 };
 
 module.exports = Visitor;

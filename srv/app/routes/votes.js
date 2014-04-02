@@ -1,16 +1,14 @@
 var express = require('express');
 
+var whenKeysMap = require('when/keys').map;
 var sha1 = require('app/lib/sha1');
 var log = require('app/log');
 
-var localsResolver = require('app/middleware/localsResolver');
-
 var Track = require('app/models/Track');
-var TrackVote = require('app/models/TrackVote');
 
 var DUPLICATE_VOTE_TIMEOUT = 1000*60*60*12;
 var DUPLICATE_CUTOFF = 10;
-var UNTRUSTWORTHY_IP_CUTOFF = 50;
+var VISITORS_PER_IP_CUTOFF = 50;
 
 module.exports = exports = function () {
 
@@ -19,9 +17,7 @@ module.exports = exports = function () {
 	router.use(require('app/middleware/visitor').loader);
 	router.all('/vote/:trackid/:direction',
 		exports.loadTrack,
-		exports.validateTrackAndVisitor,
-		exports.checkExistingAndTrustedVote,
-		exports.validateUntrustedVote
+		exports.processVote
 	);
 
 	return router;
@@ -39,27 +35,6 @@ exports.loadTrack = function (req, res, next) {
 		}
 	}
 
-	res.locals.track = Track.promiseTrackByID(req.params.trackid, {asModel: true});
-
-	localsResolver(req, res, next);
-};
-
-exports.validateTrackAndVisitor = function (req, res, next) {
-	var track = res.locals.track;
-	
-	// Verify the requested track exists.
-	if (!track) {
-		if (res.locals.wantsJSON) {
-			res.json(404, { error: { message: 'The requested track could not be found.' }});
-		} else {
-			res.status(404);
-			res.locals.error = 'The requested track could not be found.';
-			res.locals.statusCode = 404;
-			res.render('pages/error', res.locals);
-		}
-		return;
-	}
-
 	// Verify the visitor cookie exists
 	if (!res.locals.visitorid) {
 		if (res.locals.wantsJSON) {
@@ -73,19 +48,13 @@ exports.validateTrackAndVisitor = function (req, res, next) {
 		return;
 	}
 
-	if (!track.votes) {
-		track.votes = {
-			'1':0,
-			'-1':0
-		};
-	}
-
-	if (!track.votesActual) {
-		track.votesActual = {
-			'1':0,
-			'-1':0
-		};
-	}
+	Track
+		.findById(req.params.trackid)
+		.select({votes: {$elemMatch: { visitorId: res.locals.visitorid }}})
+		.exec(function (err, track) {
+			res.locals.track = track;
+			next();
+		});
 
 	var delta = 0;
 	switch (req.params.direction) {
@@ -99,161 +68,121 @@ exports.validateTrackAndVisitor = function (req, res, next) {
 		break;
 	}
 	res.locals.delta = delta;
-
-	res.locals.vote = TrackVote.promisePreviousVote(req.params.trackid, res.locals.visitorid);
-
-	localsResolver(req, res, next);
 };
 
-exports.checkExistingAndTrustedVote = function (req, res, next) {
+exports.processVote = function (req, res, next) {
 	var ip = req.headers['x-forwarded-for'] || req.ip || req._remoteAddress || (req.socket && req.socket.socket.remoteAddress);
 	var hash = sha1(ip);
 
-	var track = res.locals.track;
-	var vote = res.locals.vote;
+	var visitor = res.locals.visitor;
 	var delta = res.locals.delta;
-
-	// Visitor has a previous track. If the delta has changed, update the track and resave the vote.
-	if (vote) {
-
-		if (vote.delta !== delta) {
-			if (vote.delta) {
-				track.votes[vote.delta]--;
-				track.votesActual[vote.delta]--;
-				track.markModified('votes');
-				track.markModified('votesActual');
-			}
-			if (delta) {
-				track.votes[delta]++;
-				track.votesActual[delta]++;
-				track.markModified('votes');
-				track.markModified('votesActual');
-			}
-			track.save();
-
-			vote.ipHash = hash;
-			vote.created_at = Date.now();
-			vote.delta = delta;
-			vote.save();
-		}
-
-
+	var track = res.locals.track;
+	// Verify the requested track exists.
+	if (!track) {
 		if (res.locals.wantsJSON) {
-			res.json({vote: vote.toObject()});
+			res.json(404, { error: { message: 'The requested track could not be found.' }});
 		} else {
-			res.redirect('/track/' + track._id);
+			res.status(404);
+			res.locals.error = 'The requested track could not be found.';
+			res.locals.statusCode = 404;
+			res.render('pages/error', res.locals);
+		}
+		return;
+	}
+
+	if (track.votes.length > 1) {
+		return next(new Error('More than one previous vote was found for this visitor.'));
+	}
+
+/***********************************************************************************************************************************************************************************/
+
+	var vote = track.votes[0];
+
+	// we've done all we need before sending user feedback, we can finish the request here.
+	if (res.locals.wantsJSON) {
+		res.json({
+			success: true,
+			track: {
+				id: track._id,
+				vote: delta
+			}
+		});
+	} else {
+		res.redirect('/track/' + track._id);
+	}
+	
+
+	// Visitor has a previous vote. If the delta has changed, update the vote and stop here
+	if (vote) {
+		if (vote.delta !== delta) {
+			Track.update({_id: track._id, 'votes.visitorId': res.locals.visitorid}, {$set: {'votes.$.delta': delta}});
 		}
 		return;
 	}
 
 	// Visitor has not previously voted on this track, check if they are trusted and create a new vote.
-	var trusted = res.locals.visitor && res.locals.visitor.isTrusted();
-
-	vote = res.locals.vote = new TrackVote({
+	var trusted = visitor.isTrusted();
+	vote = {
 		track: track._id,
 		ipHash: hash,
 		visitorId: res.locals.visitorid,
 		trusted: trusted,
 		delta: delta
-	});
+	};
 
-	vote.save(log.fireAndForget({source: 'TrackVote save in votes.js'}));
-
-	res.locals.visitor.update({$inc: {voteCount: 1}}, {upsert:true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
-
-	// if the visitor is trusted, we can just save the vote and stop here.
-	// we don't need to do anything with the save callback
-	if (trusted === true) {
-		track.votes[delta]++;
-		track.votesActual[delta]++;
-		track.markModified('votes');
-		track.markModified('votesActual');
-		track.save(log.fireAndForget({source: 'Trusted visitor Track save in votes.js'}));
-
-		if (res.locals.wantsJSON) {
-			res.json({vote: vote.toObject()});
-		} else {
-			res.redirect('/track/' + track._id);
-		}
+	// log that they've made a vote. This creates the visitor record for the first time if they've never voted
+	visitor.update({$inc: {voteCount: 1}}, {upsert:true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
+	
+	// If a trust level (be it true or false) is known for the user, add the vote to the track and stop here.
+	if (trusted !== null) {
+		track.update({$push: {votes: vote}}, log.fireAndForget({source: 'Appending vote to track (known trust level)'}));
 		return;
 	}
 
-	// If the visitor has been found to be untrustworthy, just save their vote and do not alter the track score
-	if (trusted === false) {
-		if (res.locals.wantsJSON) {
-			res.json({vote: vote.toObject()});
-		} else {
-			res.redirect('/track/' + track._id);
-		}
-		return;
-	}
+/***********************************************************************************************************************************************************************************/
 
-	// User has an indeterminate level of trust, load historical data and continue on.
-	res.locals.totalValidVotesByVisitor = TrackVote
-		.find({visitorId: res.locals.visitorid})
-		.where('created_at').lte(Date.now() - DUPLICATE_VOTE_TIMEOUT)
-		.exec();
+	var historical = {
 
-	res.locals.totalVotesByIPForTrack = TrackVote
-		.find({track: track._id, ipHash: hash})
-		.where('created_at').gt(Date.now() - DUPLICATE_VOTE_TIMEOUT)
-		.count()
-		.exec();
+		totalValidVotesByVisitor: Track
+			.find({'votes.visitorId': visitor._id})
+			.where('created_at').lte(Date.now() - DUPLICATE_VOTE_TIMEOUT)
+			.count().exec(),
 
-	res.locals.totalUntrustedVotesByIP = TrackVote
-		.find({ipHash: hash})
-		.count()
-		.exec();
+		totalVotesByIPForTrack: Track
+			.find({_id: track._id, 'votes.ipHash': hash})
+			.where('created_at').gt(Date.now() - DUPLICATE_VOTE_TIMEOUT)
+			.count().exec(),
 
-	localsResolver(req, res, next);
-};
+		totalVisitorsForIP: Track
+			.aggregate([
+				{$match: { 'votes.ipHash': '4b84b15bff6ee5796152495a230e45e3d7e947d9'}},
+				{$unwind: "$votes"},
+				{$group: { _id: '$votes.visitorId' }}
+			])
+			.exec().then(function (response) {
+				return response.results.length;
+			})
 
-exports.validateUntrustedVote = function (req, res) {
+		};
+	
+	whenKeysMap(historical).then(function (historical) {
+		var trustShift = 0;
 
-	var track = res.locals.track;
-	var vote = res.locals.vote;
-	var delta = res.locals.delta;
-	var visitor = res.locals.visitor;
-
-	var trustShift = 0;
-
-	do {
-
-		if (res.locals.totalValidVotesByVisitor) {
+		if (historical.totalValidVotesByVisitor) {
 			trustShift = 1;
-			break;
+		} else if (historical.totalVotesByIPForTrack > DUPLICATE_CUTOFF && historical.totalVisitorsForIP > VISITORS_PER_IP_CUTOFF) {
+			trustShift = -1;
 		}
 
-		if (res.locals.totalVotesByIPForTrack < DUPLICATE_CUTOFF) {
-			break;
+		if (trustShift) {
+			visitor.update({$inc: {trust: trustShift}}, {upsert: true}, log.fireAndForget({source: 'Visitor trust save in votes.js'}));
 		}
 
-		if (res.locals.totalUntrustedVotesByIP < UNTRUSTWORTHY_IP_CUTOFF) {
-			break;
+		if (trustShift = -1) {
+			vote.trusted = false;
 		}
 
-		trustShift = -1;
-		
-	} while(0);
-
-	if (trustShift) {
-		visitor.update({$inc: {trust: trustShift}}, {upsert: true}, log.fireAndForget({source: 'Visitor trust save in votes.js'}));
-	}
-
-	track.votes[delta]++;
-	track.markModified('votes');
-
-	if (trustShift >= 0) {
-		track.votesActual[delta]++;
-		track.markModified('votesActual');
-	}
-
-	track.save(log.fireAndForget({source: 'Indeterminate trust Track save in votes.js'}));
-
-	if (res.locals.wantsJSON) {
-		res.json({vote: vote.toObject()});
-	} else {
-		res.redirect('/track/' + track._id);
-	}
+		track.update({$push: {votes: vote}}, log.fireAndForget({source: 'Appending vote to track (unknown trust level)'}));
+	});
 
 };

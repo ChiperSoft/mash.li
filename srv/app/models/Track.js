@@ -9,17 +9,18 @@ var sTrack = mongoose.Schema({
 	_id: String,
 	details: { type: String, ref: 'SoundCloudTrack' },
 	created_at: { type: Date, default: Date.now },
-	votes: {
-		'1': { type: Number, default: 0 },
-		'-1': { type: Number, default: 0 }
-	},
-	votesActual: {
-		'1': { type: Number, default: 0 },
-		'-1': { type: Number, default: 0 }
-	}
+	votes: [{
+		visitorId: String,
+		ipHash: String,
+		delta: { type: Number, default: 0 },
+		trusted: Boolean,
+		created_at: { type: Date, default: Date.now }
+	}]
 },{
 	strict: true
 });
+
+sTrack.index({'votes.ip':1});
 
 var Track = mongoose.model('Track', sTrack);
 
