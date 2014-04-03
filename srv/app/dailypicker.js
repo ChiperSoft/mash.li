@@ -18,11 +18,11 @@ module.exports = function (callback) {
 
 		return proxmis.wrap(function (cb) { SCTrack.find({ _id: {$in: ids}}, cb); });
 	}).then(function (tracks) {
-		var defers = tracks.map(function (track) {
+		var defers = tracks.map(function (sctrack) {
 			var p = proxmis();
 			var t = new Track();
-			t._id = track.id;
-			t.details = track.id;
+			t._id = sctrack.id;
+			t.details = sctrack.toObject();
 			t.save(function (err) {
 				if (err) {console.warn(p);return p(err);}
 				SCTrack.update({_id:t._id}, {trackLink: t._id}, p);
@@ -30,7 +30,7 @@ module.exports = function (callback) {
 				log({
 					level: 6,
 					name: 'Added New Track',
-					status: track.title
+					status: sctrack.title
 				});
 			});
 

@@ -28,19 +28,6 @@ TrackList.promiseTrackList = function (name, options) {
 		})
 		.exec();
 
-	p = p.then(function (tracklist) {
-		if (!tracklist) {
-			return false;
-		}
-
-		var p2 = proxmis();
-		Track.populate(tracklist.tracks, {path: 'details'}, p2);
-
-		return when(p2).then(function () {
-			return tracklist;
-		});
-	});
-
 	if (options.asModels) {
 		return when(p);
 	}
@@ -61,7 +48,6 @@ TrackList.promiseTrackList['new'] = function (options) {
 	options = options || {};
 
 	var p = Track.find()
-		.populate('details')
 		.sort({created_at:-1, _id:1})
 		.skip(options.start)
 		.limit(options.limit)
