@@ -1,5 +1,5 @@
 
-define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], function (_, Backbone, events, Track, tmplDetails) {
+define(['lodash', 'backbone', 'events', 'models/Track', './fill.hbs'], function (_, Backbone, events, Track, tmplDetails) {
 
 	return Backbone.View.extend({
 		template: tmplDetails,
