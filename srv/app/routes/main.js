@@ -11,7 +11,7 @@ var DEFAULT_LIMIT = 25;
 module.exports = exports = function () {
 
 	var router = express.Router();
-	
+
 	// register data gatherers
 	router.use(require('app/middleware/visitor').loader);
 	router.use(require('app/middleware/visitor').creator);
@@ -62,7 +62,7 @@ exports.scanForList = function (req, res, next) {
 	match = req.path.match(REGEX_FOR_LISTNAME);
 	var listname = match && match[1] || DEFAULT_LIST;
 	res.locals.list = listname;
-		
+
 	if (match && match.index === 0) {
 		res.locals.first = 'list';
 	}
@@ -82,8 +82,8 @@ exports.scanForList = function (req, res, next) {
 	// first see if the list name is one of our computed lists
 	if (TrackList.promiseTrackList[listname]) {
 		res.locals.tracks = TrackList.promiseTrackList[listname]({
-			start:start,
-			limit:limit,
+			start: start,
+			limit: limit,
 			visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
 		});
 		res.locals.total = TrackList.promiseTotalTracks[listname]();
@@ -92,8 +92,8 @@ exports.scanForList = function (req, res, next) {
 
 	// list is not computed, try loading it by name.
 	res.locals.tracks = TrackList.promiseTrackList(listname, {
-		start:start,
-		limit:limit,
+		start: start,
+		limit: limit,
 		visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
 	});
 	res.locals.total = TrackList.promiseTotalTracks(listname);

@@ -123,11 +123,11 @@ function getPage (limit, offset, since, callback) {
 	if (limit)  {args.limit = limit;}
 	if (offset) {args.offset = offset;}
 
-	var url = 'https://api.soundcloud.com/tracks.json?'+qss(args);
+	var url = 'https://api.soundcloud.com/tracks.json?' + qss(args);
 
 	// if (since) {
 	// 	url += '&created_at[from]=' + moment(since).format('YYYY-MM-DD') + '00:00:00 +0000';
 	// }
 
-	request.get(url, {json:true}, callback);
+	request.get(url, {json: true}, callback);
 }

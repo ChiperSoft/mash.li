@@ -1,6 +1,6 @@
 
-function padleft(value) {
-	value = ''+value;
+function padleft (value) {
+	value = '' + value;
 	return new Array(2 - value.length + 1).join('0') + value;
 }
 

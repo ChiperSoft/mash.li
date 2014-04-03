@@ -13,7 +13,7 @@ module.exports = function (callback) {
 	proxmis.wrap(function (cb) { SCTrack.find({trackLink: null}).select('_id').exec(cb); }).then(function (ids) {
 		ids = ids
 			.map(function (o) { return Number(o._id); })
-			.sort(function() {return 0.5 - Math.random();})
+			.sort(function () {return 0.5 - Math.random();})
 			.slice(0, config.addPerDay);
 
 		return proxmis.wrap(function (cb) { SCTrack.find({ _id: {$in: ids}}, cb); });
@@ -25,7 +25,7 @@ module.exports = function (callback) {
 			t.details = sctrack.toObject();
 			t.save(function (err) {
 				if (err) {console.warn(p);return p(err);}
-				SCTrack.update({_id:t._id}, {trackLink: t._id}, p);
+				SCTrack.update({_id: t._id}, {trackLink: t._id}, p);
 
 				log({
 					level: 6,

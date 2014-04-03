@@ -8,7 +8,7 @@ var cache = require('app/lib/request-buffer')({
 	processor: function (ids, resolve, reject, rejectAll, done) {
 		var url = 'https://api.soundcloud.com/tracks.json?client_id=' + config.soundcloudKey + '&ids=' + ids.join(',');
 
-		request.get(url, {json:true}, function (err, response, tracks) {
+		request.get(url, {json: true}, function (err, response, tracks) {
 			if (err) {
 				return rejectAll(err);
 			}
@@ -33,7 +33,7 @@ var cache = require('app/lib/request-buffer')({
 
 module.exports = cache.get;
 
-function getTags(string) {
+function getTags (string) {
 	var tags = [], tag;
 	var regexp = /[^\s"']+|"([^"]*)"/g;
 	while (tag = regexp.exec(string)) {

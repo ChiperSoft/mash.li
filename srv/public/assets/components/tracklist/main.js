@@ -1,4 +1,3 @@
-
 define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], function (_, Backbone, events, TrackList, tmplListContents) {
 
 	return Backbone.View.extend({

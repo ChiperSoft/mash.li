@@ -8,14 +8,14 @@ var localsResolver = require('app/middleware/localsResolver');
 var Track = require('app/models/Track');
 var TrackVote = require('app/models/TrackVote');
 
-var DUPLICATE_VOTE_TIMEOUT = 1000*60*60*12;
+var DUPLICATE_VOTE_TIMEOUT = 1000 * 60 * 60 * 12;
 var DUPLICATE_CUTOFF = 10;
 var UNTRUSTWORTHY_IP_CUTOFF = 50;
 
 module.exports = exports = function () {
 
 	var router = express.Router();
-	
+
 	router.use(require('app/middleware/visitor').loader);
 	router.post('/vote/:trackid/:direction',
 		exports.loadTrack,
@@ -46,7 +46,7 @@ exports.loadTrack = function (req, res, next) {
 
 exports.validateTrackAndVisitor = function (req, res, next) {
 	var track = res.locals.track;
-	
+
 	// Verify the requested track exists.
 	if (!track) {
 		if (res.locals.wantsJSON) {
@@ -75,15 +75,15 @@ exports.validateTrackAndVisitor = function (req, res, next) {
 
 	if (!track.votes) {
 		track.votes = {
-			'1':0,
-			'-1':0
+			'1':  0,
+			'-1': 0
 		};
 	}
 
 	if (!track.votesActual) {
 		track.votesActual = {
-			'1':0,
-			'-1':0
+			'1':  0,
+			'-1': 0
 		};
 	}
 
@@ -159,7 +159,7 @@ exports.checkExistingAndTrustedVote = function (req, res, next) {
 
 	vote.save(log.fireAndForget({source: 'TrackVote save in votes.js'}));
 
-	res.locals.visitor.update({$inc: {voteCount: 1}}, {upsert:true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
+	res.locals.visitor.update({$inc: {voteCount: 1}}, {upsert: true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
 
 	// if the visitor is trusted, we can just save the vote and stop here.
 	// we don't need to do anything with the save callback
@@ -233,8 +233,8 @@ exports.validateUntrustedVote = function (req, res) {
 		}
 
 		trustShift = -1;
-		
-	} while(0);
+
+	} while (0);
 
 	if (trustShift) {
 		visitor.update({$inc: {trust: trustShift}}, {upsert: true}, log.fireAndForget({source: 'Visitor trust save in votes.js'}));

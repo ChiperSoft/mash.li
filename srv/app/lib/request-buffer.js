@@ -30,7 +30,7 @@ module.exports = exports = function (processor, options) {
 		throw new Error('request-buffer cannot be initialized without a processor function');
 	}
 
-	if (!({'number':1, 'boolean':1, 'function': 1, 'undefined':1}[typeof options.limit])) {
+	if (!({'number': 1, 'boolean': 1, 'function': 1, 'undefined': 1}[typeof options.limit])) {
 		throw new TypeError('request-buffer limit option is not of a supported type.');
 	}
 
@@ -166,7 +166,7 @@ module.exports = exports = function (processor, options) {
 				rejectAll(err);
 				return;
 			}
-			
+
 		}
 
 	};

@@ -1,4 +1,3 @@
-
 define(['lodash', 'backbone', 'events', 'models/Track', './fill.hbs'], function (_, Backbone, events, Track, tmplDetails) {
 
 	return Backbone.View.extend({
@@ -25,7 +24,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './fill.hbs'], function 
 
 			$(window).on('resize scroll', this.onPageScroll.bind(this));
 			this.updateDetailHeight();
-			
+
 		},
 
 		events: {

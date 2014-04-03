@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 module.exports = function () {
 	return function (err, req, res, next) {
-		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function(v){ return '' + v + ''; }) }, err)};
+		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
 
 		console.warn(error);
 

@@ -18,7 +18,7 @@ Setting.get = function (name) {
 };
 
 Setting.set = function (name, value) {
-	var p = Setting.update({_id: name}, {_id: name, value: value}, {upsert:true}).exec();
+	var p = Setting.update({_id: name}, {_id: name, value: value}, {upsert: true}).exec();
 
 	return when(p);
 };

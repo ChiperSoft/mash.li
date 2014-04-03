@@ -1,5 +1,4 @@
 
-var proxmis = require('proxmis');
 var when = require('when');
 
 var mongoose = require('app/db/mongo');
@@ -48,7 +47,7 @@ TrackList.promiseTrackList['new'] = function (options) {
 	options = options || {};
 
 	var p = Track.find()
-		.sort({created_at:-1, _id:1})
+		.sort({created_at: -1, _id: 1})
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();

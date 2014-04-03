@@ -7,7 +7,7 @@ exports.option = function () {
 		options = arguments[arguments.length - 1];
 
 		//make sure key is a string
-		key = ''+key;
+		key = '' + key;
 
 		if (arguments.length === 2) {
 			value = undefined;

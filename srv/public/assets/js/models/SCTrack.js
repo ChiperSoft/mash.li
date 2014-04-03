@@ -1,12 +1,11 @@
 
 define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) {
 
-	
 	var TrackLoader = {
 		URL_LIMIT: 1000,
 		_waiting: {},
 		_requesting: {},
-		
+
 		_responseCallback: function (tracks, err, expecting) {
 			if (err || !_.isArray(tracks)) {
 				TrackLoader._onError('Soundcloud did not respond with a tracks array.', tracks, err);
@@ -48,7 +47,7 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 		_fetch: _.debounce(function () {
 			var ids = _.keys(TrackLoader._requesting);
 
-			function makeRequest() {
+			function makeRequest () {
 				var id = ids.shift(),
 					expecting = {},
 					url = '/tracks?ids=' + id;
@@ -88,24 +87,24 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 	};
 
 
-	
+
 	var SCTrack = Backbone.Model.extend({
 		className: 'SoundCloudTrack',
-		
+
 		url: function () { return this.get('uri'); },
-		
+
 		fetch: function (options) {
 			options = options ? Object.create(options) : {};
-			var model = this;
+			var self = this;
 			var success = options.success;
-			options.success = function(resp) {
-				if (!model.set(model.parse(resp, options), options)) {
+			options.success = function (resp) {
+				if (!self.set(self.parse(resp, options), options)) {
 					return false;
 				}
 				if (success) {
-					success(model, resp, options);
+					success(self, resp, options);
 				}
-				model.trigger('sync', model, resp, options);
+				self.trigger('sync', self, resp, options);
 			};
 
 			TrackLoader.getTrack(this.get('id'), options.success);
@@ -114,7 +113,7 @@ define(['lodash', 'backbone', 'soundcloud'], function (_, Backbone, soundcloud) 
 		},
 
 		parse: function (input) {
-			function getTags(string) {
+			function getTags (string) {
 				var tags = [], tag;
 				var regexp = /[^\s"']+|"([^"]*)"/g;
 				while (tag = regexp.exec(string)) {
