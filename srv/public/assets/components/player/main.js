@@ -6,7 +6,6 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 			var args = [].splice.call(arguments);
 			args.unshift(this);
 			onObject[toFunction].apply(onObject, args);
-			// console.log(toFunction, args);
 		};
 	}
 
@@ -167,8 +166,6 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 			val = Math.min(this.sound.duration, val);
 			val = Math.max(0, val);
-
-			console.log(w, h, x, y, val);
 
 			this.sound.setPosition(val);
 
