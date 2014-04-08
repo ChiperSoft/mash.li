@@ -17,6 +17,11 @@ module.exports = function (grunt) {
 			tasks: ['concat:helpers', 'amdwrap:helpers']
 		},
 
+		lodash: {
+			files: ['grunt/lodash.js'],
+			tasks: ['lodash']
+		},
+
 		requirejs: {
 			files: ['public/assets/js/require.config.js', 'public/assets/modules/main.js'],
 			tasks: ['requirejs:main']
