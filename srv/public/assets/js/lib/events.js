@@ -4,6 +4,7 @@ define(['pinvault-observer', 'jquery'], function (pvo, $) {
 	var events = pvo();
 
 	// events.on([], function () { console.log.apply(console, arguments); });
+	// events.on({}, function () { console.log.apply(console, arguments); });
 
 	events.observerDelimiter = ':';
 
@@ -27,18 +28,15 @@ define(['pinvault-observer', 'jquery'], function (pvo, $) {
 
 
 	$('body').on('click', 'a[href^="event:"]', function (ev) {
-		var a = ev.target;
-
-		if (!a || a.protocol !== 'event') {
-			//how did we even get here?
-			return;
-		}
-
-		var query = parseQuery(a.search);
-
 		ev.preventDefault();
 
-		events.trigger(ev.target.host, query);
+		var anchor = ev.currentTarget;
+
+		var path = anchor.getAttribute('href').split('/').slice(2);
+
+		path.push(parseQuery(anchor.search));
+
+		events.trigger.apply(events, path);
 	});
 
 	return events;

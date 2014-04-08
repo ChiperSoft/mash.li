@@ -31,7 +31,7 @@
 	{{#append "postscripts"}}
 		<script src="/assets/rjs/index.js"></script>
 		<script>
-			require(['lodash', 'soundcloud', 'soundmanager2', 'handlebars', 'helpers', 'js/lib/pagerouter'], function (_, soundcloud, soundmanager, handlebars, helpers) {
+			require(['lodash', 'soundcloud', 'soundmanager2', 'handlebars', 'helpers', 'js/lib/facetizer'], function (_, soundcloud, soundmanager, handlebars, helpers) {
 				soundcloud.initialize({
 					client_id: "{{soundcloudKey}}",
 					redirect_uri: "{{httproot}}/soundcloud-callback",

@@ -20,7 +20,7 @@ define(['lodash', 'backbone', 'events', 'models/Track', './fill.hbs'], function 
 
 			this.render = this.render.bind(this);
 
-			events.on('track', this.onTrackEvent, this);
+			events.on('facet:track', this.onTrackEvent, this);
 
 			$(window).on('resize scroll', this.onPageScroll.bind(this));
 			this.updateDetailHeight();

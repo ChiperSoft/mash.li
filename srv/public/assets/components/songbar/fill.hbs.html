@@ -1,5 +1,5 @@
 {{#with track}}
-	<a class="artwork{{#unless details.kind}} loading{{else}} mashlicon mashlicon-play{{/unless}}" href="{{#if details.kind}}/track/{{_id}}/play{{else}}{{details.permalink_url}}{{/if}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
+	<a class="artwork{{#unless details.kind}} loading{{else}} mashlicon mashlicon-play{{/unless}}" href="{{#if details.kind}}event://track:play/{{_id}}{{else}}{{details.permalink_url}}{{/if}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
 	<div class="details">
 		<div class="vote">
 			<a data-url="/vote/{{_id}}/up"      class="up{{#compare voted 1}} current{{/compare}}"    data-bypass data-delta="1"><i class="mashlicon mashlicon-chevron-up"></i></a>
@@ -14,7 +14,7 @@
 		{{#if details.description}}<hr><div class="description datacell"><i class="mashlicon mashlicon-info-sign"></i><span>{{nl2br details.description}}</span></div>{{/if}}
 
 		{{#if details.tags}}<hr><div class="tags datacell"><i class="mashlicon mashlicon-tag"></i><span>{{#each details.tags}}<label class="label label-default">{{this}}</label>{{/each}}</span></div>{{/if}}
-		<a href="/" class="mashlicon mashlicon-remove songbar-close"></a>
+		<a href="/track//" class="mashlicon mashlicon-remove songbar-close"></a>
 
 		<!-- <pre>{{stringify this}}</pre> -->
 	</div>

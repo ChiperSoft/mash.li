@@ -48,6 +48,9 @@ exports.scanForPlay = function (req, res, next) {
 	var match = req.path.match(REGEX_FOR_PLAY);
 	if (match) {
 		res.locals.play = true;
+		if (match.index === 0) {
+			res.locals.first = 'play';
+		}
 	}
 	next();
 };
@@ -152,7 +155,7 @@ exports.main = function (req, res) {
 
 	} else {
 
-		if (locals.first === 'track' && !locals.track) {
+		if ((locals.first === 'track' || locals.first === 'play') && !locals.track) {
 			res.status(404);
 			res.locals.error = 'The requested track could not be found.';
 			res.locals.statusCode = 404;
