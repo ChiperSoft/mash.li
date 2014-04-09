@@ -12,7 +12,7 @@ define(['lodash', 'backbone', 'models/Track', 'pinvault'], function (_, Backbone
 		},
 
 		url: function () {
-			return '/list/' + this.name + '/start/' + this.start + '/limit/' + this.limit
+			return '/list/' + this.name + '/start/' + (this.start + 1) + '/limit/' + this.limit;
 		},
 
 		parse: function (data) {
@@ -26,7 +26,7 @@ define(['lodash', 'backbone', 'models/Track', 'pinvault'], function (_, Backbone
 
 	return function (data, options) {
 		options = options || {};
-		
+
 		var signature = [
 			options.name,
 			options.limit,
