@@ -28,6 +28,7 @@ var sTrack = mongoose.Schema({
 		first_scanned_at: { type: Date, default: Date.now },
 		last_scanned_at: Date
 	},
+	dead: { type: Boolean, default: false },
 	created_at: { type: Date, default: Date.now },
 	votes: {
 		'1': { type: Number, default: 0 },
@@ -109,6 +110,8 @@ Track.prototype.promiseForRendering = function (visitorid) {
 		if (track.details) {
 			return track;
 		}
+
+		Track.update({_id: track._id}, {$set:{dead: true}}).exec();
 
 		return false;
 	});

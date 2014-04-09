@@ -20,6 +20,7 @@ TrackList.promiseTrackList = function (name, options) {
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
+			match: { dead: {$ne: true}},
 			options: {
 				skip: options.start,
 				limit: options.limit
@@ -50,6 +51,7 @@ TrackList.promiseTrackList['new'] = function (options) {
 
 	var p = Track.find()
 		.sort({created_at: -1, _id: 1})
+		.where('dead').ne(true)
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();
@@ -79,7 +81,9 @@ TrackList.promiseTotalTracks = function (name) {
 };
 
 TrackList.promiseTotalTracks['new'] = function () {
-	var p = Track.find({}).count().exec();
+	var p = Track.find({})
+		.where('dead').ne(true)
+		.count().exec();
 
 	return when(p);
 };
