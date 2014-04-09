@@ -38,6 +38,8 @@ TrackList.promiseTrackList = function (name, options) {
 
 		return when.map(tracklist.tracks, function (model) {
 			return model.promiseForRendering(options.visitorid);
+		}).then(function (tracks) {
+			return tracks.filter(function (o) { return o; });
 		});
 	});
 
@@ -58,6 +60,8 @@ TrackList.promiseTrackList['new'] = function (options) {
 
 	return when.map(when(p), function (model) {
 		return model.promiseForRendering(options.visitorid);
+	}).then(function (tracks) {
+		return tracks.filter(function (o) { return o; });
 	});
 };
 

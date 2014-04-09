@@ -119,7 +119,7 @@ exports.processData = function (req, res, next) {
 		total: locals.total,
 		stop: Math.min(locals.start + locals.limit, locals.total),
 		prevPage: Math.max(0, locals.start - locals.limit)
-	}
+	};
 
 	if (locals.page.stop < locals.page.total) {
 		locals.page.nextPage = locals.page.stop;
@@ -129,10 +129,6 @@ exports.processData = function (req, res, next) {
 
 	if (locals.track && locals.play) {
 		locals.lastPlayed = locals.track._id;
-	}
-
-	if (Array.isArray(locals.tracks)) {
-		locals.tracks = _.filter(locals.tracks);
 	}
 
 	locals.title = 'Mash.li - New Music Mashups Every Day';
