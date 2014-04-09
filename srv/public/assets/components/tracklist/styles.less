@@ -180,6 +180,56 @@
 				}
 			}
 		}
+
+		li.pager {
+			margin: 0;
+			padding: 4px 10px;
+			font-weight: 600;
+			background-color: #eee;
+			color: #333;
+			font-size: 12px;
+
+			.location {
+				display: inline-block;
+			}
+
+			span a, .location {
+				text-decoration: none;
+				
+				padding: 4px 5px 3px;
+				border-radius: 3px;
+
+				&[href] {
+					border: 1px solid #eee;
+					color: #333;
+
+					&:hover {
+						background:#ddd;
+						text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+						box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+
+						&:active {
+							padding-top: 5px;
+							padding-bottom: 2px;
+							text-shadow: 0 0 1px rgba(0,0,0,0.35);
+							
+						}
+					}
+				}
+			}
+
+			.previous a {
+				margin-right: 20px;
+			}
+
+			.next a {
+				margin-left: 20px;
+			}
+
+			.omit {
+				visibility: hidden;
+			}
+		}
 	}
 
 	li.empty {
@@ -187,6 +237,12 @@
 		color: @gray-lighter;
 		text-align: center;
 		height: 600px;
+
+		&.loading {
+			background-image: url(/assets/images/tracklist-loading.gif);
+			background-position: center center;
+			background-repeat: no-repeat;
+		}
 	}
 
 }

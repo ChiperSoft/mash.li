@@ -112,12 +112,19 @@ exports.loadOther = function (req, res, next) {
 exports.processData = function (req, res, next) {
 	var locals = res.locals;
 
-	locals.stop = Math.min(locals.start + locals.limit, locals.total);
-	locals.prevPage = Math.max(0, locals.start - locals.limit);
-	if (locals.stop < locals.total) {
-		locals.nextPage = locals.stop;
+	locals.page = {
+		list: locals.list,
+		start: locals.start,
+		limit: locals.limit,
+		total: locals.total,
+		stop: Math.min(locals.start + locals.limit, locals.total),
+		prevPage: Math.max(0, locals.start - locals.limit)
+	}
+
+	if (locals.page.stop < locals.page.total) {
+		locals.page.nextPage = locals.page.stop;
 	} else {
-		locals.nextPage = false;
+		locals.page.nextPage = false;
 	}
 
 	if (locals.track && locals.play) {
@@ -147,8 +154,10 @@ exports.main = function (req, res) {
 			res.json(404, { error: { message: 'The requested list could not be found.' }});
 		} else {
 			res.json({
+				name: locals.list,
 				start: locals.start,
-				total: locals.tracks && locals.tracks.length || 0,
+				limit: locals.limit,
+				total: locals.total,
 				tracks: locals.tracks
 			});
 		}

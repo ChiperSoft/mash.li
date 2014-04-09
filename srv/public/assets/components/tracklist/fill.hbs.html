@@ -17,7 +17,20 @@
 </li>
 {{/and}}
 {{else}}
+	{{#if loading}}
+<li class="empty loading"></li>
+	{{else}}
 <li class="empty">
 	<h2>There's nothing here!</h2>
 </li>
+	{{/if}}
 {{/each}}
+{{#with page}}
+<li class="pager">
+	<span class="location">Tracks {{add start 1}} - {{stop}} of {{total}}</span>
+	<span class="previous {{#unless start}}omit{{/unless}}"><a href="/list/{{list}}/start/1{{#if limitIsCustom}}/limit/{{limit}}{{/if}}"><i class="mashlicon mashlicon-fast-backward"></i> Newest</a></span>
+	<span class="previous {{#unless start}}omit{{/unless}}"><a href="/list/{{list}}/start/{{add prevPage 1}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}"><i class="mashlicon mashlicon-backward"></i> Newer</a></span>
+	<span class="next {{#unless nextPage}}omit{{/unless}}"><a href="/list/{{list}}/start/{{sub total limit}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}">Oldest <i class="mashlicon mashlicon-fast-forward"></i></a></span>
+	<span class="next {{#unless nextPage}}omit{{/unless}}"><a href="/list/{{list}}/start/{{add nextPage 1}}{{#if limitIsCustom}}/limit/{{limit}}{{/if}}">Older <i class="mashlicon mashlicon-forward"></i></a></span>
+</li>
+{{/with}}
