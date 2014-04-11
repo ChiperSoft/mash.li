@@ -41,7 +41,7 @@ var sTrack = mongoose.Schema({
 	strict: true
 });
 
-sTrack.index({'votes.ip':1});
+sTrack.index({'votes.ip': 1});
 
 var Track = mongoose.model('Track', sTrack);
 
@@ -63,12 +63,16 @@ Track.promiseTrackByID = function (id, options) {
 
 Track.prototype.promiseForRendering = function (visitorid) {
 	var track = this.toObject();
-	track.score = this.getScore();
-	delete track.votesActual;
+	var voteData = this.getVoteData(visitorid);
 
-	var waiting = [];
+	track.votes = {
+		up: voteData.up,
+		down: voteData.down
+	};
+	track.score = voteData.score;
+	track.voted = voteData.visitorVote;
 
-	waiting.push(promiseFromSoundcloudCache(track._id).then(
+	return promiseFromSoundcloudCache(track._id).then(
 		function (details) {
 			// if details is false, that means soundcloud no longer has the track
 			// return false in that situation, since the track no longer exists
@@ -77,6 +81,7 @@ Track.prototype.promiseForRendering = function (visitorid) {
 				return track;
 			} else {
 				track.details = false;
+				Track.update({_id: track._id}, {$set: {dead: true}}).exec();
 				return false;
 			}
 		},
@@ -85,48 +90,96 @@ Track.prototype.promiseForRendering = function (visitorid) {
 		function () {
 			return track;
 		}
-	));
+	);
 
-	if (visitorid) {
-		waiting.push(require('app/models/TrackVote').promisePreviousVote(track._id, visitorid).then(
-			function (vote) {
-				// if vote is false, the user has not voted on this track
-				if (vote) {
-					track.voted = vote && vote.delta || 0;
-					return track;
-				} else {
-					track.voted = 0;
-					return false;
-				}
-			},
-			// the promise shouldn't ever reject, but if it does, pretend the user didn't vote
-			function () {
-				track.voted = 0;
-				return track;
+};
+
+Track.prototype.getVoteData = function (visitorid) {
+	var data = {
+		up: 0,
+		upReal: 0,
+		down: 0,
+		downReal: 0,
+		score: 1,
+		scoreReal: 1,
+		visitorVote: 0
+	};
+
+	if (!this.votes || !this.votes.length) {return data;}
+
+	this.votes.forEach(function (vote) {
+
+		var trusted = vote.trusted !== -1;
+
+		data.score += vote.delta;
+		if (trusted) {data.scoreReal += vote.delta;}
+
+		if (vote.delta > 1) {
+			data.up++;
+			if (trusted) {data.upReal++;}
+		} else if (vote.delta < 1) {
+			data.down++;
+			if (trusted) {data.downReal++;}
+		} else {
+			data.up++;
+			data.down++;
+			if (trusted) {
+				data.upReal++;
+				data.downReal++;
 			}
-		));
-	}
-
-	return when.all(waiting).then(function () {
-		if (track.details) {
-			return track;
 		}
 
-		Track.update({_id: track._id}, {$set:{dead: true}}).exec();
+		if (visitorid && vote.visitorId === visitorid) {
+			data.visitorVote = vote.delta;
+		}
 
-		return false;
 	});
 
+	return data;
+};
+
+Track.prototype.getVotesUp = function () {
+	if (!this.votes || !this.votes.length) {return 0;}
+
+	return this.votes.reduce(function (score, vote) {
+		if (vote.delta > 0) {
+			return score + vote.delta;
+		} else {
+			return score;
+		}
+	}, 0);
+};
+
+Track.prototype.getVotesDown = function () {
+	if (!this.votes || !this.votes.length) {return 0;}
+
+	return this.votes.reduce(function (score, vote) {
+		if (vote.delta < 0) {
+			return score + vote.delta;
+		} else {
+			return score;
+		}
+	}, 0);
 };
 
 Track.prototype.getScore = function () {
-	if (!this.votes) {return 1;}
-	return 1 + parseInt(this.votes[1],10) - parseInt(this.votes[-1],10);
+	if (!this.votes || !this.votes.length) {return 1;}
+
+	return this.votes.reduce(function (score, vote) {
+		return score + vote.delta;
+	}, 1);
 };
 
 Track.prototype.getActualScore = function () {
-	if (!this.votesActual) {return 1;}
-	return 1 + parseInt(this.votesActual[1]) - parseInt(this.votesActual[-1]);
+	if (!this.votes || !this.votes.length) {return 1;}
+
+	return this.votes.reduce(function (score, vote) {
+		if (vote.trusted === undefined || vote.trusted > -1) {
+			return score + vote.delta;
+		} else {
+			return score;
+		}
+	}, 1);
 };
 
 module.exports = Track;
