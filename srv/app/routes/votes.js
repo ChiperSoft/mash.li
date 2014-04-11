@@ -155,12 +155,12 @@ exports.processVote = function (req, res, next) {
 
 		totalVisitorsForIP: Track
 			.aggregate([
-				{$match: { 'votes.ipHash': '4b84b15bff6ee5796152495a230e45e3d7e947d9'}},
+				{$match: { 'votes.ipHash': hash}},
 				{$unwind: "$votes"},
 				{$group: { _id: '$votes.visitorId' }}
 			])
 			.exec().then(function (response) {
-				return response.results.length;
+				return response.length;
 			})
 
 	};
