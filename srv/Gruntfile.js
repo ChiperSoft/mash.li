@@ -2,7 +2,7 @@
 /**
  * GRUNT CONFIGURATION
  */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
 	grunt.loadTasks('grunt');
 
@@ -25,6 +25,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('lint', [
 		'jshint',
+		'jscs',
 		'less',
 		'csslint'
 	]);
@@ -41,6 +42,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', [
 		'jshint',
+		'jscs',
 		'less',
 		'csslint',
 		'cssmin',

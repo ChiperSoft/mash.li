@@ -1,5 +1,4 @@
 
-var proxmis = require('proxmis');
 var when = require('when');
 
 var mongoose = require('app/db/mongo');
@@ -21,25 +20,13 @@ TrackList.promiseTrackList = function (name, options) {
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
+			match: { dead: {$ne: true}},
 			options: {
 				skip: options.start,
 				limit: options.limit
 			}
 		})
 		.exec();
-
-	p = p.then(function (tracklist) {
-		if (!tracklist) {
-			return false;
-		}
-
-		var p2 = proxmis();
-		Track.populate(tracklist.tracks, {path: 'details'}, p2);
-
-		return when(p2).then(function () {
-			return tracklist;
-		});
-	});
 
 	if (options.asModels) {
 		return when(p);
@@ -52,6 +39,8 @@ TrackList.promiseTrackList = function (name, options) {
 
 		return when.map(tracklist.tracks, function (model) {
 			return model.promiseForRendering(options.visitorid);
+		}).then(function (tracks) {
+			return tracks.filter(function (o) { return o; });
 		});
 	});
 
@@ -61,8 +50,8 @@ TrackList.promiseTrackList['new'] = function (options) {
 	options = options || {};
 
 	var p = Track.find()
-		.populate('details')
-		.sort({created_at:-1, _id:1})
+		.sort({created_at: -1, _id: 1})
+		.where('dead').ne(true)
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();
@@ -73,6 +62,8 @@ TrackList.promiseTrackList['new'] = function (options) {
 
 	return when.map(when(p), function (model) {
 		return model.promiseForRendering(options.visitorid);
+	}).then(function (tracks) {
+		return tracks.filter(function (o) { return o; });
 	});
 };
 
@@ -90,7 +81,9 @@ TrackList.promiseTotalTracks = function (name) {
 };
 
 TrackList.promiseTotalTracks['new'] = function () {
-	var p = Track.find({}).count().exec();
+	var p = Track.find({})
+		.where('dead').ne(true)
+		.count().exec();
 
 	return when(p);
 };

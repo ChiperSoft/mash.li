@@ -6,16 +6,16 @@ var log = require('app/log');
 
 var Track = require('app/models/Track');
 
-var DUPLICATE_VOTE_TIMEOUT = 1000*60*60*12;
+var DUPLICATE_VOTE_TIMEOUT = 1000 * 60 * 60 * 12;
 var DUPLICATE_CUTOFF = 10;
 var VISITORS_PER_IP_CUTOFF = 50;
 
 module.exports = exports = function () {
 
 	var router = express.Router();
-	
+
 	router.use(require('app/middleware/visitor').loader);
-	router.all('/vote/:trackid/:direction',
+	router.post('/vote/:trackid/:direction',
 		exports.loadTrack,
 		exports.processVote
 	);

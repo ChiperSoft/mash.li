@@ -18,7 +18,7 @@ module.exports = function (callback) {
 				name: 'Requesting new tracks since',
 				status: reader.since
 			});
-			
+
 			reader.pipe(writer);
 		});
 

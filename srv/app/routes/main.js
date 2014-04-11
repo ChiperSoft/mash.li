@@ -11,7 +11,7 @@ var DEFAULT_LIMIT = 25;
 module.exports = exports = function () {
 
 	var router = express.Router();
-	
+
 	// register data gatherers
 	router.use(require('app/middleware/visitor').loader);
 	router.use(require('app/middleware/visitor').creator);
@@ -48,6 +48,9 @@ exports.scanForPlay = function (req, res, next) {
 	var match = req.path.match(REGEX_FOR_PLAY);
 	if (match) {
 		res.locals.play = true;
+		if (match.index === 0) {
+			res.locals.first = 'play';
+		}
 	}
 	next();
 };
@@ -62,7 +65,7 @@ exports.scanForList = function (req, res, next) {
 	match = req.path.match(REGEX_FOR_LISTNAME);
 	var listname = match && match[1] || DEFAULT_LIST;
 	res.locals.list = listname;
-		
+
 	if (match && match.index === 0) {
 		res.locals.first = 'list';
 	}
@@ -82,8 +85,8 @@ exports.scanForList = function (req, res, next) {
 	// first see if the list name is one of our computed lists
 	if (TrackList.promiseTrackList[listname]) {
 		res.locals.tracks = TrackList.promiseTrackList[listname]({
-			start:start,
-			limit:limit,
+			start: start,
+			limit: limit,
 			visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
 		});
 		res.locals.total = TrackList.promiseTotalTracks[listname]();
@@ -92,8 +95,8 @@ exports.scanForList = function (req, res, next) {
 
 	// list is not computed, try loading it by name.
 	res.locals.tracks = TrackList.promiseTrackList(listname, {
-		start:start,
-		limit:limit,
+		start: start,
+		limit: limit,
 		visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
 	});
 	res.locals.total = TrackList.promiseTotalTracks(listname);
@@ -109,20 +112,23 @@ exports.loadOther = function (req, res, next) {
 exports.processData = function (req, res, next) {
 	var locals = res.locals;
 
-	locals.stop = Math.min(locals.start + locals.limit, locals.total);
-	locals.prevPage = Math.max(0, locals.start - locals.limit);
-	if (locals.stop < locals.total) {
-		locals.nextPage = locals.stop;
+	locals.page = {
+		list: locals.list,
+		start: locals.start,
+		limit: locals.limit,
+		total: locals.total,
+		stop: Math.min(locals.start + locals.limit, locals.total),
+		prevPage: Math.max(0, locals.start - locals.limit)
+	};
+
+	if (locals.page.stop < locals.page.total) {
+		locals.page.nextPage = locals.page.stop;
 	} else {
-		locals.nextPage = false;
+		locals.page.nextPage = false;
 	}
 
 	if (locals.track && locals.play) {
 		locals.lastPlayed = locals.track._id;
-	}
-
-	if (Array.isArray(locals.tracks)) {
-		locals.tracks = _.filter(locals.tracks);
 	}
 
 	locals.title = 'Mash.li - New Music Mashups Every Day';
@@ -144,15 +150,17 @@ exports.main = function (req, res) {
 			res.json(404, { error: { message: 'The requested list could not be found.' }});
 		} else {
 			res.json({
+				name: locals.list,
 				start: locals.start,
-				total: locals.tracks && locals.tracks.length || 0,
+				limit: locals.limit,
+				total: locals.total,
 				tracks: locals.tracks
 			});
 		}
 
 	} else {
 
-		if (locals.first === 'track' && !locals.track) {
+		if ((locals.first === 'track' || locals.first === 'play') && !locals.track) {
 			res.status(404);
 			res.locals.error = 'The requested track could not be found.';
 			res.locals.statusCode = 404;

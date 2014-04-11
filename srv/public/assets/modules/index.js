@@ -4,7 +4,7 @@ require([
 	'moment',
 	'handlebars',
 	'helpers',
-	'js/lib/pagerouter',
+	'js/lib/facetizer',
 	'components/player/main',
 	'components/songbar/main',
 	'components/tracklist/main'

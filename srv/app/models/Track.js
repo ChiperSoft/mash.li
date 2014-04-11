@@ -7,7 +7,28 @@ var promiseFromSoundcloudCache = require('app/lib/soundcloud-cache');
 
 var sTrack = mongoose.Schema({
 	_id: String,
-	details: { type: String, ref: 'SoundCloudTrack' },
+	details: {
+		title: String,
+		duration: Number,
+		genre: String,
+		tags: [String],
+		permalink_url: String,
+		uri: String,
+		stream_url: String,
+		artwork_url: String,
+		user: {
+			id: Number,
+			username: String,
+			uri: String,
+			avatar_url: String,
+			permalink_url: String
+		},
+		trackLink: { type: String, ref: 'Track'},
+		created_at: { type: Date, default: Date.now },
+		first_scanned_at: { type: Date, default: Date.now },
+		last_scanned_at: Date
+	},
+	dead: { type: Boolean, default: false },
 	created_at: { type: Date, default: Date.now },
 	votes: [{
 		visitorId: String,
@@ -27,9 +48,7 @@ var Track = mongoose.model('Track', sTrack);
 Track.promiseTrackByID = function (id, options) {
 	options = options || {};
 
-	var p = Track.findOne({_id: id})
-		.populate('details')
-		.exec();
+	var p = Track.findOne({_id: id}).exec();
 
 	if (options.asModel) {
 		return when(p);
@@ -37,7 +56,7 @@ Track.promiseTrackByID = function (id, options) {
 
 	return p.then(function (model) {
 		if (!model) {return false;}
-		
+
 		return model.promiseForRendering(options.visitorid);
 	});
 };
@@ -93,17 +112,21 @@ Track.prototype.promiseForRendering = function (visitorid) {
 			return track;
 		}
 
+		Track.update({_id: track._id}, {$set:{dead: true}}).exec();
+
 		return false;
 	});
 
 };
 
 Track.prototype.getScore = function () {
-	return 1 + this.votes[1] - this.votes[-1];
+	if (!this.votes) {return 1;}
+	return 1 + parseInt(this.votes[1],10) - parseInt(this.votes[-1],10);
 };
 
 Track.prototype.getActualScore = function () {
-	return 1 + this.votesActual[1] - this.votesActual[-1];
+	if (!this.votesActual) {return 1;}
+	return 1 + parseInt(this.votesActual[1]) - parseInt(this.votesActual[-1]);
 };
 
 module.exports = Track;

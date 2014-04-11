@@ -14,9 +14,9 @@ function loadTemplate (src) {
 	if (src.substr(0,3) === 'app') {
 		actualpath = src + '.hbs';
 	} else if (src.substr(0,7) === 'assets/') {
-		actualpath = pathResolve(root + '/../public/' +src+'.hbs');
+		actualpath = pathResolve(root + '/../public/' + src + '.hbs');
 	} else {
-		actualpath = pathResolve(root+src+'.hbs');
+		actualpath = pathResolve(root + src + '.hbs');
 	}
 
 	if (templateCache[actualpath]) {
@@ -48,7 +48,7 @@ var View = function (name, options) {
 	this.path = name;
 };
 
-View.prototype.render = function(options, fn){
+View.prototype.render = function (options, fn) {
 	fn(false, loadTemplate(this.path)(options));
 };
 

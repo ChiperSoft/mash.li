@@ -9,7 +9,7 @@ exports.component = function (Handlebars) {
 	return function (component, options) {
 		switch (typeof component) {
 		case 'string':
-			component = new (require('app/components/'+component))(options.hash);
+			component = new (require('app/components/' + component))(options.hash);
 			break;
 		case 'function':
 			component = {render: component};

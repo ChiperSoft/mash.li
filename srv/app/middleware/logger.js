@@ -5,7 +5,7 @@ var cluster = require('cluster');
 var bytes = require('bytes');
 
 module.exports = function () {
-	return logger(function(tokens, req, res){
+	return logger(function (tokens, req, res) {
 		var status = res.statusCode,
 			len = parseInt(res.getHeader('Content-Length'), 10),
 			clus = cluster.worker && ' ' + cluster.worker.id || '',
@@ -23,7 +23,7 @@ module.exports = function () {
 			status: tokens.status(req, res),
 			source: req.headers['x-forwarded-for'] || tokens['remote-addr'](req, res),
 			target: tokens.url(req, res),
-			id: (new Date - req._startTime)+'ms' + len + clus
+			id: (new Date - req._startTime) + 'ms' + len + clus
 		});
 	});
 };

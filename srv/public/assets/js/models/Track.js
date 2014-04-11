@@ -7,7 +7,7 @@ define(['lodash', 'backbone', 'soundcloud', 'models/SCTrack'], function (_, Back
 		className: 'Track',
 		idAttribute: '_id',
 
-		set: function(attributes, options) {
+		set: function (attributes, options) {
 			// If we pass in nodes collection JSON array and this model has a nodes attribute
 			// Assume we already set it as a collection
 			if (_.has(attributes, 'details') && this.get("details")) {
@@ -23,12 +23,12 @@ define(['lodash', 'backbone', 'soundcloud', 'models/SCTrack'], function (_, Back
 			return Backbone.Model.prototype.set.call(this, attributes, options);
 		},
 
-		_onSubModelEvent: function(event) {
+		_onSubModelEvent: function (event) {
 			if (event === 'add' || event === 'remove' || event.substring(0, 7) === 'change:') {return;}
 			this.trigger.apply(this, arguments);
 		},
 
-		toJSON: function() {
+		toJSON: function () {
 			var data = _.clone(this.attributes);
 			data.details = data.details.toJSON();
 			return data;

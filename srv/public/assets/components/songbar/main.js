@@ -1,5 +1,4 @@
-
-define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], function (_, Backbone, events, Track, tmplDetails) {
+define(['lodash', 'backbone', 'events', 'models/Track', './fill.hbs'], function (_, Backbone, events, Track, tmplDetails) {
 
 	return Backbone.View.extend({
 		template: tmplDetails,
@@ -21,11 +20,11 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 
 			this.render = this.render.bind(this);
 
-			events.on('track', this.onTrackEvent, this);
+			events.on('facet:track', this.onTrackEvent, this);
 
 			$(window).on('resize scroll', this.onPageScroll.bind(this));
 			this.updateDetailHeight();
-			
+
 		},
 
 		events: {
@@ -79,9 +78,13 @@ define(['lodash', 'backbone', 'events', 'models/Track', './songDetails.hbs'], fu
 
 				track.set({score: targetScore, voted: targetDelta});
 
-				var url = $targetVote.attr('href');
+				var url = $targetVote.attr('data-url');
 
-				$.getJSON(url);
+				$.ajax({
+					url: url,
+					type: "POST",
+					dataType: 'json'
+				});
 
 				if (window.ga) {
 					ga('send', 'pageview', url);

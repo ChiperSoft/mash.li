@@ -21,13 +21,13 @@ function stringify (input) {
 	}
 }
 
-function debug(input) {
+function debug (input) {
 	if (input.level && input.level > debug.level) { return; }
 	var time = moment().format('YYYY-MM-DD HH:mm:ss');
 
 	var stack = [];
 	var level = input.level && ("00000" + input.level).slice(-2) || '';
-	stack.push(cPrefix(time + ' D'+level+':'));
+	stack.push(cPrefix(time + ' D' + level + ':'));
 	stack.push(cEvent(stringify(input.name)));
 
 	if (input.status) {
@@ -65,7 +65,7 @@ debug.fireAndForget = function (options) {
 	return function (err) {
 		if (!err) {return;}
 
-		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function(v){ return '' + v + ''; }) }, err)};
+		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
 
 		debug(_.assign({
 			level: 1,

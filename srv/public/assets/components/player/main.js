@@ -1,12 +1,11 @@
 
 define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Track', './fill.hbs'], function (_, Backbone, events, soundcloud, soundmanager, Track, tmplFill) {
 
-	function bindSoundEvent(onObject, toFunction) {
+	function bindSoundEvent (onObject, toFunction) {
 		return function () {
 			var args = [].splice.call(arguments);
 			args.unshift(this);
 			onObject[toFunction].apply(onObject, args);
-			// console.log(toFunction, args);
 		};
 	}
 
@@ -35,7 +34,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 				events.on('track:play', self.onTrackPlayEvent, self);
 			});
-			
+
 		},
 
 		loadModel: function (attributes) {
@@ -71,7 +70,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 				var volume = this.$('.volume-slider input').val();
 
-				soundcloud.stream('/tracks/'+this.model.id, function (sound) {
+				soundcloud.stream('/tracks/' + this.model.id, function (sound) {
 					self.sound = sound;
 					if (!sound) {
 						self.$el.addClass('error');
@@ -125,7 +124,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 			this.sound.play();
 			this.$el.addClass('playing');
-			
+
 		},
 
 		pause: function () {
@@ -167,8 +166,6 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 			val = Math.min(this.sound.duration, val);
 			val = Math.max(0, val);
-
-			console.log(w, h, x, y, val);
 
 			this.sound.setPosition(val);
 
@@ -228,8 +225,8 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 		onSoundPositionChange: function (sound) {
 			var loaded = sound.bytesLoaded && sound.bytesTotal && (sound.bytesLoaded / sound.bytesTotal) * 100;
 			var position = sound.position && sound.duration && (sound.position / sound.duration) * 100;
-			this.$('.loaded').css('width', loaded+'%');
-			this.$('.position').css('width', position+'%');
+			this.$('.loaded').css('width', loaded + '%');
+			this.$('.position').css('width', position + '%');
 		}
 	});
 
