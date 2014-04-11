@@ -20,7 +20,6 @@ db.tracks.aggregate([
 	{$unwind: "$votes"},
 	{$group: {
 		_id: "$_id",
-		details: "$details",
 		visitorVoted: {
 			$sum: {
 				$cond: [
@@ -32,4 +31,15 @@ db.tracks.aggregate([
 		votedUp:   {$sum: {$cond: [{ $and: [{$eq: ["$votes.delta",  1]}, {$ne: ["$votes.trusted", false]}]}, 1, 0]}},
 		votedDown: {$sum: {$cond: [{ $and: [{$eq: ["$votes.delta", -1]}, {$ne: ["$votes.trusted", false]}]}, 1, 0]}},
 	}}
-]);
+]).result.map(function (voted) {
+	var track = db.tracks.findOne({_id: voted._id});
+	track.visitorVoted = voted.visitorVoted;
+	track.votedUp = voted.votedUp;
+	track.votedDown = voted.votedDown;
+	return track;
+});
+
+
+/***************************************************************************************************************************************************************************/
+
+db.tracks.update({votes: {$exists: true}}, {$unset: {votesActual: ''}}, {multi: true});
