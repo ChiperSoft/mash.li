@@ -8,7 +8,7 @@ var Track = require('app/models/Track');
 
 var DUPLICATE_VOTE_TIMEOUT = 1000 * 60 * 60 * 12;
 var DUPLICATE_CUTOFF = 10;
-var VISITORS_PER_IP_CUTOFF = 50;
+var VISITORS_PER_IP_CUTOFF = 10;
 
 module.exports = exports = function () {
 
@@ -110,7 +110,7 @@ exports.processVote = function (req, res, next) {
 	} else {
 		res.redirect('/track/' + track._id);
 	}
-	
+
 
 	// Visitor has a previous vote. If the delta has changed, update the vote and stop here
 	if (vote) {
@@ -131,8 +131,8 @@ exports.processVote = function (req, res, next) {
 	};
 
 	// log that they've made a vote. This creates the visitor record for the first time if they've never voted
-	visitor.update({$inc: {voteCount: 1}}, {upsert:true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
-	
+	visitor.update({$inc: {voteCount: 1}}, {upsert: true}, log.fireAndForget({source: 'Visitor voteCount increment in votes.js'}));
+
 	// If a trust level (be it true or false) is known for the user, add the vote to the track and stop here.
 	if (trusted !== null) {
 		track.update({$push: {votes: vote}}, log.fireAndForget({source: 'Appending vote to track (known trust level)'}));
@@ -163,8 +163,8 @@ exports.processVote = function (req, res, next) {
 				return response.results.length;
 			})
 
-		};
-	
+	};
+
 	whenKeysMap(historical).then(function (historical) {
 		var trustShift = 0;
 
