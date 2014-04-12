@@ -1,9 +1,9 @@
 
 require('when/monitor/console');
 
-var picker = require('app/dailypicker');
+var hourlyhot = require('app/hourlyhot');
 var mongo = require('app/db/mongo');
 
-picker(function () {
+hourlyhot().then(function () {
 	mongo.disconnect();
 });

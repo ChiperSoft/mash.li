@@ -37,8 +37,6 @@ var sTrack = mongoose.Schema({
 		trusted: Boolean,
 		created_at: { type: Date, default: Date.now }
 	}]
-},{
-	strict: true
 });
 
 sTrack.index({'votes.ip': 1});

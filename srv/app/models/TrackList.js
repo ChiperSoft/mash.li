@@ -1,5 +1,6 @@
 
 var when = require('when');
+var decay = require('decay').redditHot();
 
 var mongoose = require('app/db/mongo');
 var Track = require('app/models/Track');
@@ -69,6 +70,33 @@ TrackList.promiseTrackList.empty = function () {
 	return when([]);
 };
 
+TrackList.promiseTrackList.steam = function (options) {
+	options = options || {};
+
+	var p = Track.find()
+		.sort({created_at: -1, _id: 1})
+		.where('dead').ne(true)
+		.exec();
+
+	return when(p).then(function (tracks) {
+		return tracks.map(function (o) {
+			var voteData = o.getVoteData();
+			o.temperature = decay(voteData.upReal, voteData.downReal, o.created_at);
+			return o;
+
+		}).sort(function (a, b) {
+			return b.temperature - a.temperature;
+
+		}).slice(options.start, options.start + options.limit);
+
+	}).then(function (tracks) {
+		return when.map(tracks, function (model) {
+			// return model.toObject();
+			return model.promiseForRendering(options.visitorid);
+		});
+	});
+};
+
 
 TrackList.promiseTotalTracks = function (name) {
 	var p = TrackList.findOne({_id: name}).exec();
@@ -90,5 +118,8 @@ TrackList.promiseTotalTracks.empty = function () {
 	return when.resolve(0);
 };
 
+TrackList.promiseTotalTracks.steam = function () {
+	return TrackList.promiseTotalTracks['new']();
+};
 
 module.exports = TrackList;
