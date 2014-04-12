@@ -76,7 +76,7 @@ TrackList.promiseTotalTracks = function (name) {
 	var p = TrackList.findOne({_id: name}).exec();
 
 	return when(p).then(function (tracklist) {
-		return tracklist.tracks.length;
+		return tracklist && tracklist.tracks.length || 0;
 	});
 };
 
