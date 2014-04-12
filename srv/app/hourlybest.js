@@ -1,5 +1,5 @@
 var when = require('when');
-var decay = require('decay').redditHot();
+var decay = require('decay').wilsonScore();
 var log = require('app/log');
 
 var Track = require('app/models/Track');
@@ -36,10 +36,10 @@ module.exports = function () {
 	}).then(function (ids) {
 		log({
 			level: 6,
-			name: 'Updating hot list'
+			name: 'Updating best list'
 		});
 
-		return TrackList.update({_id: 'hot'}, {tracks: ids}, {upsert: true}).exec();
+		return TrackList.update({_id: 'best'}, {tracks: ids}, {upsert: true}).exec();
 	});
 
 };
