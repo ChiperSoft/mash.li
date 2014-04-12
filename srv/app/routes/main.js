@@ -87,7 +87,7 @@ exports.scanForList = function (req, res, next) {
 		res.locals.tracks = TrackList.promiseTrackList[listname]({
 			start: start,
 			limit: limit,
-			visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
+			visitorid: res.locals.visitorid
 		});
 		res.locals.total = TrackList.promiseTotalTracks[listname]();
 		return next();
@@ -97,7 +97,7 @@ exports.scanForList = function (req, res, next) {
 	res.locals.tracks = TrackList.promiseTrackList(listname, {
 		start: start,
 		limit: limit,
-		visitorid: res.locals.visitor && res.locals.visitor.voteCount && res.locals.visitorid
+		visitorid: res.locals.visitorid
 	});
 	res.locals.total = TrackList.promiseTotalTracks(listname);
 	return next();
