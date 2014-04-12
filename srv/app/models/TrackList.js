@@ -20,16 +20,14 @@ TrackList.promiseTrackList = function (name, options) {
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
-			match: { dead: {$ne: true}},
-			options: {
-				skip: options.start,
-				limit: options.limit
-			}
+			match: { dead: {$ne: true}}
 		})
 		.exec();
 
 	if (options.asModels) {
-		return when(p);
+		return when(p).then(function (tracklist) {
+			return tracklist.tracks.slice(options.start, options.start + options.limit);
+		});
 	}
 
 	return p.then(function (tracklist) {
@@ -37,7 +35,7 @@ TrackList.promiseTrackList = function (name, options) {
 			return false;
 		}
 
-		return when.map(tracklist.tracks, function (model) {
+		return when.map(tracklist.tracks.slice(options.start, options.start + options.limit), function (model) {
 			return model.promiseForRendering(options.visitorid);
 		}).then(function (tracks) {
 			return tracks.filter(function (o) { return o; });
