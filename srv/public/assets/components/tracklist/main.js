@@ -12,12 +12,12 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 
 			try {
-				json = json && JSON.parse(json) || false;
+				json = json && JSON.parse(json);
 			} catch (e) {
-				json = false;
+				json = undefined;
 			}
 
-			if (!json) {
+			if (json === undefined) {
 				console.error('Could not parse list data for component/tracklist');
 				return;
 			}
@@ -55,13 +55,17 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 				start: start,
 				limit: limit
 			});
-			this.listenTo(this.collection, 'sync', this.render);
-			this.listenTo(this.collection, 'change', this.render);
 
 			if (!this.collection.length) {
 				this.loading = true;
 				this.collection.fetch();
+				this.collection.once('sync', function () {
+					this.loading = false;
+				}.bind(this));
 			}
+
+			this.listenTo(this.collection, 'sync', this.render);
+			this.listenTo(this.collection, 'change', this.render);
 
 			this.render();
 		},
@@ -125,10 +129,6 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 		},
 
 		render: function () {
-			if (this.loading && this.collection.length) {
-				this.loading = false;
-			}
-
 			var data;
 			if (this.loading) {
 				data = {loading: true};
