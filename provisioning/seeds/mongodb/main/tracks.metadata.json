@@ -1,1 +1,1 @@
-{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "main.tracks", "name" : "_id_" } ] }
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "main.tracks", "name" : "_id_" }, { "v" : 1, "key" : { "votes.ip" : 1 }, "ns" : "main.tracks", "name" : "votes.ip_1", "background" : true, "safe" : null } ] }
