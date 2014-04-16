@@ -1,5 +1,4 @@
 var when = require('when');
-var decay = require('decay').redditHot();
 var log = require('app/log');
 
 var Track = require('app/models/Track');
@@ -16,8 +15,7 @@ module.exports = function () {
 		return tracks
 			.map(function (o) {
 				var track = o.toObject();
-				track.votes = o.getVoteData();
-				track.temperature = decay(track.votes.upReal, track.votes.downReal, o.created_at);
+				track.temperature = o.getVoteData().temperature;
 				return track;
 			})
 			.sort(function (a, b) {

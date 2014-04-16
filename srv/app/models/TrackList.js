@@ -1,6 +1,5 @@
 
 var when = require('when');
-var decay = require('decay').redditHot();
 
 var mongoose = require('app/db/mongo');
 var Track = require('app/models/Track');
@@ -80,10 +79,8 @@ TrackList.promiseTrackList.steam = function (options) {
 
 	return when(p).then(function (tracks) {
 		return tracks.map(function (o) {
-			var voteData = o.getVoteData();
-			o.temperature = decay(voteData.upReal, voteData.downReal, o.created_at);
+			o.temperature = o.getVoteData().temperature;
 			return o;
-
 		}).sort(function (a, b) {
 			return b.temperature - a.temperature;
 

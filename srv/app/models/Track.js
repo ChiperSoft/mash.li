@@ -103,8 +103,6 @@ Track.prototype.getVoteData = function (visitorid) {
 		visitorVote: 0
 	};
 
-	if (!this.votes || !this.votes.length) {return data;}
-
 	this.votes.forEach(function (vote) {
 
 		var trusted = vote.trusted !== -1;
@@ -132,6 +130,13 @@ Track.prototype.getVoteData = function (visitorid) {
 		}
 
 	});
+
+	var decay = 7;
+	var order = Math.log(Math.max(Math.abs(data.scoreReal), 1), 10),
+		dayAge = (Date.now() - this.created_at.getTime()) / (86400000);
+
+	data.temperature = order - dayAge / decay;
+
 
 	return data;
 };
