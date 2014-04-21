@@ -23,6 +23,7 @@ function ResultsStream (since) {
 	this.maxResults =  8000;
 	this.since = since || false;
 	this.highWaterMark = 0;
+	this.errorCount = 0;
 }
 
 util.inherits(ResultsStream, Readable);
@@ -62,7 +63,27 @@ ResultsStream.prototype._grabPage = function () {
 				source: JSON.stringify(body.errors),
 				warn: true
 			});
-			self.emit('error', true);
+			this.errorCount++;
+			if (this.errorCount > 5) {
+				self.emit('error', true);
+				log({
+					level: 1,
+					name: 'ERROR!',
+					status: 'Reached 5 errors, quitting.',
+					id: response.statusCode,
+					source: JSON.stringify(body.errors),
+					warn: true
+				});
+
+			} else {
+				setTimeout(self._grabPage.bind(self), 5000);
+				log({
+					level: 4,
+					status: 'Retrying last request.',
+					id: response.statusCode,
+					source: JSON.stringify(body.errors),
+				});
+			}
 		}
 	});
 };
@@ -74,8 +95,6 @@ ResultsStream.prototype._processPage = function (results) {
 		row,
 		since = this.since && moment(since);
 
-	process.stdout.write('Received ' + (c||0) + ' Results');
-
 	log({
 		level: 4,
 		name: 'Received ' + (c||0) + ' Results',
@@ -84,30 +103,28 @@ ResultsStream.prototype._processPage = function (results) {
 
 	if (c) {
 		while (i < c) {
-			process.stdout.write('.');
 			this.pageOffset++;
 			row = results[i];
 
 			//if the track we got was older than our "since" date, we've run out of new tracks and can stop iterating.
-			if (row && since && moment(row.created_at) < since) {
-				this.emit('end');
-				process.stdout.write('\n');
-				return;
-			}
+			// if (row && since && moment(row.created_at) < since) {
+			// 	this.push(null);
+			// 	process.stdout.write('\n');
+			// 	return;
+			// }
 
 			if (row) {this.push(row);}
 			i++;
 		}
-		process.stdout.write('\n');
 
-		if ((this.maxResults && this.pageOffset >= this.maxResults) || c < this.pageSize) {
-			this.emit('end');
+		if (!c || (this.maxResults && this.pageOffset >= this.maxResults)) {
+			this.push(null);
 		} else {
 			setTimeout(this._grabPage.bind(this), 5000);
 		}
 	} else {
 		process.stdout.write('\n');
-		self.emit('end');
+		self.push(null);
 	}
 };
 
@@ -117,7 +134,7 @@ function getPage (limit, offset, since, callback) {
 		client_id: config.soundcloudKey,
 		filter: 'streamable',
 		tags: 'mashup',
-		order: 'created_at'
+		// order: 'created_at'
 	};
 
 	if (limit)  {args.limit = limit;}
@@ -128,6 +145,8 @@ function getPage (limit, offset, since, callback) {
 	// if (since) {
 	// 	url += '&created_at[from]=' + moment(since).format('YYYY-MM-DD') + '00:00:00 +0000';
 	// }
+
+	console.log(url);
 
 	request.get(url, {json: true}, callback);
 }
