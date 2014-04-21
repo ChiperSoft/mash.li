@@ -45,8 +45,8 @@ app.use('/assets', express.static(__dirname + '/public/assets'));
 // process the request cookies
 app.use(require('cookie-parser')());
 
-// Register the session handler with a redis store -- disabled until we need sessions
-// app.use(require('app/middleware/sessions')());
+// Setup sessions and user login
+// require('app/middleware/sessions')(app);
 
 // register any request specific locals.
 var REGEX_FOR_JSON = /\.json\/?/;
@@ -64,6 +64,7 @@ app.use(function (req, res, next) {
 });
 
 // with all middleware in place, register the actual routers that handle the page requests.
+// app.use(require('app/routes/login')());
 app.use(require('app/routes/votes')());
 app.use(require('app/routes/main')());
 

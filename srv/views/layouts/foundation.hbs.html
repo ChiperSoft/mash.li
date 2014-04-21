@@ -17,6 +17,7 @@
 				<a class="sitelogo pull-left" href="/" data-bypass><i class="mashlicon mashlicon-logo"></i><span>Mash.li</span></a>
 				<a href="http://twitter.com/mash_li" target="_blank" class="pull-right mashlicon mashlicon-twitter"></a>
 				<a href="http://github.com/chipersoft/mash.li" target="_blank" class="pull-right mashlicon mashlicon-github"></a>
+				{{#if user}}<a href="/logout" data-bypass class="pull-right mashlicon mashlicon-remove"></a>{{/if}}
 			</div>
 			<div id="player" class="navbar navbar-inverse">{{#if needPlayer}}{{require "assets/components/player/prerender"}}{{> assets/components/player/prerender}}{{/if}}</div>
 	{{/block}}

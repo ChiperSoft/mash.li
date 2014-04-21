@@ -133,6 +133,10 @@ exports.processData = function (req, res, next) {
 
 	locals.title = 'Mash.li - New Music Mashups Every Day';
 
+	if (locals.user) {
+		locals.isModerator = locals.user.isModerator;
+	}
+
 	next();
 
 };
