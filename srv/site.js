@@ -50,7 +50,7 @@ app.use(require('cookie-parser')());
 
 // register any request specific locals.
 var REGEX_FOR_JSON = /\.json\/?/;
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
 	var match = req.path.match(REGEX_FOR_JSON);
 	var accept = req.headers.accept || '';
 
@@ -75,11 +75,11 @@ app.use(require('app/routes/main')());
 app.use(require('app/middleware/errorHandler')());
 
 // start the server.
-var server = app.listen(app.get('port'), function() {
+var server = app.listen(app.get('port'), function () {
 	log({
 		level: 1,
 		name: 'Express Server Started',
-		status: 'Port '+app.get('port'),
+		status: 'Port ' + app.get('port'),
 		id: env
 	});
 });
