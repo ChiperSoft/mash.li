@@ -54,7 +54,8 @@
     "passport-local": "^1.0.0",
     "bcrypt": "^0.7.7",
     "connect-flash": "^0.1.1",
-    "prompt": "^0.2.12"
+    "prompt": "^0.2.12",
+    "pitstop": "^0.1.2"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.5.3",

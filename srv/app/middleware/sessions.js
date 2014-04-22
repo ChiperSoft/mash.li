@@ -2,6 +2,7 @@ var config = require('app/config');
 var redis = require('app/db/redis');
 var User = require('app/models/User');
 
+var pitstop = require('pitstop');
 var expressSession = require("express-session");
 var ExpressSessionRedisStore = require('connect-redis')(expressSession);
 var passport = require('passport');
@@ -52,25 +53,26 @@ passport.deserializeUser(function (id, done) {
 	User.findOne({_id: id}, done);
 });
 
-module.exports = function (app) {
+module.exports = function () {
 
-	app.use(expressSession({
+	var pit = pitstop();
+
+	pit.use(expressSession({
 		store: new ExpressSessionRedisStore({ client: redis }),
 		secret: config.sessions.secret,
-		cookieName: config.sessions.cookieKey,
 		key: config.sessions.cookieKey
 	}));
 
-	app.use(require('connect-flash')());
+	pit.use(require('connect-flash')());
 
-	app.use(passport.initialize());
-	app.use(passport.session());
-	app.use(function (req, res, next) {
+	pit.use(passport.initialize());
+	pit.use(passport.session());
+	pit.use(function (req, res, next) {
 		if (req.isAuthenticated()) {
 			res.locals.user = req.user;
 		}
 		next();
 	});
 
-
+	return pit;
 };

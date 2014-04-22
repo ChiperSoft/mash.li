@@ -2,15 +2,15 @@ var express = require('express');
 var passport = require('passport');
 
 //map endpoints
-module.exports = exports = function () {
+module.exports = exports = function (sessions) {
 	var router = express.Router();
 
 	router.use(require('body-parser')());
 
 	//setup endpoints
-	router.get('/login', exports.getLogin);
-	router.post('/login', exports.postLogin);
-	router.all('/logout', exports.allLogout);
+	router.get('/login', sessions, exports.getLogin);
+	router.post('/login', sessions, exports.postLogin);
+	router.all('/logout', sessions, exports.allLogout);
 
 	return router;
 };
