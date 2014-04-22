@@ -12,7 +12,6 @@ require('when/monitor/console');
 
 // load express and any middleware dependencies that need to be saved
 var express = require('express');
-var pitstop = require('pitstop');
 
 // load local modules
 var config = require('app/config');
@@ -48,10 +47,7 @@ app.use(require('cookie-parser')());
 
 // Setup sessions and user login, but wrap in a pitstop condition that checks for a session cookie
 var sessions = require('app/middleware/sessions')();
-app.use(pitstop().condition(function (req, res, next) {
-	// if the cookie doesn't exist, sessions will not be invoked for the request
-	next(!!req.cookies[config.sessions.cookieKey]);
-}).use(sessions));
+app.use(sessions);
 
 // register any request specific locals.
 var REGEX_FOR_JSON = /\.json\/?/;
@@ -69,7 +65,7 @@ app.use(function (req, res, next) {
 });
 
 // with all middleware in place, register the actual routers that handle the page requests.
-app.use(require('app/routes/login')(sessions));
+app.use(require('app/routes/login')(sessions.execute));
 app.use(require('app/routes/votes')());
 app.use(require('app/routes/main')());
 

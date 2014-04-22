@@ -57,6 +57,11 @@ module.exports = function () {
 
 	var pit = pitstop();
 
+	pit.condition(function (req, res, next) {
+		// if the cookie doesn't exist, sessions will not be invoked for the request
+		next(!!req.cookies[config.sessions.cookieKey]);
+	});
+
 	pit.use(expressSession({
 		store: new ExpressSessionRedisStore({ client: redis }),
 		secret: config.sessions.secret,
