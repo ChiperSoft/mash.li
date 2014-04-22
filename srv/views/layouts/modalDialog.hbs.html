@@ -1,0 +1,22 @@
+<div {{#if modal.id}}id="{{modal.id}}" {{/if}}class="modal {{#if modal.show}}show{{else}}fade{{/if}}" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				{{#block "modalHeader"}}
+				{{#if modal.closeWidget}}<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>{{/if}}
+				<h4 class="modal-title">{{modal.titleText}}</h4>
+				{{/block}}
+			</div>
+			<div class="modal-body">
+				{{#block "modalBody"}}
+				{{/block}}
+			</div>
+			<div class="modal-footer">
+				{{#block "modalFooter"}}
+				{{#if modal.default}}<button type="button" class="btn btn-default"{{#if modal.default.dismiss}} data-dismiss="modal"{{/if}}>{{modal.default.caption}}</button>{{/if}}
+				{{#if modal.primary}}<button type="button" class="btn btn-primary"{{#if modal.primary.dismiss}} data-dismiss="modal"{{/if}}>{{modal.primary.caption}}</button>{{/if}}
+				{{/block}}
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -9,7 +9,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			var $script = this.$('script.list-data');
 			var json = $script.html();
 			this.lastPlayed = $script.attr('data-last-played');
-
+			this.isModerator = $script.attr('data-ismoderator') || false;
 
 			try {
 				json = json && JSON.parse(json);
@@ -39,7 +39,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 
 			events.on({facetChange: '*'}, this.onFacetChange.bind(this));
 
-			this.render();
+			// this.render();
 		},
 
 		events: {
@@ -149,6 +149,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 				}
 
 				data = {
+					isModerator: this.isModerator,
 					tracks: this.collection.toJSON(),
 					lastPlayed: this.lastPlayed,
 					nowPlaying: this.nowPlaying,

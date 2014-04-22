@@ -50,7 +50,12 @@
     "grunt-contrib-concat": "^0.3.0",
     "grunt-amd-wrap": "^1.0.1",
     "newrelic": "^1.4.0",
-    "decay": "^1.0.5"
+    "decay": "^1.0.5",
+    "passport-local": "^1.0.0",
+    "bcrypt": "^0.7.7",
+    "connect-flash": "^0.1.1",
+    "prompt": "^0.2.12",
+    "pitstop": "^0.1.2"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.5.3",

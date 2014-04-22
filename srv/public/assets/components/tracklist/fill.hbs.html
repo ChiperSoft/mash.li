@@ -9,6 +9,7 @@
 	<a class="artwork{{#unless details.kind}} loading{{/unless}}" href="/track/{{_id}}"{{#if details.artwork_url}}{{#if details.kind}} style="background-image:url({{details.artwork_url}})"{{/if}}{{/if}}></a>
 	<div class="title"><a href="/track/{{_id}}">{{details.title}}</a></div>
 	<div class="actions">
+		{{#if ../../isModerator}}<a href="event://track:remove/{{_id}}" class="label label-inverted pull-right"><i class="mashlicon mashlicon-remove"></i> Remove Track</a>{{/if}}
 		{{#if details.kind}}<a href="event://track:play/{{_id}}" class="play label label-primary"><i class="mashlicon mashlicon-play"></i> Play Track</a>{{/if}}
 		<a href="{{details.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-soundcloud"></i> View On SoundCloud</a>
 		<a href="{{details.user.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-user"></i> View {{details.user.username}}</a>
