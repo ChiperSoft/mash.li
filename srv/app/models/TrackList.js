@@ -20,7 +20,10 @@ TrackList.promiseTrackList = function (name, options) {
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
-			match: { dead: {$ne: true}}
+			match: {
+				dead: {$ne: true},
+				'flags.2': {$exists: false}
+			}
 		})
 		.exec();
 
@@ -49,7 +52,9 @@ TrackList.promiseTrackList['new'] = function (options) {
 
 	var p = Track.find()
 		.sort({created_at: -1, _id: 1})
-		.where('dead').ne(true)
+		.where('dead').ne(true)          // ignore tracks marked as dead
+		.where('flags.2').exists(false)  // ignore tracks with three or more flags
+		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();
@@ -74,7 +79,9 @@ TrackList.promiseTrackList.steam = function (options) {
 
 	var p = Track.find()
 		.sort({created_at: -1, _id: 1})
-		.where('dead').ne(true)
+		.where('dead').ne(true)          // ignore tracks marked as dead
+		.where('flags.2').exists(false)  // ignore tracks with three or more flags
+		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
 		.exec();
 
 	return when(p).then(function (tracks) {
@@ -103,9 +110,11 @@ TrackList.promiseTotalTracks = function (name) {
 	});
 };
 
-TrackList.promiseTotalTracks['new'] = function () {
+TrackList.promiseTotalTracks['new'] = function (options) {
 	var p = Track.find({})
-		.where('dead').ne(true)
+		.where('dead').ne(true)          // ignore tracks marked as dead
+		.where('flags.2').exists(false)  // ignore tracks with three or more flags
+		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
 		.count().exec();
 
 	return when(p);
@@ -115,8 +124,8 @@ TrackList.promiseTotalTracks.empty = function () {
 	return when.resolve(0);
 };
 
-TrackList.promiseTotalTracks.steam = function () {
-	return TrackList.promiseTotalTracks['new']();
+TrackList.promiseTotalTracks.steam = function (options) {
+	return TrackList.promiseTotalTracks['new'](options);
 };
 
 module.exports = TrackList;

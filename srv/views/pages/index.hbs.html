@@ -2,6 +2,7 @@
 {{require "assets/components/featuredLists/prerender"}}
 {{require "assets/components/songbar/prerender"}}
 {{require "assets/components/tracklist/prerender"}}
+{{require "assets/components/dialog/flag/prerender"}}
 {{option 'needPlayer' true}}
 {{#extend "layouts/foundation"}}
 	{{#append "head"}}
@@ -16,6 +17,7 @@
 			{{> assets/components/tracklist/prerender}}
 		</div>
 	</div>
+	{{> assets/components/dialog/flag/prerender}}
 	{{/content}}
 
 	{{#append "postscripts"}}

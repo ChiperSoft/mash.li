@@ -29,6 +29,7 @@
 	}
 
 	.artwork {
+		position: relative;
 		background-image: url('/assets/images/artwork-missing.svg');
 		background-position: center center;
 		background-repeat: no-repeat;
@@ -36,14 +37,34 @@
 		border-bottom: 1px solid #ccc;
 		color:white;
 		display: block;
-		font-size: 100px;
+		font-size: 32px;
 		width: @songbar-width;
 		height: @songbar-width;
-		line-height: @songbar-width;
 		text-align: center;
 		text-decoration: none;
-		text-shadow: 0 0 10px rgba(0,0,0,0.75);
 		top: 0;
+
+		.controls {
+			position: absolute;
+			bottom: 11px;
+			left: 30px;
+			right: 30px;
+			text-align: center;
+			background: rgba(190,190,190,0.5);
+			border-radius: 10px;
+			
+			a {
+				color: white;
+				text-decoration: none;
+				margin: 0 10px;
+				text-shadow: 0 1px 1px rgba(0,0,0,0.6);
+			}
+
+			a:hover {
+				color: #aaa;
+				text-shadow: 0 1px 1px rgba(0,0,0,0.8);
+			}
+		}
 
 		&:before {
 			display: none;

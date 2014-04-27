@@ -36,6 +36,12 @@ var sTrack = mongoose.Schema({
 		delta: { type: Number, default: 0 },
 		trusted: Boolean,
 		created_at: { type: Date, default: Date.now }
+	}],
+	flags: [{
+		visitorId: String,
+		ipHash: String,
+		reason: String,
+		created_at: { type: Date, default: Date.now }
 	}]
 });
 

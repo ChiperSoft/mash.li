@@ -89,7 +89,7 @@ exports.scanForList = function (req, res, next) {
 			limit: limit,
 			visitorid: res.locals.visitorid
 		});
-		res.locals.total = TrackList.promiseTotalTracks[listname]();
+		res.locals.total = TrackList.promiseTotalTracks[listname]({visitorid: res.locals.visitorid});
 		return next();
 	}
 
@@ -99,7 +99,7 @@ exports.scanForList = function (req, res, next) {
 		limit: limit,
 		visitorid: res.locals.visitorid
 	});
-	res.locals.total = TrackList.promiseTotalTracks(listname);
+	res.locals.total = TrackList.promiseTotalTracks(listname, {visitorid: res.locals.visitorid});
 	return next();
 };
 
