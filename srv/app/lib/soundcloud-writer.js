@@ -5,17 +5,19 @@ var SoundCloudTrack = require('app/models/SoundCloudTrack');
 
 var stream = new Writable({ objectMode: true });
 stream._write = function (track, encoding, next) {
+	track.id = '' + track.id;
 	track.tags = getTags(track.tag_list);
 	track.last_scanned_at = Date.now();
 
-	SoundCloudTrack.find({_id: track.id}).exec().then(function (track) {
-		if (track) {
-			// log({
-			// 	level: 8,
-			// 	name: 'Scanned Existing Song',
-			// 	status: track.title,
-			// 	target: track.created_at
-			// });
+	SoundCloudTrack.findOne({_id: track.id}).exec().then(function (existing) {
+		if (existing) {
+			log({
+				level: 8,
+				name: 'Scanned Existing Song',
+				status: track.title,
+				target: track.created_at
+			});
+			// console.log(track, existing);
 
 			next();
 		} else {

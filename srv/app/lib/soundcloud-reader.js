@@ -42,6 +42,7 @@ ResultsStream.prototype._grabPage = function () {
 	var self = this;
 	getPage(self.pageSize, self.pageOffset, self.since, function (err, response, body) {
 		if (response.statusCode === 200) {
+			this.errorCount = 0;
 			if (body.errors && body.errors.length) {
 				log({
 					level: 1,
@@ -134,7 +135,7 @@ function getPage (limit, offset, since, callback) {
 		client_id: config.soundcloudKey,
 		filter: 'streamable',
 		tags: 'mashup',
-		// order: 'created_at'
+		order: 'created_at'
 	};
 
 	if (limit)  {args.limit = limit;}
