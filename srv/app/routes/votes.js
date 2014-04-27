@@ -70,7 +70,7 @@ exports.loadTrack = function (req, res, next) {
 	res.locals.delta = delta;
 };
 
-exports.processVote = function (req, res, next) {
+exports.processVote = function (req, res) {
 	var ip = req.headers['x-forwarded-for'] || req.ip || req._remoteAddress || (req.socket && req.socket.socket.remoteAddress);
 	var hash = sha1(ip);
 
@@ -90,13 +90,9 @@ exports.processVote = function (req, res, next) {
 		return;
 	}
 
-	if (track.votes.length > 1) {
-		return next(new Error('More than one previous vote was found for this visitor.'));
-	}
-
 /***********************************************************************************************************************************************************************************/
 
-	var vote = track.votes[0];
+	var vote = track.votes && track.votes[0];
 
 	// we've done all we need before sending user feedback, we can finish the request here.
 	if (res.locals.wantsJSON) {
@@ -112,7 +108,7 @@ exports.processVote = function (req, res, next) {
 	}
 
 
-	// Visitor has a previous vote. If the delta has changed, update the vote and stop here
+	// Visitor has a previous vote. If the delta has changed, update the vote, but stop here
 	if (vote) {
 		if (vote.delta !== delta) {
 			Track.update({_id: track._id, 'votes.visitorId': res.locals.visitorid}, {$set: {'votes.$.delta': delta}});
@@ -178,7 +174,7 @@ exports.processVote = function (req, res, next) {
 			visitor.update({$inc: {trust: trustShift}}, {upsert: true}, log.fireAndForget({source: 'Visitor trust save in votes.js'}));
 		}
 
-		if (trustShift = -1) {
+		if (trustShift === -1) {
 			vote.trusted = false;
 		}
 
