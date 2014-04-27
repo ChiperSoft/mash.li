@@ -196,3 +196,91 @@ body > .container {
 		margin-top: 15px;
 	}
 }
+
+.mashlicon-spin {
+	-webkit-animation: mashlicon-spin 2s infinite linear;
+	-moz-animation: mashlicon-spin 2s infinite linear;
+	-o-animation: smashlicon-pin 2s infinite linear;
+	animation: mashlicon-spin 2s infinite linear;
+}
+
+&, .btn, .nav-tabs {
+	[class^="mashlicon-"], [class*=" mashlicon-"] {
+		&.mashlicon-spin {
+			line-height: 1;
+			margin: 0;
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+			top: 2px;
+			position: relative;
+		}
+	}
+}
+
+@-moz-keyframes mashlicon-spin {
+	0% { -moz-transform: rotate(0deg); }
+	100% { -moz-transform: rotate(359deg); }
+}
+@-webkit-keyframes mashlicon-spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(359deg); }
+}
+@-o-keyframes mashlicon-spin {
+	0% { -o-transform: rotate(0deg); }
+	100% { -o-transform: rotate(359deg); }
+}
+@-ms-keyframes mashlicon-spin {
+	0% { -ms-transform: rotate(0deg); }
+	100% { -ms-transform: rotate(359deg); }
+}
+@keyframes mashlicon-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(359deg); }
+}
+
+
+.spinner {
+	display: inline-block;
+	opacity: 0;
+	width: 0;
+
+	.transition(~'opacity 0.25s, width 0.25s, padding 0.25s');
+
+	.mashlicon {
+		display: inline-block;
+	}
+}
+
+.has-spinner {
+	cursor:progress;
+
+	&.left {
+		padding-right: 5px;
+	}
+
+	.spinner.right {
+		padding-left: 5px;
+	}
+
+}
+
+.has-spinner .spinner {
+	opacity: 1;
+}
+
+.has-spinner.btn-mini .spinner {
+    width: 10px;
+}
+
+.has-spinner.btn-small .spinner {
+    width: 13px;
+}
+
+.has-spinner.btn .spinner, .spinner.active {
+	width: 16px;
+}
+
+.has-spinner.btn-large .spinner {
+    width: 19px;
+}
