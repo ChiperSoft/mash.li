@@ -10,7 +10,7 @@
 	<div class="title"><a href="/track/{{_id}}">{{details.title}}</a></div>
 	<div class="actions">
 		{{#if ../../isModerator}}<a href="event://track:remove/{{_id}}" class="label label-inverted pull-right"><i class="mashlicon mashlicon-remove"></i> Remove Track</a>{{/if}}
-		{{!<a href="event://track:hide/{{_id}}" class="label label-warning pull-right"><i class="mashlicon mashlicon-flag"></i> Hide</a>}}
+		<!-- <a href="event://track:hide/{{_id}}" class="label label-warning pull-right"><i class="mashlicon mashlicon-flag"></i> Hide</a> -->
 		<a href="event://track:flag/{{_id}}" class="label label-danger pull-right"><i class="mashlicon mashlicon-flag"></i> Flag</a>
 		{{#if details.kind}}<a href="event://track:play/{{_id}}" class="play label label-primary"><i class="mashlicon mashlicon-play"></i> Play Track</a>{{/if}}
 		<a href="{{details.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-soundcloud"></i> View On SoundCloud</a>
