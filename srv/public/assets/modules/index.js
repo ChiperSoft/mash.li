@@ -5,8 +5,10 @@ require([
 	'handlebars',
 	'helpers',
 	'js/lib/facetizer',
+	'components/visitor/main',
 	'components/player/main',
 	'components/songbar/main',
 	'components/tracklist/main',
-	'components/featuredLists/main'
+	'components/featuredLists/main',
+	'components/dialog/flag/main'
 ]);

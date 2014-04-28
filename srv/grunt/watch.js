@@ -27,6 +27,11 @@ module.exports = function (grunt) {
 			tasks: ['requirejs:main']
 		},
 
+		copy: {
+			files: ['public/assets/modules/**/*.js'],
+			tasks: ['copy:rjsmodules']
+		},
+
 		express: {
 			files:  [ 'site.js', 'app/**/*.js', 'views/**/*.js', 'node_modules/mashli-helpers.js' ],
 			tasks:  [ 'express:server' ],

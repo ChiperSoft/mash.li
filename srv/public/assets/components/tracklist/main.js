@@ -1,4 +1,4 @@
-define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], function (_, Backbone, events, TrackList, tmplListContents) {
+define(['lodash', 'backbone', 'events', 'visitor', 'collections/TrackList', './fill.hbs'], function (_, Backbone, events, visitor, TrackList, tmplListContents) {
 
 	return Backbone.View.extend({
 		template: tmplListContents,
@@ -9,7 +9,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			var $script = this.$('script.list-data');
 			var json = $script.html();
 			this.lastPlayed = $script.attr('data-last-played');
-			this.isModerator = $script.attr('data-ismoderator') || false;
+			this.isModerator = visitor.get('ismoderator') || false;
 
 			try {
 				json = json && JSON.parse(json);
@@ -22,6 +22,8 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 				return;
 			}
 
+			this.render = _.debounce(this.render.bind(this), 50);
+
 			this.collection = new TrackList(json, {
 				name: $script.attr('data-listname'),
 				start: parseInt($script.attr('data-start'), 10),
@@ -32,15 +34,13 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			this.listenTo(this.collection, 'sync', this.render);
 			this.listenTo(this.collection, 'change', this.render);
 
-			this.render = _.debounce(this.render.bind(this), 50);
+			this.listenTo(visitor, 'change', this.onVisitorChange);
 
 			this.listenTo(events, 'player:playing', this.onPlayback);
 			this.listenTo(events, 'player:paused', this.onPaused);
+			this.listenTo(events, 'track:hide', this.onTrackHide);
 
 			events.on({facetChange: '*'}, this.onFacetChange.bind(this));
-			events.on('track:hide', this.onTrackHide.bind(this));
-
-			// this.render();
 		},
 
 		events: {
@@ -90,6 +90,11 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			if (track) {
 				track.set({hidden: true}, {silent: true});
 			}
+		},
+
+		onVisitorChange: function () {
+			this.isModerator = visitor.get('ismoderator') || false;
+			this.render();
 		},
 
 		onPlayback: function (ev, id) {

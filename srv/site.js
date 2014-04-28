@@ -66,6 +66,7 @@ app.use(function (req, res, next) {
 
 // with all middleware in place, register the actual routers that handle the page requests.
 app.use(require('app/routes/login')(sessions.execute));
+app.use('/mod', require('app/routes/moderator')(sessions.execute));
 app.use(require('app/routes/flags')());
 app.use(require('app/routes/votes')());
 app.use(require('app/routes/main')());

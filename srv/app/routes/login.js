@@ -23,7 +23,7 @@ exports.getLogin = function (req, res) {
 
 exports.postLogin = function (req, res) {
 	passport.authenticate('local', {
-		successRedirect: req.session && req.session.goingTo || '/profile',
+		successRedirect: req.session && req.session.goingTo || '/',
 		failureRedirect: "/login",
 		failureFlash: true
 	})(req, res);

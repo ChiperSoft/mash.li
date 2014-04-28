@@ -29,6 +29,7 @@
 		"define"          : false,
 		"require"         : false,
 		"ga"              : false,
+		"confirm"         : false,
 
 		"asyncTest"       : false,
 		"deepEqual"       : false,

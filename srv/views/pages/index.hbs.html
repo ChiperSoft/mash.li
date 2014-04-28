@@ -3,10 +3,12 @@
 {{require "assets/components/songbar/prerender"}}
 {{require "assets/components/tracklist/prerender"}}
 {{require "assets/components/dialog/flag/prerender"}}
+{{require "assets/components/visitor/prerender"}}
 {{option 'needPlayer' true}}
 {{#extend "layouts/foundation"}}
 	{{#append "head"}}
 		<link rel="stylesheet" href="/assets/css/pages/index.css" />
+		{{> assets/components/visitor/prerender}}
 	{{/append}}
 
 	{{#content "body"}}

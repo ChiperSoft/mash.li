@@ -24,6 +24,7 @@ exports.creator = function (req, res, next) {
 	var vid = res.locals.visitorid = require('crypto').randomBytes(20).toString('hex');
 	res.cookie(COOKIE, vid, { maxAge: 1000 * 60 * 60 * 24 * 365 });
 	res.locals.visitor = new Visitor({_id: vid});
+	res.locals.newVisitor = true;
 
 	next();
 };

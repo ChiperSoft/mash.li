@@ -1,5 +1,5 @@
 {{require "assets/components/tracklist/fill"}}
 <div data-component="tracklist" data-hasview>
-	<script type="text/json" class="list-data" data-listname="{{list}}" data-last-played="{{lastPlayed}}" data-start="{{start}}" data-total="{{total}}" data-limit="{{limit}}"{{#if user.isModerator}}data-ismoderator="1"{{/if}}>{{stringify tracks}}</script>
+	<script type="text/json" class="list-data" data-listname="{{list}}" data-last-played="{{lastPlayed}}" data-start="{{start}}" data-total="{{total}}" data-limit="{{limit}}">{{stringify tracks}}</script>
 	<ul class="lbody">{{> assets/components/tracklist/fill}}</ul>
 </div>

@@ -26,6 +26,7 @@ require.config({
 		'helpers'            : 'vendor/mash.li/helpers',
 
 		'events'             : 'js/lib/events',
+		'visitor'            : 'js/lib/visitor',
 		'collections'        : 'js/collections',
 		'models'             : 'js/models'
 
