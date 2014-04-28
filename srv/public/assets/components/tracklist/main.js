@@ -38,7 +38,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 			this.listenTo(events, 'player:paused', this.onPaused);
 
 			events.on({facetChange: '*'}, this.onFacetChange.bind(this));
-			events.on('track:hide', this.onTrackHide.bind(this))
+			events.on('track:hide', this.onTrackHide.bind(this));
 
 			// this.render();
 		},
@@ -84,7 +84,7 @@ define(['lodash', 'backbone', 'events', 'collections/TrackList', './fill.hbs'], 
 		},
 
 		onTrackHide: function (ev, id) {
-			this.$('[data-trackid="'+id+'"]').slideUp(200);
+			this.$('[data-trackid="' + id + '"]').slideUp(200);
 			var track = this.collection.get(id);
 
 			if (track) {

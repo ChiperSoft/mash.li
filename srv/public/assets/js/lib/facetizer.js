@@ -109,7 +109,7 @@ define(['lodash', 'backbone', 'events'], function (_, Backbone, events) {
 			}
 		});
 
-		events.trigger({facetChange: changed, facets:facets});
+		events.trigger({facetChange: changed, facets: facets});
 		lastFacets = facets;
 	});
 

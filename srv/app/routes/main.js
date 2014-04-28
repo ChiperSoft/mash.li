@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var express = require('express');
 
 var Setting = require('app/models/Setting');
