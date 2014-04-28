@@ -24,7 +24,7 @@ module.exports = function () {
 				return b.temperature - a.temperature;
 
 			})
-			.slice(0, 100)
+			.slice(0, 500)
 			.map(function (o) {
 				// log({
 				// 	name: o.details.title,
