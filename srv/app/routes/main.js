@@ -4,7 +4,7 @@ var Setting = require('app/models/Setting');
 var Track = require('app/models/Track');
 var TrackList = require('app/models/TrackList');
 
-var DEFAULT_LIST = 'new';
+var DEFAULT_LIST = 'hot';
 var DEFAULT_LIMIT = 25;
 
 module.exports = exports = function () {
