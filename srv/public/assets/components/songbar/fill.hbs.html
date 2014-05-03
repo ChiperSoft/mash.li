@@ -1,9 +1,10 @@
 {{#with track}}
 	<div class="artwork{{#unless details.kind}} loading{{/unless}}" {{#and details.artwork_url details.kind}} style="background-image:url({{details.artwork_url}})"{{/and}}>
 		<div class="controls">
-			{{#if details.kind}}<a href="event://track:play/{{_id}}" class="mashlicon mashlicon-play"></a>{{/if}}
-			<a href="{{details.permalink_url}}" class="mashlicon mashlicon-soundcloud2" target="_blank"></a>
-			<a href="event://track:flag/{{_id}}" class="mashlicon mashlicon-flag"></a>
+			{{#if details.kind}}<a href="event://track:play/{{_id}}" class="mashlicon mashlicon-play" title="Play"></a>{{/if}}
+			<a href="{{details.permalink_url}}" class="mashlicon mashlicon-soundcloud2" target="_blank" title="View on Soundcloud"></a>
+			<a href="event://track:flag/{{_id}}" class="mashlicon mashlicon-flag" title="Flag for Removal"></a>
+			{{#if details.downloadable}}<a href="/download/{{_id}}" data-bypass class="mashlicon mashlicon-download" title="Download"></a>{{/if}}
 		</div>
 	</div>
 	<div class="details">
