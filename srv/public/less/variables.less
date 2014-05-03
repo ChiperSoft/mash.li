@@ -14,3 +14,10 @@
 @vote-up-color: #439915;
 @vote-down-color: #F44469;
 
+@navbar-header-bg: #222;
+
+#navbar {
+	.background {
+		#gradient > .vertical(@start-color: lighten(@navbar-header-bg, 20%); @end-color: @navbar-header-bg);
+	}
+}
