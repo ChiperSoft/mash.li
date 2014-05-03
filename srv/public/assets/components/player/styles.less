@@ -75,16 +75,11 @@
 
 	.track {
 		display: block;
-		height: 40px;
+		height: 50px;
 		margin-right: 70px;
 		margin-left: 70px;
-		margin-top: 5px;
 		position: relative;
-		background: black;
 		overflow: hidden;
-		border-radius: 5px;
-		border: 2px solid #444;
-		border-color: #000 #444 #444 #000;
 
 		-webkit-touch-callout: none;
 		-webkit-user-select: none;
@@ -97,7 +92,7 @@
 			background: @gray-dark;
 		}
 
-		div {
+		.progress div, .wave div {
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -106,32 +101,66 @@
 			text-align: center;
 		}
 
-		.loaded {
-			width: 0;
-			background-color: @gray;
+		.progress {
+			position: absolute;
+			height: 5px;
+			bottom: 0;
+			width: 100%;
+			background: none;
+
+
+			.loaded {
+				width: 0;
+				background-color: @gray;
+				box-shadow: 0 -1px 2px rgba(0,0,0,0.5);
+			}
+
+			.position {
+				width: 0;
+				background-color: @brand-primary;
+			}
 		}
 
-		.position {
-			width: 0;
-			background-color: @brand-primary;
-		}
+		.wave {
+			position: absolute;
+			bottom: 0;
+			height: 50px;
+			width: 100%;
+			#gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 15%); @end-color: lighten(@navbar-inverse-bg, 5%));
 
-		.waveform {
-			background-repeat: no-repeat;
-			background-size: 100% 100%;
-			background-position: top left;
-			-webkit-filter: invert(100%);
-			-moz-filter: invert(100%);
-			-ms-filter: invert(100%);
-			filter: invert(100%);
+			.loaded {
+				width: 0;
+				#gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 20%); @end-color: lighten(@navbar-inverse-bg, 10%));
+			}
+
+			.position {
+				width: 0;
+				#gradient > .vertical(@start-color: darken(@brand-primary, 10%); @end-color: darken(@brand-primary, 50%));
+			}
+
+			.waveform {
+				#gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 10%); @end-color: @navbar-inverse-bg);
+				-webkit-mask-size: 100% 200%;
+				-webkit-mask-position: 0 0;
+				-webkit-mask-repeat: no-repeat;
+				// background-repeat: no-repeat;
+				// background-size: 100% 200%;
+				// background-position: top left;
+				// -webkit-filter: invert(100%);
+				// -moz-filter: invert(100%);
+				// -ms-filter: invert(100%);
+				// filter: invert(100%);
+			}
 		}
 
 		.details {
-			line-height: 36px;
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
 			font-weight: 800;
 			font-size: 13px;
-			text-shadow: 0 1px 2px rgba(0,0,0,0.75);
-			
+			text-shadow: 0 2px 3px rgba(0,0,0,0.85);
+			cursor: default;
 		}
 	}
 

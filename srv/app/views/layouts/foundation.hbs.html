@@ -10,16 +10,11 @@
 	{{/block}}
 </head>
 <body>
-	<div class="container">
-		<header class="container">
+	<div class="content-wrap">
+		<header class="navbar navbar-inverse navbar-fixed-top">
 	{{#block "header"}}
-			<div class="header-links">
-				<a class="sitelogo pull-left" href="/" data-bypass><i class="mashlicon mashlicon-logo"></i><span>Mash.li</span></a>
-				<a href="http://twitter.com/mash_li" target="_blank" class="pull-right mashlicon mashlicon-twitter"></a>
-				<a href="http://github.com/chipersoft/mash.li" target="_blank" class="pull-right mashlicon mashlicon-github"></a>
-				{{#if user}}<a href="/logout" data-bypass class="pull-right mashlicon mashlicon-remove"></a>{{/if}}
-			</div>
-			<div id="player" class="navbar navbar-inverse">{{#if needPlayer}}{{require "assets/components/player/prerender"}}{{> assets/components/player/prerender}}{{/if}}</div>
+			<a class="sitelogo" href="/" data-bypass><i class="mashlicon mashlicon-logo"></i><span>Mash.li</span></a>
+			<div id="player">{{#if needPlayer}}{{require "assets/components/player/prerender"}}{{> assets/components/player/prerender}}{{/if}}</div>
 	{{/block}}
 		</header>
 		<div class="filler"></div>
@@ -28,13 +23,16 @@
 
 		<footer>
 	{{#block "footer"}}
-		<div class="navbar navbar-inverse">
+		<div class="navbar navbar-inverse navbar-static-top">
+			<a class="navbar-btn navbar-right mashlicon mashlicon-twitter" href="http://twitter.com/mash_li" target="_blank"></a>
+			<a class="navbar-btn navbar-right mashlicon mashlicon-github" href="http://github.com/chipersoft/mash.li" target="_blank"></a>
+			{{#if user}}<a class="navbar-btn navbar-right mashlicon mashlicon-remove" href="/logout" data-bypass></a>{{/if}}
+			
 			<img src="/assets/images/powered-by-soundcloud.png" class="powered navbar-btn navbar-right" alt="Powered by SoundCloud" width="104" height="32">
 			<p class="navbar-text">Mash.li Copyright &copy; 2014, <a href="http://chipersoft.com/" target="_blank">Jarvis Badgley</a><br>All tracks and track artwork are copyright their respective owners. <a href="http://soundcloud.com/" target="_blank">Content provided by SoundCloud, Inc.</a></p>
 		</div>
 	{{/block}}
 		</footer>
-		<div class="mask bottom"></div>
 	</div>
 
 	<script src="/assets/rjs/main.js"></script>
