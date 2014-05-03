@@ -20,9 +20,9 @@
 		<div class="duration datacell"><i class="mashlicon mashlicon-calendar"></i><span>Created: {{date 'MMM Do, YYYY' details.created_at}}</span><span>Added: {{date 'MMM Do, YYYY' created_at}}</span></div>
 		{{#if details.description}}<hr><div class="description datacell"><i class="mashlicon mashlicon-info-sign"></i><span>{{nl2br details.description}}</span></div>{{/if}}
 
-		{{#if details.tags}}<hr><div class="tags datacell"><i class="mashlicon mashlicon-tag"></i><span>{{#each details.tags}}<label class="label label-default">{{this}}</label>{{/each}}</span></div>{{/if}}
+		{{#if details.tags}}<hr><div class="tags datacell"><i class="mashlicon mashlicon-tag"></i><span>{{#each details.tags}}<label>{{this}}</label>{{/each}}</span></div>{{/if}}
 		<a href="/track//" class="mashlicon mashlicon-remove songbar-close"></a>
 
-		<!-- <pre>{{stringify this}}</pre> -->
+		<pre class="hide">{{stringify this}}</pre>
 	</div>
 {{/with}}

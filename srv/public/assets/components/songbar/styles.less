@@ -163,13 +163,32 @@
 	}
 
 	.tags {
-		.label {
+		label {
 			display: block;
 			float: left;
-			font-size: 10px;
+			text-align: center;
+			font-size: 12px;
 			line-height: 1;
-			margin: 3px;
+			margin: 3px 5px 3px 0;
 			white-space: nowrap;
+			font-weight: normal;
+		}
+
+		label:before, label:after {
+			font-weight: 700;
+			font-size: 14px;
+			color: @gray-light;
+			font-family: Arial;
+		}
+
+		label:before {
+			content: '[';
+			margin-right: 2px;
+		}
+
+		label:after {
+			content: ']';
+			margin-left: 2px;
 		}
 
 		.mashlicon {
