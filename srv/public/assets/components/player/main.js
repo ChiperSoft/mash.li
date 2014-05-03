@@ -70,7 +70,18 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 				var volume = this.$('.volume-slider input').val();
 
-				soundcloud.stream('/tracks/' + this.model.id, function (sound) {
+				soundcloud.stream('/tracks/' + this.model.id, {
+					volume: volume,
+					onfinish:     bindSoundEvent(self, 'onSoundFinished'),
+					onstop:       bindSoundEvent(self, 'onSoundStop'),
+					onplay:       bindSoundEvent(self, 'onSoundPlay'),
+					onresume:     bindSoundEvent(self, 'onSoundPlay'),
+					onpause:      bindSoundEvent(self, 'onSoundPause'),
+					ondataerror:  bindSoundEvent(self, 'onSoundError'),
+					onsuspend:    bindSoundEvent(self, 'onSoundSuspend'),
+					whileloading: bindSoundEvent(self, 'onSoundPositionChange'),
+					whileplaying: bindSoundEvent(self, 'onSoundPositionChange'),
+				}, function (sound) {
 					self.sound = sound;
 					if (!sound) {
 						self.$el.addClass('error');
@@ -78,17 +89,8 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 						return;
 					}
 
-					sound[autoplay ? 'play' : 'load']({
-						volume: volume,
-						multiShot: true,
-						onstop:       bindSoundEvent(self, 'onSoundStop'),
-						onplay:       bindSoundEvent(self, 'onSoundPlay'),
-						onresume:     bindSoundEvent(self, 'onSoundPlay'),
-						onpause:      bindSoundEvent(self, 'onSoundPause'),
-						ondataerror:  bindSoundEvent(self, 'onSoundError'),
-						onsuspend:    bindSoundEvent(self, 'onSoundSuspend'),
-						whileloading: bindSoundEvent(self, 'onSoundPositionChange'),
-						whileplaying: bindSoundEvent(self, 'onSoundPositionChange'),
+					sound.load({
+						onload:       function () {if (autoplay) sound.play();}
 					});
 				});
 			} else if (this.sound && !this.sound.playState) {
@@ -207,6 +209,11 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 		onSoundStop: function () {
 			this.$el.removeClass('playing');
+		},
+		onSoundFinished: function (sound) {
+			this.$el.removeClass('playing');
+			sound.stop();
+			this.render();
 		},
 		onSoundPlay: function () {
 			this.$el.addClass('playing');
