@@ -15,6 +15,7 @@
 		{{#if details.kind}}<a href="event://track:play/{{_id}}" class="play label label-primary"><i class="mashlicon mashlicon-play"></i> Play Track</a>{{/if}}
 		<a href="{{details.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-soundcloud"></i> View On SoundCloud</a>
 		<a href="{{details.user.permalink_url}}" target="_blank" class="soundcloud-link label label-default"><i class="mashlicon mashlicon-user"></i> View {{details.user.username}}</a>
+		{{#if details.downloadable}}<a href="/download/{{_id}}" data-bypass class="soundcloud-link label label-default label-inverted"><i class="mashlicon mashlicon-download"></i> Download</a>{{/if}}
 	</div>
 
 </li>

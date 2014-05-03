@@ -42,7 +42,8 @@ var sTrack = mongoose.Schema({
 		ipHash: String,
 		reason: String,
 		created_at: { type: Date, default: Date.now }
-	}]
+	}],
+	downloads: { type: Number, default: 0 }
 });
 
 sTrack.index({'votes.ip': 1});
@@ -95,7 +96,6 @@ Track.prototype.promiseForRendering = function (visitorid) {
 			return track;
 		}
 	);
-
 };
 
 Track.prototype.getVoteData = function (visitorid) {

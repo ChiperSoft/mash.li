@@ -69,6 +69,7 @@ app.use(require('app/routes/login')(sessions.execute));
 app.use('/mod', require('app/routes/moderator')(sessions.execute));
 app.use(require('app/routes/flags')());
 app.use(require('app/routes/votes')());
+app.use(require('app/routes/download')());
 app.use(require('app/routes/main')());
 
 // if our site were able to have 404 errors, the handler for that would go here.
