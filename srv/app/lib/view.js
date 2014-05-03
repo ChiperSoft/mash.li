@@ -14,7 +14,7 @@ function loadTemplate (src) {
 	if (src.substr(0,3) === 'app') {
 		actualpath = src + '.hbs';
 	} else if (src.substr(0,7) === 'assets/') {
-		actualpath = pathResolve(root + '/../public/' + src + '.hbs');
+		actualpath = pathResolve(root + '/../../public/' + src + '.hbs');
 	} else {
 		actualpath = pathResolve(root + src + '.hbs');
 	}

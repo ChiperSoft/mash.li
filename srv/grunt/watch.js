@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 		},
 
 		express: {
-			files:  [ 'site.js', 'app/**/*.js', 'views/**/*.js', 'node_modules/mashli-helpers.js' ],
+			files:  [ 'site.js', 'app/**/*.js', 'app/views/**/*.js', 'node_modules/mashli-helpers.js' ],
 			tasks:  [ 'express:server' ],
 			options: {
 				spawn: false // Without this option specified express won't be reloaded

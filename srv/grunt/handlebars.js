@@ -26,11 +26,11 @@ module.exports = function (grunt) {
 			},
 			files: [{
 				expand: true,
-				cwd: 'views/',
+				cwd: 'app/views/',
 				src: [
 					'**/*.hbs.html',
 				],
-				dest: 'views/',
+				dest: 'app/views/',
 				ext: '.hbs.js'
 			}]
 		},
