@@ -101,12 +101,14 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 		render: function () {
 			var data = {
 				track: this.model.toJSON(),
-				player: this.sound
+				player: this.sound,
+				loaded: this.sound && this.sound.bytesLoaded && this.sound.bytesTotal && (this.sound.bytesLoaded / this.sound.bytesTotal) * 100,
+				position: this.sound && this.sound.position && this.sound.duration && (this.sound.position / this.sound.duration) * 100
 			};
 
 			var html = this.template(data);
 
-			this.$('.body').html(html);
+			this.$('.inner-body').html(html);
 
 			return this;
 		},
@@ -209,6 +211,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 
 		onSoundStop: function () {
 			this.$el.removeClass('playing');
+			this.render();
 		},
 		onSoundFinished: function (sound) {
 			this.$el.removeClass('playing');
@@ -217,6 +220,7 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 		},
 		onSoundPlay: function () {
 			this.$el.addClass('playing');
+			this.$('.body').show();
 			this.$el.removeClass('error');
 			events.trigger('player:playing', this.model.id);
 		},
@@ -229,11 +233,8 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 			this.$el.addClass('error');
 			this.$('.details').text('An error occurred while loading track data.');
 		},
-		onSoundPositionChange: function (sound) {
-			var loaded = sound.bytesLoaded && sound.bytesTotal && (sound.bytesLoaded / sound.bytesTotal) * 100;
-			var position = sound.position && sound.duration && (sound.position / sound.duration) * 100;
-			this.$('.loaded').css('width', loaded + '%');
-			this.$('.position').css('width', position + '%');
+		onSoundPositionChange: function () {
+			this.render();
 		}
 	});
 

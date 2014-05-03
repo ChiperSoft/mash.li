@@ -12,6 +12,7 @@ module.exports = function (grunt) {
 				'node_modules/helper-hoard/src/helpers/math/sub.js',
 				'node_modules/helper-hoard/src/helpers/compare/and.js',
 				'node_modules/helper-hoard/src/helpers/compare/compare.js',
+				'node_modules/helper-hoard/src/helpers/str/numberFormat.js',
 				'node_modules/helper-hoard/src/helpers/data/*.js',
 				'node_modules/helper-hoard/src/helpers/layout/*.js',
 				'node_modules/helper-hoard/src/helpers/date/*.js'

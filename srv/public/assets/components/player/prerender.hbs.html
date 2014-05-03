@@ -1,5 +1,12 @@
 {{require "assets/components/player/fill"}}
 <div data-component="player" data-hasview>
 	<script type="text/json" class="track-data">{{#if play}}{{stringify track}}{{/if}}</script>
-	<div class="body">{{#if play}}{{> assets/components/player/fill}}{{/if}}</div>
+	<div class="body" {{#unless play}}style="display: none"{{/unless}}>
+		<span class="volume">
+			<span class="volume-slider"><input type="range"></span>
+			<a class="player-volume mashlicon mashlicon-volume-high"></a>
+		</span>
+		<span class="controls"><a class="player-play mashlicon mashlicon-play"></a><a class="player-pause mashlicon mashlicon-pause"></a></span>
+		<div class="inner-body">{{#if play}}{{> assets/components/player/fill}}{{/if}}</div>
+	</div>
 </div>

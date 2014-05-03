@@ -23,7 +23,7 @@ exports.durationShort = function () {
 				units++;
 			}
 
-			if (value || stack.length) {
+			if (value || stack.length || level == 1) {
 				stack.push( padleft(value) );
 			}
 

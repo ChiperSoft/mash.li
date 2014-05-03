@@ -1,19 +1,19 @@
 {{#if track}}
-<span class="volume">
-	<span class="volume-slider"><input type="range"></span>
-	<a class="player-volume mashlicon mashlicon-volume-high"></a>
-</span>
-<span class="controls"><a class="player-play mashlicon mashlicon-play"></a><a class="player-pause mashlicon mashlicon-pause"></a></span>
 <div class="track {{#if track.details.waveform_url}}has-waveform{{/if}}">
 	<div class="wave">
-		<div class="loaded"></div>
-		<div class="position"></div>
-		{{#if track.details.waveform_url}}<div class="waveform" style="-webkit-mask-image:url({{track.details.waveform_url}});"></div>{{/if}}
+		<div class="loaded" {{#if loaded}}style="width: {{loaded}}%"{{/if}}></div>
+		{{#if player.position}}<div class="position" {{#if position}}style="width: {{position}}%"{{/if}}></div>{{/if}}
+		{{#if track.details.waveform_url}}<div class="waveform" style="-webkit-mask-image:url({{track.details.waveform_url}});mask-image:url({{track.details.waveform_url}});"></div>{{/if}}
 	</div>
 	<div class="progress">
-		<div class="loaded"></div>
-		<div class="position"></div>
+		<div class="loaded" {{#if loaded}}style="width: {{loaded}}%"{{/if}}></div>
+		{{#if player.position}}<div class="position" {{#if position}}style="width: {{position}}%"{{/if}}></div>{{/if}}
 	</div>
-	<div class="details">{{track.details.title}} - {{durationShort track.details.duration}}</div>
+	<div class="details">
+		<span class="title"><i class="mashlicon mashlicon-music"></i>{{track.details.title}}</span>
+		<span class="artist"><i class="mashlicon mashlicon-user"></i>{{track.details.user.username}}</span>
+		<span class="time"><i class="mashlicon mashlicon-time"></i>{{#if player.position}}{{durationShort player.position}} / {{/if}}{{durationShort track.details.duration}}</span>
+		{{#compare loaded "<" 100}}{{#if loaded}}<span class="loaded"><i class="mashlicon mashlicon-download"></i>{{numberFormat loaded}}%</span>{{/if}}{{/compare}}
+	</div>
 </div>
 {{/if}}

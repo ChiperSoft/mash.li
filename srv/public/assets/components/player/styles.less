@@ -1,6 +1,6 @@
 [data-component="player"] {
-	@track-loaded: @gray;
-	@track-position: #ffd413;
+	@track-loaded: #ccc;
+	@track-position: @brand-primary;//#f0c509;
 
 	.body {
 		color: white;
@@ -108,16 +108,17 @@
 			width: 100%;
 			background: none;
 
+			box-shadow: 0 -1px 2px rgba(0,0,0,0.5);
 
 			.loaded {
 				width: 0;
 				background-color: @track-loaded;
-				box-shadow: 0 -1px 2px rgba(0,0,0,0.5);
 			}
 
 			.position {
 				width: 0;
 				background-color: @track-position;
+				border-right: 1px solid darken(@track-position, 10%);
 			}
 		}
 
@@ -139,16 +140,8 @@
 
 			.waveform {
 				#navbar > .background;
-				-webkit-mask-size: 100% 200%;
-				-webkit-mask-position: 0 0;
-				-webkit-mask-repeat: no-repeat;
-				// background-repeat: no-repeat;
-				// background-size: 100% 200%;
-				// background-position: top left;
-				// -webkit-filter: invert(100%);
-				// -moz-filter: invert(100%);
-				// -ms-filter: invert(100%);
-				// filter: invert(100%);
+				-webkit-mask: top left / 100% 200%;
+				mask: top left / 100% 200%;
 			}
 		}
 
@@ -162,11 +155,29 @@
 		.details {
 			position: absolute;
 			bottom: 10px;
-			left: 10px;
+			left: 0px;
+			right: 0px;
+			padding: 0 10px;
 			font-weight: 800;
 			font-size: 13px;
 			text-shadow: 0 2px 3px rgba(0,0,0,0.85);
 			cursor: pointer;
+			text-align: center;
+
+			span {
+				margin: 0 20px 0 0;
+			}
+
+			.mashlicon {
+				margin-right: 5px;
+				position: relative;
+				top: 1px;
+			}
+
+			.title { float: left; }
+			.artist { float: left; }
+			.time { float: right; }
+			.loaded { }
 		}
 	}
 

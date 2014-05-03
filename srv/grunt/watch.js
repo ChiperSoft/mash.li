@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 
 		helpers: {
 			files: ['app/helpers/**/*.js', 'grunt/concat.js'],
-			tasks: ['concat:helpers', 'amdwrap:helpers']
+			tasks: ['concat:helpers', 'amdwrap:helpers', 'requirejs:main']
 		},
 
 		lodash: {
