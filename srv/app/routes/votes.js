@@ -19,6 +19,9 @@ module.exports = exports = function () {
 		exports.loadTrack,
 		exports.processVote
 	);
+	router.get(/\/vote/, function (req, res) {
+		res.send(405, 'Voting must be done with a POST request.');
+	});
 
 	return router;
 };
