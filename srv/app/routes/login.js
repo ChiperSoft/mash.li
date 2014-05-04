@@ -6,6 +6,7 @@ module.exports = exports = function (sessions) {
 	var router = express.Router();
 
 	router.use(require('body-parser')());
+	router.use(require('app/middleware/newrelic')());
 
 	//setup endpoints
 	router.get('/login', sessions, exports.getLogin);

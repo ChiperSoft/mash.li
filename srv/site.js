@@ -2,9 +2,7 @@ var env = process.env.NODE_ENV || 'development';
 var isProduction = env === 'production';
 
 // activate the newrelic process monitoring
-if (isProduction) {
-	require('newrelic');
-}
+var newrelic = require('newrelic');
 
 // setup the when.js debugging for unhandled promise rejections
 // eventually this should be made development only, but the site is still kinda beta
