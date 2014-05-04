@@ -49,7 +49,7 @@
     "grunt-lodash": "~0.3.0",
     "grunt-contrib-concat": "^0.3.0",
     "grunt-amd-wrap": "^1.0.1",
-    "newrelic": "^1.4.0",
+    "newrelic": "^1.5.3",
     "decay": "^1.0.5",
     "passport-local": "^1.0.0",
     "bcrypt": "^0.7.7",
