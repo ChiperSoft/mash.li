@@ -39,7 +39,7 @@ TrackList.promiseTrackList = function (name, options) {
 		}
 
 		return when.map(tracklist.tracks.slice(options.start, options.start + options.limit), function (model) {
-			return model.promiseForRendering(options.visitorid);
+			return model.promiseForRendering(options.visitorid || '');
 		}).then(function (tracks) {
 			return tracks.filter(function (o) { return o; });
 		});
@@ -54,7 +54,7 @@ TrackList.promiseTrackList['new'] = function (options) {
 		.sort({created_at: -1, _id: 1})
 		.where('dead').ne(true)          // ignore tracks marked as dead
 		.where('flags.2').exists(false)  // ignore tracks with three or more flags
-		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
+		.where('flags.visitorId').nin([options.visitorid || '']) //ignore tracks the visitor flagged
 		.skip(options.start)
 		.limit(options.limit)
 		.exec();
@@ -81,7 +81,7 @@ TrackList.promiseTrackList.steam = function (options) {
 		.sort({created_at: -1, _id: 1})
 		.where('dead').ne(true)          // ignore tracks marked as dead
 		.where('flags.2').exists(false)  // ignore tracks with three or more flags
-		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
+		.where('flags.visitorId').nin([options.visitorid || '']) //ignore tracks the visitor flagged
 		.exec();
 
 	return when(p).then(function (tracks) {
@@ -96,7 +96,7 @@ TrackList.promiseTrackList.steam = function (options) {
 	}).then(function (tracks) {
 		return when.map(tracks, function (model) {
 			// return model.toObject();
-			return model.promiseForRendering(options.visitorid);
+			return model.promiseForRendering(options.visitorid || '');
 		});
 	});
 };
@@ -114,7 +114,7 @@ TrackList.promiseTotalTracks['new'] = function (options) {
 	var p = Track.find({})
 		.where('dead').ne(true)          // ignore tracks marked as dead
 		.where('flags.2').exists(false)  // ignore tracks with three or more flags
-		.where('flags.visitorId').nin([options.visitorid]) //ignore tracks the visitor flagged
+		.where('flags.visitorId').nin([options.visitorid || '']) //ignore tracks the visitor flagged
 		.count().exec();
 
 	return when(p);
