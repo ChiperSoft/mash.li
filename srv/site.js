@@ -39,6 +39,9 @@ app.use(require('app/middleware/logger')());
 // so that static assets don't invoke the session code
 app.use(require('static-favicon')(__dirname + '/public/favicon.ico'));
 app.use('/assets', express.static(__dirname + '/public/assets'));
+app.all(/\/event\:/, function (req, res) {
+	res.send(404, 'That is a javascript link, you are not supposed to load them as actual pages.');
+});
 
 // process the request cookies
 app.use(require('cookie-parser')());
