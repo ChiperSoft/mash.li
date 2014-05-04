@@ -160,8 +160,9 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 			if (!this.sound) {return;}
 
 			var $target = $(ev.currentTarget);
+			var pos = $target.position();
 			var w = $target.width(), h = $target.height();
-			var x = ev.offsetX, y = ev.offsetY;
+			var x = ev.clientX - pos.left, y = ev.clientY - pos.top;
 			var duration = this.sound.duration;
 
 			if (y < 0 || y > h) {return;}
