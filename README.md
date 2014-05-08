@@ -84,4 +84,4 @@ Absolutely, pull requests are very welcome, but please conform with the style of
 
 ##License
 
-The Mash.li source is released under the Apache 2.0 license.  See LICENSE.txt for details.
+The Mash.li source is released under a Creative Commons Attribution NonCommercial ShareAlike (CC-NC-SA) license.  See LICENSE.txt for details.

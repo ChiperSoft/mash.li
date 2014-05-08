@@ -8,7 +8,7 @@
     "url": "https://github.com/ChiperSoft/mash.li"
   },
   "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
-  "license": "ISC",
+  "license": "CC-NC-SA",
   "dependencies": {
     "express": "~4.1.1",
     "querystring": "^0.2.0",
