@@ -137,9 +137,9 @@ Track.prototype.getVoteData = function (visitorid) {
 
 	});
 
-	var decay = 7;
+	var decay = 84;
 	var order = Math.log(Math.max(Math.abs(data.scoreReal), 1), 10),
-		dayAge = (Date.now() - this.created_at.getTime()) / (86400000);
+		dayAge = (Date.now() - this.created_at.getTime()) / (3600000);
 
 	data.temperature = order - dayAge / decay;
 
