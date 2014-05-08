@@ -5,6 +5,7 @@ var config = require('app/config');
 var cache = require('app/lib/request-buffer')({
 	ttl: 1000 * 60 * 60 * 6,
 	limit: 50,
+	autoRefetch: true,
 	processor: function (ids, resolve, reject, rejectAll, done) {
 		var url = 'https://api.soundcloud.com/tracks.json?client_id=' + config.soundcloudKey + '&ids=' + ids.join(',');
 

@@ -23,7 +23,8 @@ module.exports = exports = function (processor, options) {
 	options = _.assign({
 		limit: false,
 		timer: 30,
-		ttl  : -1
+		ttl  : -1,
+		autoRefetch: false
 	}, options);
 
 	if (!options.processor) {
@@ -56,6 +57,9 @@ module.exports = exports = function (processor, options) {
 		if (options.ttl > 0) {
 			defer.timeout = setTimeout(function () {
 				invalidate(id);
+				if (options.autoRefetch) {
+					get(id);
+				}
 			}, options.ttl);
 		}
 
