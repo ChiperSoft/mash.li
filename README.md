@@ -69,7 +69,34 @@ Vagrant will download the custom base box from the mash.li server and provision 
 
 ##Code Tour
 
-*Coming Soon*
+- `bin`: Shell scripts for use within the Vagrant VM
+- `logo`: Mashli logo source documents
+- `migrations`: Previous database migration scripts
+- `provisioning`: Files for provisioning the vagrant environment
+- `srv`: Actual site code
+
+- `srv/index.js`: Production site launch point. Runs the server within a Forever.js wrapper to ensure the site restarts in the event of a crash.
+- `srv/server.js`: Main site launch point. Contains the majority of the Express initialization code.
+- `srv/grunt`: Grunt tasks for building the site.
+- `srv/app`: Contains all local modules used throughout the application. Any require for `app/...` loads from here.
+- `srv/app/config/index.js`: Default config file, meant to be overridden by copying to `srv/app/config.js`
+- `srv/app/db`: Database connection modules for MongoDB and Redis. Each automatically initializes the DB connection on first require.
+- `srv/app/helpers`: Custom handlebars helpers for page layout. These files are bundled into a single include via the grunt concat and amdwrap processes.
+- `srv/app/lib`: Miscellaneous local libraries, including the libs for interacting with SoundCloud.
+- `srv/app/lib/view.js`: Custom express view renderer for handling handlebars files with loaded helper functions and partials.
+- `srv/app/middleware`: Local middleware for various reusable pieces of request logic.
+- `srv/app/models`: MongoDB data models
+- `srv/app/routes`: Express routers for different sections of the site.
+- `srv/app/routes/main.js`: Router for the bulk of all requests. Creates the main site page and handles track list loading.
+- `srv/app/views/layouts`: Handlebars templates for page chrome.
+- `srv/app/views/pages`: Handlebars templates for individual pages.
+- `srv/public`: Client side code served up by nginx.
+- `srv/public/less`: LESS files to be compiled for the site CSS.
+- `srv/public/less/main.less`: Compiles to `src/public/assets/css/main.css`, containing styles for all pages.
+- `srv/public/less/pages`: Contents compile to `src/public/assets/css/pages/`, containing styles for specific pages.
+- `srv/public/less/all-components.less`: Combines styles for all front-end components to be processed for linting by csslint (since nobody's written a LESS linter yet).
+- `srv/utilities`: Server side processes to be ran outside of the main server, such as cron jobs.
+
 
 ##FAQ
 
