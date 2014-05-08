@@ -137,7 +137,7 @@ Track.prototype.getVoteData = function (visitorid) {
 
 	});
 
-	// Count flag as down votes when calculating temperature
+	// Count flags as down votes when calculating temperature
 	data.scoreReal -= (this.flags && this.flags.length || 0);
 
 	var decay = 84;
