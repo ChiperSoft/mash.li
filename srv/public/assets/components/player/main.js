@@ -90,7 +90,9 @@ define(['lodash', 'backbone', 'events', 'soundcloud', 'soundmanager', 'models/Tr
 					}
 
 					sound.load({
-						onload:       function () {if (autoplay) sound.play();}
+						onload: function () {
+							if (autoplay) {sound.play();}
+						}
 					});
 				});
 			} else if (this.sound && !this.sound.playState) {
