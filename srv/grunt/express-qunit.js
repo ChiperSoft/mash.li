@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 			options: {
 				port: 8000,
 				host: 'localhost',
-				script: './site.js',
+				script: './server.js',
 				background: true
 			}
 		},
