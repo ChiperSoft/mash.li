@@ -24,7 +24,7 @@ module.exports = exports = function () {
 	router.use(exports.processData);
 
 	// add actual routes
-	router.get('*', require('app/middleware/newrelic')('main'), exports.main);
+	router.get('*', exports.main);
 
 	return router;
 };
@@ -144,6 +144,10 @@ exports.processData = function (req, res, next) {
 
 exports.main = function (req, res) {
 	var locals = res.locals;
+
+	newrelic.setTransactionName(res.locals.first || 'main');
+	res.locals.newrelic = newrelic.getBrowserTimingHeader();
+
 	if (locals.wantsJSON) {
 		if (locals.first === 'track') {
 			if (locals.track) {
