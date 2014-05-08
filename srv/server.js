@@ -116,5 +116,11 @@ if (isProduction) {
 			});
 		});
 	});
+
+	// load the the first two pages of the main lists so we pre-cache the track info.
+	var TrackList = require('app/models/TrackList');
+	TrackList.promiseTrackList('hot', {start: 0, limit: 50});
+	TrackList.promiseTrackList('new', {start: 0, limit: 50});
+
 }
 

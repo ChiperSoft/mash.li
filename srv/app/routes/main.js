@@ -174,9 +174,3 @@ exports.main = function (req, res) {
 
 	}
 };
-
-// load the front page default list at launch time so we pre-cache the track info.
-// if (process.env.NODE_ENV === 'production') {
-// 	TrackList.promiseTrackList('hot', {start:0, limit:DEFAULT_LIMIT * 2});
-// 	TrackList.promiseTrackList['new']({start:0, limit:DEFAULT_LIMIT * 2});
-// }
