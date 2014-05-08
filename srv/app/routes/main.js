@@ -83,18 +83,6 @@ exports.scanForList = function (req, res, next) {
 		res.locals.limitIsCustom = true;
 	}
 
-	// first see if the list name is one of our computed lists
-	if (TrackList.promiseTrackList[listname]) {
-		res.locals.tracks = TrackList.promiseTrackList[listname]({
-			start: start,
-			limit: limit,
-			visitorid: res.locals.visitorid
-		});
-		res.locals.total = TrackList.promiseTotalTracks[listname]({visitorid: res.locals.visitorid});
-		return next();
-	}
-
-	// list is not computed, try loading it by name.
 	res.locals.tracks = TrackList.promiseTrackList(listname, {
 		start: start,
 		limit: limit,

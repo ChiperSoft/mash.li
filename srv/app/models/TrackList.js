@@ -17,6 +17,10 @@ var TrackList = mongoose.model('TrackList', sTrackList);
 TrackList.promiseTrackList = function (name, options) {
 	options = options || {};
 
+	if (typeof TrackList.promiseTrackList[name] === 'function') {
+		return TrackList.promiseTrackList[name](options);
+	}
+
 	var p = TrackList.findOne({_id: name})
 		.populate({
 			path: 'tracks',
@@ -102,8 +106,12 @@ TrackList.promiseTrackList.steam = function (options) {
 };
 
 
-TrackList.promiseTotalTracks = function (name) {
+TrackList.promiseTotalTracks = function (name, options) {
 	var p = TrackList.findOne({_id: name}).exec();
+
+	if (typeof TrackList.promiseTotalTracks[name] === 'function') {
+		return TrackList.promiseTotalTracks[name](options);
+	}
 
 	return when(p).then(function (tracklist) {
 		return tracklist && tracklist.tracks.length || 0;
