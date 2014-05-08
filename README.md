@@ -73,8 +73,7 @@ Vagrant will download the custom base box from the mash.li server and provision 
 - `logo`: Mashli logo source documents
 - `migrations`: Previous database migration scripts
 - `provisioning`: Files for provisioning the vagrant environment
-- `srv`: Actual site code
-
+- `srv`: Actual site code   
 - `srv/index.js`: Production site launch point. Runs the server within a Forever.js wrapper to ensure the site restarts in the event of a crash.
 - `srv/server.js`: Main site launch point. Contains the majority of the Express initialization code.
 - `srv/grunt`: Grunt tasks for building the site.
