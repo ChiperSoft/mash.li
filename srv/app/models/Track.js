@@ -140,11 +140,13 @@ Track.prototype.getVoteData = function (visitorid) {
 	// Count flags as down votes when calculating temperature
 	data.scoreReal -= (this.flags && this.flags.length || 0);
 
-	var decay = 84;
-	var order = Math.log(Math.max(Math.abs(data.scoreReal), 1), 10),
-		dayAge = (Date.now() - this.created_at.getTime()) / (3600000);
+	var gravity = 1.2;
+	var burialDepth = 4;
+	var days = (Date.now() - this.created_at.getTime()) / 86400000;
+	var temperature = (Math.log(Math.max(1, Math.abs(data.scoreReal))) * Math.log(10)) - Math.pow(days, gravity);
+	if (data.scoreReal < 1) {temperature -= Math.abs(data.scoreReal * 2) + burialDepth;}
 
-	data.temperature = order - dayAge / decay;
+	data.temperature = temperature;
 
 
 	return data;
