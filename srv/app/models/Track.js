@@ -5,6 +5,34 @@ var mongoose = require('app/db/mongo');
 
 var promiseFromSoundcloudCache = require('app/lib/soundcloud-cache');
 
+function pressure (details) {
+	var age = (Date.now() - (new Date(details.created_at)).getTime()) / 86400000;
+	var plays = details.playback_count,
+		favs = details.favoritings_count,
+		comments = details.comment_count,
+		downloads = details.download_count,
+		duration = details.duration / 1000;
+
+	var durationAcceleration = 1.4; //overage acceleration
+	var durationDesired = 7; //minutes
+	var durationPenalty = Math.max(0, (Math.pow(duration, durationAcceleration) / 60) - (Math.pow(60 * durationDesired, durationAcceleration) / 60));
+
+	// how many liked the song enough to listen to it again, doubled to account for accountless / apathetic
+	var liked = ((1 + downloads + favs + (comments * 2)) / plays) * 2;
+	var playsPerDay = plays / age;
+
+	// give a boost to tracks younger than a month.
+	if (age < 30) {
+		playsPerDay = Math.max(playsPerDay, 1);
+	}
+
+	var value = ((liked + playsPerDay) * 100) - durationPenalty;
+	// value = (Math.log(Math.max(1, Math.abs(plays))) * Math.log(liked * 100));
+	// value = (Math.log(Math.max(1, Math.abs(value))) * Math.log(10)) * (value > 0 ? 1 : -1);
+
+	return Math.round(value - durationPenalty);
+}
+
 var sTrack = mongoose.Schema({
 	_id: String,
 	details: {
@@ -77,12 +105,15 @@ Track.prototype.promiseForRendering = function (visitorid) {
 	track.score = voteData.score;
 	track.voted = voteData.visitorVote;
 
+
 	return promiseFromSoundcloudCache(track._id).then(
 		function (details) {
 			// if details is false, that means soundcloud no longer has the track
 			// return false in that situation, since the track no longer exists
 			if (details) {
 				track.details = details;
+				track.age = (Date.now() - (new Date(details.created_at)).getTime()) / 86400000;
+				track.pressure = pressure(details);
 				return track;
 			} else {
 				track.details = false;
@@ -195,5 +226,7 @@ Track.prototype.getActualScore = function () {
 		}
 	}, 1);
 };
+
+Track.pressure = pressure;
 
 module.exports = Track;

@@ -1,6 +1,14 @@
 {{#each tracks}}{{#and this details}}{{#unless hidden}}
 <li data-trackid="{{_id}}" class="{{#compare _id '==' ../../../nowPlaying}}playing{{/compare}}{{#compare _id '==' ../../../lastPlayed}} last-played{{/compare}}">
 	<span class="duration">{{durationShort details.duration}} <i class="mashlicon mashlicon-time"></i></span>
+	{{#if ../../../isModerator}}
+	<span class="duration">{{numberFormat details.comment_count}} <i class="mashlicon mashlicon-comments"></i></span>
+	<span class="duration">{{numberFormat details.favoritings_count}} <i class="mashlicon mashlicon-heart"></i></span>
+	{{#if details.downloadable}}<span class="duration">{{numberFormat details.download_count}} <i class="mashlicon mashlicon-download"></i></span>{{/if}}
+	<span class="duration">{{numberFormat details.playback_count}} <i class="mashlicon mashlicon-play"></i></span>
+	<span class="duration">{{numberFormat age}} <i class="mashlicon mashlicon-calendar"></i></span>
+	{{/if}}
+	<span class="duration">{{pressure}} <i class="mashlicon mashlicon-meter"></i></span>
 	<div class="vote">
 		<a data-url="/vote/{{_id}}/up"      class="up{{#compare voted 1}} current{{/compare}}"    data-bypass data-delta="1"><i class="mashlicon mashlicon-chevron-up"></i></a>
 		<a data-url="/vote/{{_id}}/neutral" class="score{{#unless voted}} current{{/unless}}"     data-bypass data-delta="0">{{score}}</a>
