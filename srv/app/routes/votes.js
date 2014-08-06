@@ -1,6 +1,6 @@
 var express = require('express');
 
-var whenKeysMap = require('when/keys').map;
+var whenKeys = require('when/keys').all;
 var sha1 = require('app/lib/sha1');
 var log = require('app/log');
 
@@ -164,7 +164,7 @@ exports.processVote = function (req, res) {
 
 	};
 
-	whenKeysMap(historical).then(function (historical) {
+	whenKeys(historical).then(function (historical) {
 		var trustShift = 0;
 
 		if (historical.totalValidVotesByVisitor) {

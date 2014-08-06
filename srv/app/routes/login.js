@@ -5,7 +5,7 @@ var passport = require('passport');
 module.exports = exports = function (sessions) {
 	var router = express.Router();
 
-	router.use(require('body-parser')());
+	router.use(require('body-parser').urlencoded({extended: true}));
 	router.use(require('app/middleware/newrelic')());
 
 	//setup endpoints

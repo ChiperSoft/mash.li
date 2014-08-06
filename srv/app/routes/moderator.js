@@ -6,7 +6,7 @@ var log = require('app/log');
 module.exports = exports = function (sessions) {
 	var router = express.Router();
 
-	router.use(require('body-parser')());
+	router.use(require('body-parser').json());
 
 	router.param('trackid', require('app/middleware/loadTrack')());
 

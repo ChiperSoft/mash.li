@@ -65,7 +65,9 @@ module.exports = function () {
 	pit.use(expressSession({
 		store: new ExpressSessionRedisStore({ client: redis }),
 		secret: config.sessions.secret,
-		key: config.sessions.cookieKey
+		key: config.sessions.cookieKey,
+		resave: true,
+		saveUninitialized: true
 	}));
 
 	pit.use(require('connect-flash')());

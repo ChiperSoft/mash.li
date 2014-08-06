@@ -1,7 +1,7 @@
-var whenKeysMap = require('when/keys').map;
+var whenKeys = require('when/keys').all;
 
 module.exports = function (req, res, next) {
-	whenKeysMap(res.locals).then(
+	whenKeys(res.locals).then(
 		function (locals) {
 			res.locals = locals;
 			next();

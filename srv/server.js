@@ -60,7 +60,7 @@ app.use(function (req, res, next) {
 		res.locals.wantsJSON = true;
 	}
 
-	res.locals.httproot = req.protocol + '://' + req.host;
+	res.locals.httproot = req.protocol + '://' + req.hostname;
 
 	next();
 });
