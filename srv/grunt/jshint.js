@@ -15,6 +15,8 @@ module.exports = function (grunt) {
 			'public/assets/collections/**/*.js',
 			'public/assets/js/**/*.js',
 			'!public/assets/**/*.hbs.js',  //ignore compiled handlebars templates
+
+			'!public/assets/js/require.config.js'
 		],
 
 	});

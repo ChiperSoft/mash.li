@@ -54,7 +54,7 @@ require.config({
 
 		handlebars: {
 			exports: 'Handlebars',
-			init: function() {
+			init: function () {
 				this.Handlebars = Handlebars;
 				return this.Handlebars;
 			}
