@@ -21,7 +21,8 @@ require.config({
 		'handlebars'         : 'vendor/handlebars/handlebars',
 		'pinvault-observer'  : 'vendor/pinvault-observer/pinvault-observer',
 		'pinvault'           : 'vendor/pinvault/pinvault',
-		'soundmanager2'      : 'vendor/soundmanager2/script/soundmanager2',
+		'SoundManager'       : 'vendor/soundmanager2/script/soundmanager2',
+		'soundmanager2'      : 'js/lib/soundmanager2',
 		'soundcloud'         : '//connect.soundcloud.com/sdk',
 		'helpers'            : 'vendor/mash.li/helpers',
 
@@ -54,10 +55,6 @@ require.config({
 
 		handlebars: {
 			exports: 'Handlebars'
-		},
-
-		'soundmanager2': {
-			exports: 'soundManager'
 		},
 
 		soundcloud: {
