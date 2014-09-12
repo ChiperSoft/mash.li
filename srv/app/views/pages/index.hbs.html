@@ -31,19 +31,6 @@
 					redirect_uri: "{{httproot}}/soundcloud-callback",
 				});
 
-				soundmanager.setup({
-					url: '/assets/vendor/soundmanager2/swf/',
-					debugMode: false,
-					preferFlash: false,
-					useHighPerformance: true,
-					flashVersion: 9,
-					ontimeout: function() {
-						console.warn('SM2 init failed!');
-					},
-				});
-				soundmanager.beginDelayedInit();
-				window.soundManager = soundmanager;
-
 				_.each(helpers, function (helper, name) {
 					handlebars.registerHelper(name, helper(handlebars));
 				});
