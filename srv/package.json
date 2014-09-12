@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://github.com/ChiperSoft/mash.li"
   },
+  "private": true,
   "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
   "license": "CC-NC-SA",
   "dependencies": {
