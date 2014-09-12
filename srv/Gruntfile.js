@@ -6,12 +6,6 @@ module.exports = function (grunt) {
 
 	grunt.loadTasks('grunt');
 
-	grunt.registerTask('test', [
-		// 'nodeunit',
-		// 'express:qunit',
-		// 'qunit'
-	]);
-
 	grunt.registerTask('launch', [
 		'less',
 		'handlebars',
@@ -55,7 +49,6 @@ module.exports = function (grunt) {
 		'cssmin',
 		'handlebars',
 		'lodash',
-		'test',
 		'concat',
 		'amdwrap',
 		'requirejs'
