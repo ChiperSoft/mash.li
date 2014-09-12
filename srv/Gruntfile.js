@@ -7,14 +7,8 @@ module.exports = function (grunt) {
 	grunt.loadTasks('grunt');
 
 	grunt.registerTask('launch', [
-		'less',
-		'handlebars',
-		'concat:helpers',
-		'amdwrap:helpers',
-		'requirejs:main',
-		'copy:rjsmodules',
-		'express:server',
-		'watch'
+		'development',
+		'run'
 	]);
 
 	grunt.registerTask('run', [
@@ -29,15 +23,26 @@ module.exports = function (grunt) {
 		'csslint'
 	]);
 
-	grunt.registerTask('deploy', [
+	grunt.registerTask('production', [
+		'copy:frontend',
 		'less',
 		'cssmin',
-		'copy:frontend',
 		'handlebars',
 		'lodash',
 		'concat:helpers',
 		'amdwrap:helpers',
 		'requirejs'
+	]);
+
+	grunt.registerTask('development', [
+		'copy:frontend',
+		'less',
+		'handlebars',
+		'lodash',
+		'concat:helpers',
+		'amdwrap:helpers',
+		'requirejs:main',
+		'copy:rjsmodules',
 	]);
 
 	grunt.registerTask('default', [
@@ -46,12 +51,12 @@ module.exports = function (grunt) {
 		'copy:frontend',
 		'less',
 		'csslint',
-		'cssmin',
 		'handlebars',
 		'lodash',
-		'concat',
-		'amdwrap',
-		'requirejs'
+		'concat:helpers',
+		'amdwrap:helpers',
+		'requirejs:main',
+		'copy:rjsmodules',
 	]);
 
 };
