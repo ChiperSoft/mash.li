@@ -16,7 +16,6 @@ require.config({
 		'modernizr'          : 'vendor/modernizr/modernizr',
 		'moment'             : 'vendor/moment/moment',
 		'bootstrap'          : 'vendor/bootstrap/dist/js/bootstrap',
-		'async'              : 'vendor/async/lib/async',
 		'when'               : 'vendor/when/when',
 		'handlebars'         : 'vendor/handlebars/handlebars',
 		'pinvault-observer'  : 'vendor/pinvault-observer/pinvault-observer',
