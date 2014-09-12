@@ -33,7 +33,7 @@ app.use(require('app/middleware/logger')());
 // since nginx serves them, but we still register them before any other middleware
 // so that static assets don't invoke the session code
 app.use(require('static-favicon')(__dirname + '/public/favicon.ico'));
-app.use('/assets', express.static(__dirname + '/public/assets'));
+app.use('/assets', express.static(__dirname + '/public/assets'), function (req, res) {res.send(404);});
 app.all(/\/event\:/, function (req, res) {
 	res.send(404, 'That is a javascript link, you are not supposed to load them as actual pages.');
 });
