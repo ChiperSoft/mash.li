@@ -5,7 +5,7 @@
 // as fast as I got them, and let the stream handle back-pressure itself.
 
 var request = require('request');
-var qss = require('querystring').stringify;
+var qss = require('qs').stringify;
 var Readable = require('stream').Readable;
 var moment = require('moment');
 var util = require('util');
