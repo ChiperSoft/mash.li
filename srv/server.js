@@ -26,9 +26,6 @@ app.enable('trust proxy');
 
 app.use(require('app/middleware/render-handlebars')(__dirname + '/app/views/'));
 
-// register any local variables that are application-wide
-app.locals.soundcloudKey = config.soundcloudKey;
-
 // first middleware is the request logger
 app.use(require('app/middleware/logger')());
 
@@ -59,6 +56,7 @@ app.use(function (req, res, next) {
 	}
 
 	res.locals.httproot = req.protocol + '://' + req.hostname;
+	res.locals.soundcloudKey = config.soundcloudKey;
 
 	next();
 });
