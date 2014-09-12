@@ -6,7 +6,8 @@ module.exports = function (grunt) {
 			src: [
 				'**/*.hbs.js',
 				'public/assets/rjs',
-				'public/assets/css'
+				'public/assets/css',
+				'public/assets/vendor'
 			]
 		}
 	});

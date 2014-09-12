@@ -43,6 +43,9 @@
     "when": "~3.4.5"
   },
   "devDependencies": {
+    "backbone": "^1.1.2",
+    "bootstrap": "^3.2.0",
+    "es5-shim": "^4.0.3",
     "grunt": "~0.4.5",
     "grunt-amd-wrap": "^1.0.1",
     "grunt-contrib-clean": "~0.6.0",
@@ -61,8 +64,13 @@
     "grunt-jscs": "^0.7.1",
     "grunt-lodash": "~0.3.0",
     "grunt-requirejs": "~0.4.0",
+    "html5shiv": "^3.7.2",
+    "jquery": "^1.11.1",
     "lodash-cli": "~2.4.2",
-    "nodeunit": "~0.9.0"
+    "nodeunit": "~0.9.0",
+    "pinvault-observer": "^0.1.1",
+    "requirejs": "^2.1.15",
+    "soundmanager2": "git+http://github.com/ChiperSoft/SoundManager2.git"
   },
   "engines": {
     "node": ">=0.10.20"

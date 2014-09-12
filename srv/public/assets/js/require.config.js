@@ -12,15 +12,15 @@ require.config({
 		'jquery'             : 'vendor/jquery/dist/jquery',
 		'lodash'             : 'vendor/lodash/lodash.build',
 		'underscore'         : 'vendor/lodash/lodash.build',
-		'backbone'           : 'vendor/backbone-amd/backbone',
+		'backbone'           : 'vendor/backbone/backbone',
 		'modernizr'          : 'vendor/modernizr/modernizr',
 		'moment'             : 'vendor/moment/moment',
 		'bootstrap'          : 'vendor/bootstrap/dist/js/bootstrap',
 		'when'               : 'vendor/when/when',
-		'handlebars'         : 'vendor/handlebars/handlebars',
+		'handlebars'         : 'vendor/handlebars/dist/handlebars',
 		'pinvault-observer'  : 'vendor/pinvault-observer/pinvault-observer',
-		'pinvault'           : 'vendor/pinvault/pinvault',
-		'SoundManager'       : 'vendor/soundmanager2/script/soundmanager2',
+		'pinvault'           : 'vendor/pinvault-observer/node_modules/pinvault/pinvault',
+		'SoundManager'       : 'vendor/SoundManager/script/soundmanager2',
 		'soundmanager2'      : 'js/lib/soundmanager2',
 		'soundcloud'         : '//connect.soundcloud.com/sdk',
 		'helpers'            : 'vendor/mash.li/helpers',
@@ -53,7 +53,11 @@ require.config({
 		},
 
 		handlebars: {
-			exports: 'Handlebars'
+			exports: 'Handlebars',
+			init: function() {
+				this.Handlebars = Handlebars;
+				return this.Handlebars;
+			}
 		},
 
 		soundcloud: {

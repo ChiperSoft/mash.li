@@ -23,6 +23,11 @@ module.exports = function (grunt) {
 		'watch'
 	]);
 
+	grunt.registerTask('run', [
+		'express:server',
+		'watch'
+	]);
+
 	grunt.registerTask('lint', [
 		'jshint',
 		'jscs',
@@ -33,6 +38,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('deploy', [
 		'less',
 		'cssmin',
+		'copy:frontend',
 		'handlebars',
 		'lodash',
 		'concat:helpers',
@@ -43,6 +49,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('default', [
 		'jshint',
 		'jscs',
+		'copy:frontend',
 		'less',
 		'csslint',
 		'cssmin',
