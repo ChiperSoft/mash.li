@@ -15,6 +15,7 @@ var cache = require('app/lib/request-buffer')({
 			}
 
 			_.each(tracks, function (track) {
+				if (!track.id) {return;}
 
 				// parse the tags list into something usable
 				track.tags = track.tag_list && getTags(track.tag_list) || track.tags || [];
