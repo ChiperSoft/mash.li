@@ -45,11 +45,9 @@ ResultsStream.prototype._grabPage = function () {
 			this.errorCount = 0;
 			if (body.errors && body.errors.length) {
 				log({
-					level: 1,
-					name: 'ERROR!',
-					status: 'SoundCloud call returned errors',
-					source: JSON.stringify(body.errors, undefined, 2),
-					warn: true
+					name: 'SoundCloud call returned errors',
+					source: 'soundcloud-reader',
+					error: body.errors
 				});
 				self.emit('error', true);
 			} else {
@@ -58,31 +56,28 @@ ResultsStream.prototype._grabPage = function () {
 		} else {
 			log({
 				level: 1,
-				name: 'ERROR!',
-				status: 'SoundCloud call returned with a non 200 status',
+				source: 'soundcloud-reader',
+				name: 'SoundCloud call returned with a non 200 status',
 				id: response.statusCode,
-				source: JSON.stringify(body.errors),
-				warn: true
+				error: body.errors
 			});
 			this.errorCount++;
 			if (this.errorCount > 5) {
 				self.emit('error', true);
 				log({
 					level: 1,
-					name: 'ERROR!',
-					status: 'Reached 5 errors, quitting.',
+					name: 'Reached 5 errors, quitting.',
 					id: response.statusCode,
-					source: JSON.stringify(body.errors),
-					warn: true
+					error: body.errors
 				});
 
 			} else {
 				setTimeout(self._grabPage.bind(self), 5000);
 				log({
 					level: 4,
-					status: 'Retrying last request.',
+					name: 'Retrying last request.',
 					id: response.statusCode,
-					source: JSON.stringify(body.errors),
+					errpr: body.errors,
 				});
 			}
 		}
@@ -99,7 +94,7 @@ ResultsStream.prototype._processPage = function (results) {
 	log({
 		level: 4,
 		name: 'Received ' + (c||0) + ' Results',
-		warn: true
+		error: true
 	});
 
 	if (c) {

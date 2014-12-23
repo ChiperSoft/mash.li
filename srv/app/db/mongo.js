@@ -16,10 +16,9 @@ var db = mongoose.connection;
 db.on("error", function (err) {
 	log({
 		level: 1,
-		name: 'ERROR!',
-		status: 'mongodb',
-		target: JSON.stringify(err),
-		warn: true
+		name: 'general error',
+		source: 'mongodb',
+		error: err
 	});
 });
 
@@ -27,7 +26,7 @@ db.once('open', function () {
 	log({
 		level: 10,
 		name: 'DB Connected',
-		status: 'mongodb'
+		source: 'mongodb'
 	});
 });
 

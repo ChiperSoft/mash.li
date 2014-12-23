@@ -13,10 +13,9 @@ if (config.redis.pass) {
 redis.on("error", function (err) {
 	log({
 		level: 1,
-		name: 'ERROR!',
-		status: 'redis',
-		target: JSON.stringify(err),
-		warn: true
+		name: 'general error',
+		source: 'redis',
+		error: err
 	});
 });
 
@@ -24,7 +23,7 @@ redis.once('connect', function () {
 	log({
 		level: 10,
 		name: 'DB Connected',
-		status: 'redis'
+		source: 'redis'
 	});
 });
 

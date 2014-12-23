@@ -8,7 +8,7 @@ soundcloudSync(function (err) {
 		log({
 			level: 1,
 			name: 'Search did not finish successfully',
-			warn: true
+			error: err
 		});
 	} else {
 		log({

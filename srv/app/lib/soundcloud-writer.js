@@ -13,11 +13,11 @@ stream._write = function (track, encoding, next) {
 		if (existing) {
 			log({
 				level: 8,
+				source: 'soundcloud-writer',
 				name: 'Scanned Existing Song',
 				status: track.title,
 				target: track.created_at
 			});
-			// console.log(track, existing);
 
 			next();
 		} else {
@@ -25,16 +25,16 @@ stream._write = function (track, encoding, next) {
 				if (err) {
 					log({
 						level: 1,
-						name: 'ERROR!',
-						status: 'SoundCloudTrack',
-						target: JSON.stringify(err),
-						warn: true
+						source: 'soundcloud-writer',
+						name: 'SoundCloudTrack',
+						error: err
 					});
 					return next(err);
 				}
 
 				log({
 					level: 6,
+					source: 'soundcloud-writer',
 					name: 'Scanned New Song',
 					status: track.title,
 					target: track.created_at

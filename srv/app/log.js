@@ -1,19 +1,42 @@
 var color = require('cli-color');
-var moment = require('moment');
 var util = require('util');
 var _ = require('lodash');
+var basename = 'mashli';
 
-var cPrefix = color.blackBright;
-var cEvent = color.blue.bold;
-var cTarget = color.magenta;
-var cSource = color.white;
-var cID = function (input) {return input;};
-var cStatus = color.green.underline;
+if (!process.env.DEBUG) {process.env.DEBUG = basename + '*';}
+
+var debug = require('debug');
+var useColor = debug.useColors();
+var noColor = function (input) {return input;};
+
+var cPrefix = useColor && color.blackBright || noColor;
+var cEvent  = useColor && color.blue.bold || noColor;
+var cTarget = useColor && color.magenta || noColor;
+var cID     = noColor;
+var cStatus = useColor && color.green.underline || noColor;
+var cError  = useColor && color.red || noColor;
+
+function flattenObject(input) {
+	var protos = [input];
+	var parent = Object.getPrototypeOf(input);
+
+	while (parent && parent !== Object.prototype) {
+		protos.unshift(parent);
+		parent = Object.getPrototypeOf(parent);
+	}
+
+	protos.unshift({});
+
+	return _.assign.apply(null, protos);
+}
 
 function stringify (input) {
 	if (typeof input === 'string' || typeof input === 'number') {
 		return input;
 	} else {
+		if (typeof input === 'object') {
+			input = flattenObject(input);
+		}
 		return util.inspect(input, {
 			depth: 5,
 			colors: true
@@ -21,21 +44,33 @@ function stringify (input) {
 	}
 }
 
-function debug (input) {
-	if (input.level && input.level > debug.level) { return; }
-	var time = moment().format('YYYY-MM-DD HH:mm:ss');
+var debugCache = {};
+function getDebug (name) {
+	if (!debugCache[name]) {
+		var log = debug(basename + (name && ':' + name || ''));
+		var error = debug(basename + (name && ':' + name || '') + ':error');
+		error.log = console.error.bind(console);
+
+		debugCache[name] = {
+			log: log,
+			error: error
+		};
+	}
+	return debugCache[name];
+}
+
+module.exports = exports = function (input) {
+	if (input.level && input.level > exports.level) { return; }
+
+	var output = getDebug(input.source);
 
 	var stack = [];
 	var level = input.level && ("00000" + input.level).slice(-2) || '';
-	stack.push(cPrefix(time + ' D' + level + ':'));
+
 	stack.push(cEvent(stringify(input.name)));
 
 	if (input.status) {
 		stack.push(cStatus(stringify(input.status)));
-	}
-
-	if (input.source) {
-		stack.push(cSource(stringify(input.source)));
 	}
 
 	if (input.target) {
@@ -46,33 +81,45 @@ function debug (input) {
 		stack.push(cID(stringify(input.id)));
 	}
 
-	stack = stack.join(' ');
+	if (input.error && input.error !== true) {
+		var error = _.assign({ message: input.error.message, stack: (input.error.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, input.error);
+		stack.push(cError(stringify(error)));
+	}
+
+	if (input.raw) {
+		stack.push(input.raw);
+	}
+
+	if (input.extra !== undefined) {
+		if (Array.isArray(input.extra)) {
+			stack.push.apply(stack, input.extra);
+		} else {
+			stack.push(input.extra);
+		}
+	}
+
+	stack.push(cPrefix('L' + level));
 
 	if (input.noop) {
 		return stack;
 	} else {
-		if (input.warn) {
-			console.warn(stack);
+		if (input.error) {
+			output.error.apply(null, stack);
 		} else {
-			console.log(stack);
+			output.log.apply(null, stack);
 		}
 	}
-}
+};
 
-debug.level = 10;
+exports.level = 10;
 
-debug.fireAndForget = function (options) {
+exports.fireAndForget = function (options) {
 	return function (err) {
 		if (!err) {return;}
 
-		var error = { error: _.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
-
-		debug(_.assign({
+		exports(_.assign({
 			level: 1,
-			warn: true,
-			id: error
+			error: err
 		}, options));
 	};
 };
-
-module.exports = debug;

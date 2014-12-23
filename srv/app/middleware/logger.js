@@ -19,9 +19,10 @@ module.exports = function () {
 
 		return log({
 			level: 1,
+			source: 'express',
 			name: tokens.method(req, res),
 			status: tokens.status(req, res),
-			source: req.headers['x-forwarded-for'] || tokens['remote-addr'](req, res),
+			extra: req.headers['x-forwarded-for'] || tokens['remote-addr'](req, res),
 			target: tokens.url(req, res),
 			id: (new Date - req._startTime) + 'ms' + len + clus
 		});
